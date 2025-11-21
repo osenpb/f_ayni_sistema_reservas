@@ -5,7 +5,11 @@ export const homeRoutes: Routes = [
   {
     path: '',
     component: HomePageComponent
-  }
+  },
+  // {
+  //   path: 'reservar',
+  //   component: ReservaPageComponent
+  // }
 ]
 
 export default homeRoutes;

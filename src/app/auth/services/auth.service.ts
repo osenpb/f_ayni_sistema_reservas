@@ -19,8 +19,6 @@ export class AuthService {
     stream: () => this.checkAuthStatus()
   });
 
-
-
   private http = inject(HttpClient)
 
   authStatus = computed(() => {
@@ -52,8 +50,6 @@ export class AuthService {
       catchError((error: any) => this.handleAuthError(error))
     )
   }
-
-
 
   login(loginRequest: LoginRequest) : Observable<boolean> {
     return this.http.post<AuthResponse>(`${baseUrl}/auth/login`, {
@@ -95,8 +91,6 @@ export class AuthService {
   //IMPLEMENTACION FUTURA O.o
 
 }
-
-
 
   private handleLoginSuccess(resp: any) {
         this._authStatus.set('authenticated');
