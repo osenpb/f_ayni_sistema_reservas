@@ -11,6 +11,10 @@ export const adminRoutes: Routes = [
         path: 'dashboard',
         component: DashboardPageComponent // esta sera una pagina x defecto, podria mostrar estadisticas
       },
+      {
+        path: 'hotel',
+        loadChildren: () => import('./hotel/hotel.routes').then(m => m.hotelAdminRoutes)
+      }
     ]
   }
 ]

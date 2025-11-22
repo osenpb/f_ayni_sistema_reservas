@@ -26,7 +26,7 @@
       <div class="px-6 mb-3">
         <span class="text-xs uppercase text-gray-500 font-semibold tracking-wider">Principal</span>
       </div>
-      <a href="#"
+      <a [routerLink]="['/admin/dashboard']" routerLinkActive="bg-blue-600"
         class="flex items-center gap-3 px-6 py-3 text-gray-300 hover:bg-blue-600 hover:bg-opacity-20 hover:text-white hover:border-l-4 hover:border-blue-500 transition-all duration-200 border-l-4 border-transparent active">
         <i class="fas fa-chart-line w-5"></i>
         <span>Dashboard</span>
@@ -38,22 +38,22 @@
       <div class="px-6 mb-3">
         <span class="text-xs uppercase text-gray-500 font-semibold tracking-wider">Gestión</span>
       </div>
-      <a href="#" onclick="loadContent('vinilos')"
+      <a [routerLink]="['/admin/reservas/list']"
         class="flex items-center gap-3 px-6 py-3 text-gray-300 hover:bg-blue-600 hover:bg-opacity-20 hover:text-white hover:border-l-4 hover:border-blue-500 transition-all duration-200 border-l-4 border-transparent">
         <i class="fas fa-compact-disc w-5"></i>
         <span>Reservas</span>
       </a>
-      <a href="#" onclick="loadContent('ventas')"
+      <a [routerLink]="['/admin/hotel/list']" routerLinkActive="bg-blue-600"
         class="flex items-center gap-3 px-6 py-3 text-gray-300 hover:bg-blue-600 hover:bg-opacity-20 hover:text-white hover:border-l-4 hover:border-blue-500 transition-all duration-200 border-l-4 border-transparent">
         <i class="fas fa-shopping-cart w-5"></i>
         <span>Hoteles</span>
       </a>
-      <a href="#" onclick="loadContent('carritos')"
+      <a [routerLink]="['/admin/departamentos/list']" onclick="loadContent('carritos')"
         class="flex items-center gap-3 px-6 py-3 text-gray-300 hover:bg-blue-600 hover:bg-opacity-20 hover:text-white hover:border-l-4 hover:border-blue-500 transition-all duration-200 border-l-4 border-transparent">
         <i class="fas fa-shopping-basket w-5"></i>
         <span>Departamentos</span>
       </a>
-      <a href="#" onclick="loadContent('usuarios')"
+      <a [routerLink]="['/admin/usuarios/list']" onclick="loadContent('usuarios')"
         class="flex items-center gap-3 px-6 py-3 text-gray-300 hover:bg-blue-600 hover:bg-opacity-20 hover:text-white hover:border-l-4 hover:border-blue-500 transition-all duration-200 border-l-4 border-transparent">
         <i class="fas fa-users w-5"></i>
         <span>Usuarios</span>

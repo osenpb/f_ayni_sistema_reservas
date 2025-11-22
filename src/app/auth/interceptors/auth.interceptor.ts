@@ -8,9 +8,9 @@ export function authInterceptor(
   req: HttpRequest<unknown>,
   next: HttpHandlerFn) {
 
-  const token = inject(AuthService).token;
+  const token = inject(AuthService).token(); // antes habia puesto .token, pero eso devolvia el signal completo, con el parentesis estas llamando al valor interno.
 
-    console.log(token);
+    console.log("INTERCEPTOR, AQUI ESTA EL TOKEN: ", token);
 
   const newReq = req.clone({
     headers: req.headers.append('Authorization', `Bearer ${token}`),

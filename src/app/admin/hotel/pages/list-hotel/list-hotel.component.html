@@ -1,0 +1,84 @@
+<div class="p-8">
+
+  <h2 class="text-3xl font-bold mb-6 tracking-tight text-gray-800">
+    Listado de Hoteles
+  </h2>
+
+  <div class="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
+
+    <div class="overflow-x-auto">
+      <table class="min-w-full divide-y divide-gray-200">
+
+        <thead class="bg-gray-50">
+          <tr>
+            <th class="px-6 py-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">
+              ID
+            </th>
+            <th class="px-6 py-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">
+              Nombre
+            </th>
+            <th class="px-6 py-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">
+              Dirección
+            </th>
+            <th class="px-6 py-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">
+              Departamento
+            </th>
+            <th class="px-6 py-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">
+              Acciones
+            </th>
+          </tr>
+        </thead>
+
+        @if (hoteles().length > 0) {
+
+        <tbody class="divide-y divide-gray-100 bg-white">
+
+          @for (hotel of hoteles(); track hotel.id) {
+            <tr class="hover:bg-gray-50 transition-colors">
+
+              <td class="px-6 py-4 text-sm text-gray-700">
+                {{ hotel.id }}
+              </td>
+
+              <td class="px-6 py-4 text-sm font-medium text-gray-800">
+                {{ hotel.nombre }}
+              </td>
+
+              <td class="px-6 py-4 text-sm text-gray-700">
+                {{ hotel.direccion }}
+              </td>
+
+              <td class="px-6 py-4 text-sm text-gray-700">
+                {{ hotel.departamento.nombre }}
+              </td>
+
+              <td class="px-6 py-4">
+                <button
+                  class="px-4 py-2 text-xs font-medium bg-blue-600 text-white rounded-lg hover:bg-blue-700 active:scale-[.98] transition-all shadow-sm">
+                  Ver habitaciones
+                </button>
+              </td>
+
+            </tr>
+          }
+
+        </tbody>
+
+        } @else {
+
+          <tbody>
+            <tr>
+              <td colspan="6" class="px-6 py-10 text-center text-gray-500 text-lg font-semibold">
+                No hay información que mostrar
+              </td>
+            </tr>
+          </tbody>
+
+        }
+
+      </table>
+    </div>
+
+  </div>
+
+</div>
