@@ -1,40 +1,45 @@
-import { AfterViewInit, Component } from '@angular/core';
-import { NavBarComponent } from "../../components/nav-bar/nav-bar.component";
-import { FooterComponent } from "../../components/footer/footer.component";
+import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { RouterLink } from '@angular/router';
+import { ReservaPublicService } from '../../services/reserva-public.service';
+import { DepartamentoPublic } from '../../interfaces/departamento-public.interface';
 
 @Component({
+  standalone: true,
   selector: 'app-home-page',
-  imports: [NavBarComponent, FooterComponent],
+  imports: [CommonModule, RouterLink],
   templateUrl: './home-page.component.html',
-
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class HomePageComponent implements AfterViewInit {
+export class HomePageComponent {
+  private reservaService = inject(ReservaPublicService);
 
+  departamentosDestacados = signal<DepartamentoPublic[]>([]);
+  loading = signal<boolean>(true);
 
-  ngAfterViewInit(): void {
-
-    // Smooth scroll
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-      anchor.addEventListener('click', (e) => {
-        e.preventDefault();
-        const target = document.querySelector(
-          (e.currentTarget as HTMLAnchorElement).getAttribute('href')!
-        );
-        if (target) {
-          target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        }
-      });
-    });
-
-    // Parallax effect
-    window.addEventListener('scroll', () => {
-      const scrolled = window.pageYOffset;
-      const hero = document.querySelector('section');
-      if (hero && scrolled < window.innerHeight) {
-        (hero as HTMLElement).style.transform = `translateY(${scrolled * 0.5}px)`;
-      }
-    });
-
+  constructor() {
+    this.loadDepartamentosDestacados();
   }
 
+  loadDepartamentosDestacados(): void {
+    this.reservaService.getDepartamentos().subscribe({
+      next: (data) => {
+        // Mostrar solo los primeros 4 departamentos
+        this.departamentosDestacados.set(data.slice(0, 4));
+        this.loading.set(false);
+      },
+      error: (err) => {
+        console.error('Error cargando departamentos:', err);
+        this.loading.set(false);
+      },
+    });
+  }
+
+  getImagenDepartamento(nombre: string): string {
+    const nombreLower = nombre
+      .toLowerCase()
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '');
+    return `https://source.unsplash.com/600x400/?${nombreLower},peru,travel`;
+  }
 }

@@ -1,19 +1,16 @@
-import { HttpHandlerFn, HttpRequest } from "@angular/common/http";
-import { inject } from "@angular/core";
-import { AuthService } from "../services/auth.service";
+import { HttpHandlerFn, HttpRequest } from '@angular/common/http';
+import { inject } from '@angular/core';
+import { AuthService } from '../services/auth.service';
 
+export function authInterceptor(req: HttpRequest<unknown>, next: HttpHandlerFn) {
+  const token = inject(AuthService).token();
 
-// para transferir entre peticiones http el token del login
-export function authInterceptor(
-  req: HttpRequest<unknown>,
-  next: HttpHandlerFn) {
+  // Solo agregar token si existe y no es ruta pública
+  if (token && !req.url.includes('/api/public/') && !req.url.includes('/api/v1/auth/')) {
+    req = req.clone({
+      headers: req.headers.append('Authorization', `Bearer ${token}`),
+    });
+  }
 
-  const token = inject(AuthService).token(); // antes habia puesto .token, pero eso devolvia el signal completo, con el parentesis estas llamando al valor interno.
-
-    console.log("INTERCEPTOR, AQUI ESTA EL TOKEN: ", token);
-
-  const newReq = req.clone({
-    headers: req.headers.append('Authorization', `Bearer ${token}`),
-  });
-  return next(newReq);
+  return next(req); //  Esto faltaba
 }

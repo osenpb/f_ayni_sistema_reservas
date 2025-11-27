@@ -1,0 +1,101 @@
+<div class="p-8">
+  <!-- Header -->
+  <div class="flex justify-between items-center mb-6">
+    <h2 class="text-3xl font-bold tracking-tight text-gray-800">
+      Listado de Departamentos
+    </h2>
+    <button [routerLink]="['/admin/departamento/crear']"
+      class="px-4 py-2 text-sm font-medium bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-all shadow-sm">
+      + Nuevo Departamento
+    </button>
+  </div>
+
+  <!-- Tabla -->
+  <div class="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
+    <div class="overflow-x-auto">
+      <table class="min-w-full divide-y divide-gray-200">
+
+        <!-- Cabecera -->
+        <thead class="bg-gray-50">
+          <tr>
+            <th class="px-6 py-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">
+              ID
+            </th>
+            <th class="px-6 py-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">
+              Nombre
+            </th>
+            <th class="px-6 py-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">
+              Detalle
+            </th>
+            <th class="px-6 py-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">
+              Acciones
+            </th>
+          </tr>
+        </thead>
+
+        <!-- Loading -->
+        @if (loading()) {
+        <tbody>
+          <tr>
+            <td colspan="4" class="px-6 py-10 text-center text-gray-500">
+              <div class="flex justify-center items-center gap-2">
+                <svg class="animate-spin h-5 w-5 text-blue-600" xmlns="http://www.w3.org/2000/svg" fill="none"
+                  viewBox="0 0 24 24">
+                  <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                  <path class="opacity-75" fill="currentColor"
+                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
+                  </path>
+                </svg>
+                <span>Cargando departamentos...</span>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+        }
+
+        <!-- Con datos -->
+        @else if (departamentos().length > 0) {
+        <tbody class="divide-y divide-gray-100 bg-white">
+          @for (dep of departamentos(); track dep.id) {
+          <tr class="hover:bg-gray-50 transition-colors">
+            <td class="px-6 py-4 text-sm text-gray-700">
+              {{ dep.id }}
+            </td>
+            <td class="px-6 py-4 text-sm font-medium text-gray-800">
+              {{ dep.nombre }}
+            </td>
+            <td class="px-6 py-4 text-sm text-gray-700">
+              {{ dep.detalle }}
+            </td>
+            <td class="px-6 py-4">
+              <div class="flex gap-2">
+                <button [routerLink]="['/admin/departamento/editar', dep.id]"
+                  class="px-4 py-2 text-xs font-medium bg-amber-500 text-white rounded-lg hover:bg-amber-600 transition-all shadow-sm">
+                  Editar
+                </button>
+                <button type="button" (click)="eliminarDepartamento(dep.id)"
+                  class="px-4 py-2 text-xs font-medium bg-red-600 text-white rounded-lg hover:bg-red-700 transition-all shadow-sm">
+                  Eliminar
+                </button>
+              </div>
+            </td>
+          </tr>
+          }
+        </tbody>
+        }
+
+        <!-- Sin datos -->
+        @else {
+        <tbody>
+          <tr>
+            <td colspan="4" class="px-6 py-10 text-center text-gray-500 text-lg font-semibold">
+              No hay departamentos registrados
+            </td>
+          </tr>
+        </tbody>
+        }
+
+      </table>
+    </div>
+  </div>
+</div>

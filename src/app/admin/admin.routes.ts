@@ -1,6 +1,6 @@
-import { Routes } from "@angular/router";
-import { AdminLayoutComponent } from "./layout/admin-layout/admin-layout.component";
-import { DashboardPageComponent } from "./pages/dashboard-page/dashboard-page.component";
+import { Routes } from '@angular/router';
+import { AdminLayoutComponent } from './layout/admin-layout/admin-layout.component';
+import { DashboardPageComponent } from './pages/dashboard-page/dashboard-page.component';
 
 export const adminRoutes: Routes = [
   {
@@ -9,14 +9,23 @@ export const adminRoutes: Routes = [
     children: [
       {
         path: 'dashboard',
-        component: DashboardPageComponent // esta sera una pagina x defecto, podria mostrar estadisticas
+        component: DashboardPageComponent,
       },
       {
         path: 'hotel',
-        loadChildren: () => import('./hotel/hotel.routes').then(m => m.hotelAdminRoutes)
-      }
-    ]
-  }
-]
+        loadChildren: () => import('./hotel/hotel.routes').then((m) => m.hotelAdminRoutes),
+      },
+      {
+        path: 'departamento',
+        loadChildren: () =>
+          import('./departamento/departamento.routes').then((m) => m.departamentoRoutes),
+      },
+      {
+        path: 'reserva',
+        loadChildren: () => import('./reserva/reserva.routes').then((m) => m.reservaRoutes),
+      },
+    ],
+  },
+];
 
 export default adminRoutes;

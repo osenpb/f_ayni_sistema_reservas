@@ -6,23 +6,18 @@ import { HttpClient } from '@angular/common/http';
 import { catchError, Observable, tap, throwError } from 'rxjs';
 import { Departamento } from '../interfaces/departamento.interface';
 
-
-
-const baseUrl = 'http://localhost:8080/api/admin'
-
+const baseUrl = 'http://localhost:8080/api/admin';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class HotelService {
-
-
   private http = inject(HttpClient);
 
   getAllHoteles(): Observable<Hotel[]> {
     return this.http.get<Hotel[]>(`${baseUrl}/hoteles`).pipe(
       catchError((error: any) => {
-        console.error("Error: ", error);
+        console.error('Error: ', error);
         return throwError(() => error);
       })
     );
@@ -31,37 +26,36 @@ export class HotelService {
   createHotel(hotelRequest: HotelRequest) {
     return this.http.post<HotelRequest>(`${baseUrl}/hoteles`, hotelRequest).pipe(
       catchError((error: any) => {
-        console.error("Error: ", error);
+        console.error('Error: ', error);
         return throwError(() => error);
       })
     );
   }
 
   updateHotel(hotelRequest: HotelRequest) {
-    return this.http.post<HotelRequest>(`${baseUrl}/hoteles`, hotelRequest).pipe(
+    return this.http.put<HotelRequest>(`${baseUrl}/hoteles`, hotelRequest).pipe(
       catchError((error: any) => {
-        console.error("Error: ", error);
-        return throwError(() => error);
-      })
-    )
-  }
-
-  getById(idHotel: number): Observable<Hotel> {
-    return this.http.get<Hotel>(`${baseUrl}/hoteles/${idHotel}`).pipe(
-      catchError((error: any) => {
-        console.error("Error: ", error);
+        console.error('Error: ', error);
         return throwError(() => error);
       })
     );
   }
 
+  getById(idHotel: number): Observable<Hotel> {
+    return this.http.get<Hotel>(`${baseUrl}/hoteles/${idHotel}`).pipe(
+      catchError((error: any) => {
+        console.error('Error: ', error);
+        return throwError(() => error);
+      })
+    );
+  }
 
   deleteById(idHotel: number) {
     return this.http.delete<number>(`${baseUrl}/hoteles/${idHotel}`).pipe(
       catchError((error: any) => {
-        console.error("Error: ", error);
-        return throwError(() => error)
+        console.error('Error: ', error);
+        return throwError(() => error);
       })
-    )
+    );
   }
 }
