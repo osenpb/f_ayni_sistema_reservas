@@ -19,10 +19,10 @@ export const adminRoutes: Routes = [
         path: 'departamento',
         loadChildren: () => import('./departamento/departamento.routes').then((m) => m.departamentoRoutes),
       },
-      {
-        path: 'reserva',
-        loadChildren: () => import('./reserva/reserva.routes').then((m) => m.reservaRoutes),
-      },
+      // {
+      //   path: 'reserva',
+      //   loadChildren: () => import('./reserva/reserva.routes').then((m) => m.reservaRoutes),
+      // },
     ],
   },
 ];

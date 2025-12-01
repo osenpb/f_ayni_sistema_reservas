@@ -1,8 +1,9 @@
 import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HotelResponse } from '../../../../interfaces/hotel/hotel-response.interface';
-import { HotelService } from '../../../services/hotel.service';
+
 import { RouterLink } from '@angular/router';
+import { HotelService } from '../../../../services/hotel.service';
 
 @Component({
   standalone: true,
@@ -21,7 +22,7 @@ export class ListHotelPageComponent {
   }
 
   loadAllHoteles() {
-    this.hotelService.getAllHoteles().subscribe({
+    this.hotelService.getAll().subscribe({
       next: (data) => this.hoteles.set(data),
       error: (err) => console.error('Error cargando hoteles', err),
     });

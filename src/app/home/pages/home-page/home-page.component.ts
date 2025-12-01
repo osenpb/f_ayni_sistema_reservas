@@ -36,11 +36,11 @@ export class HomePageComponent {
     });
   }
 
-  getImagenDepartamento(nombre: string): string { // esto sobra creo, verificar luego
-    const nombreLower = nombre
-      .toLowerCase()
-      .normalize('NFD')
-      .replace(/[\u0300-\u036f]/g, '');
-    return `https://source.unsplash.com/600x400/?${nombreLower},peru,travel`;
-  }
+  // getImagenDepartamento(nombre: string): string { // esto sobra creo, verificar luego
+  //   const nombreLower = nombre
+  //     .toLowerCase()
+  //     .normalize('NFD')
+  //     .replace(/[\u0300-\u036f]/g, '');
+  //   return `https://source.unsplash.com/600x400/?${nombreLower},peru,travel`;
+  // }
 }

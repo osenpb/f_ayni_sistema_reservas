@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, inject, OnInit, signal } from '@ang
 import { CommonModule } from '@angular/common';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
-import { DepartamentoService } from '../../../services/departamento.service';
+import { DepartamentoService } from '../../../../services/departamento.service';
 
 @Component({
   standalone: true,

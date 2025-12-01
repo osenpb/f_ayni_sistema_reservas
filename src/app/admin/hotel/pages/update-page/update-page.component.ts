@@ -2,11 +2,12 @@ import { Component, OnInit, signal } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { RouterModule, ActivatedRoute, Router } from '@angular/router';
-import { HotelService } from '../../../services/hotel.service';
-import { TipoHabitacionService } from '../../../services/tipo-habitacion.service';
-import { DepartamentoService } from '../../../services/departamento.service';
+
 import { forkJoin } from 'rxjs';
 import { TipoHabitacionResponse } from '../../../../interfaces/tipo-habitacion/tipo-habitacion-response.interface';
+import { HotelService } from '../../../../services/hotel.service';
+import { TipoHabitacionService } from '../../../../services/tipo-habitacion.service';
+import { DepartamentoService } from '../../../../services/departamento.service';
 
 @Component({
   selector: 'app-hotel-form',
@@ -153,8 +154,9 @@ export class UpdateHotelFormComponent implements OnInit {
         numero: hab.numero,
         estado: hab.estado,
         precio: hab.precio,
-        tipoHabitacionId: Number(hab.tipoHabitacion)
-      }))
+        tipoHabitacionId: Number(hab.tipoHabitacion),
+      })),
+      imagenUrl: ''
     };
 
     console.log('Payload a enviar:', payload);

@@ -5,4 +5,5 @@ export type HotelRequest = {
     direccion: string;
     departamentoId: number;
     habitaciones: HabitacionRequest[] | null;
-}
+    imagenUrl : string;
+  }

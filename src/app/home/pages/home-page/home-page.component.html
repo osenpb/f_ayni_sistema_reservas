@@ -138,8 +138,8 @@
         </a>
       </div>
 
-      <!-- Loading -->
-      @if (loading()) {
+      <!-- Loading  AQUIIIII ESTO CHOCA-->
+      <!-- @if (loading()) {
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         @for (item of [1,2,3,4]; track item) {
         <div class="animate-pulse">
@@ -149,17 +149,17 @@
         </div>
         }
       </div>
-      }
+      } -->
 
       <!-- Departamentos -->
-      @else if (departamentosDestacados().length > 0) {
+      @if (departamentosDestacados().length > 0) {
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         @for (dep of departamentosDestacados(); track dep.id) {
         <a [routerLink]="['/home/hoteles', dep.id]"
           class="group relative rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300">
           <div class="aspect-4/3 overflow-hidden">
-            <img [src]="getImagenDepartamento(dep.nombre)" [alt]="dep.nombre"
-              class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+            <!-- <img [src]="getImagenDepartamento(dep.nombre)" [alt]="dep.nombre"
+              class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"> -->
           </div>
           <div class="absolute inset-0 bg-linear-to-t from-black/70 via-black/20 to-transparent"></div>
           <div class="absolute bottom-0 left-0 right-0 p-4">

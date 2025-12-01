@@ -1,8 +1,9 @@
 import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { catchError, Observable, throwError } from 'rxjs';
-import { HotelResponse } from '../../interfaces/hotel/hotel-response.interface';
-import { HotelRequest } from '../../interfaces/hotel/hotel-request.interface';
+import { HotelResponse } from '../interfaces/hotel/hotel-response.interface';
+import { HotelRequest } from '../interfaces/hotel/hotel-request.interface';
+
 
 const baseUrl = 'http://localhost:8080/api/admin';
 
@@ -12,7 +13,7 @@ const baseUrl = 'http://localhost:8080/api/admin';
 export class HotelService {
   private http = inject(HttpClient);
 
-  getAllHoteles(): Observable<HotelResponse[]> {
+  getAll(): Observable<HotelResponse[]> {
     return this.http.get<HotelResponse[]>(`${baseUrl}/hoteles`).pipe(
       catchError((error: any) => {
         console.error('Error al obtener hoteles:', error);

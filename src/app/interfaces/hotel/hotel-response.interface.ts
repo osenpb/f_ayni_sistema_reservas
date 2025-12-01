@@ -10,6 +10,6 @@ export interface HotelResponse {
   nombre:       string;
   direccion:    string;
   habitaciones: HabitacionResponse[]
-
+  imagenUrl : string;
 }
 

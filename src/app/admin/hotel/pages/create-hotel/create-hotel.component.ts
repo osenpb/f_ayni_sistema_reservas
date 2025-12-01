@@ -3,9 +3,10 @@ import { routes } from './../../../../app.routes';
 import { Component, inject, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { DepartamentoResponse } from '../../../../interfaces/departamento/departamento-response.interface';
-import { DepartamentoService } from '../../../services/departamento.service';
-import { HotelService } from '../../../services/hotel.service';
+
 import { CommonModule } from '@angular/common';
+import { HotelService } from '../../../../services/hotel.service';
+import { DepartamentoService } from '../../../../services/departamento.service';
 
 @Component({
   selector: 'app-create-hotel.component',
@@ -50,7 +51,8 @@ export class CreateHotelPageComponent {
       nombre: formValue.nombre ?? '', // aunque me gustaria evitar esto luego
       direccion: formValue.direccion ?? '', // x2
       departamentoId: Number(formValue.departamentoId),
-      habitaciones: [] // xq en la creacion no se agregaran habitaciones, en el update sí
+      habitaciones: [], // xq en la creacion no se agregaran habitaciones, en el update sí
+      imagenUrl: '' // Placeholder vacío para la URL de la imagen
     };
 
     this.hotelService.createHotel(hotelData).subscribe({
