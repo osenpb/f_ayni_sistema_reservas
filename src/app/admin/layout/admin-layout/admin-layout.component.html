@@ -1,0 +1,22 @@
+<div class="flex min-h-screen bg-gray-100">
+    <!-- Sidebar -->
+    <app-sidebar></app-sidebar>
+
+    <!-- Main Content -->
+    <main class="flex-1 ml-64">
+        <!-- Top Bar -->
+        <header class="bg-white shadow-sm sticky top-0 z-50">
+            <div class="flex items-center justify-between px-8 py-4">
+                <div>
+                    <h1 class="text-2xl font-bold text-gray-800">Dashboard</h1>
+                    <p class="text-sm text-gray-500">Bienvenido al panel de administración</p>
+                </div>
+            </div>
+        </header>
+
+        <!-- Las rutas hijas van aca, x eso el router outlet en este apartado -->
+        <section class="p-6">
+            <router-outlet></router-outlet>
+        </section>
+    </main>
+</div>

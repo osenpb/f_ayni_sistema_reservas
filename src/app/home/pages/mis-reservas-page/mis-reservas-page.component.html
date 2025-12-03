@@ -1,0 +1,235 @@
+<div class="min-h-screen bg-gray-50">
+  <!-- Header -->
+  <div class="bg-gradient-to-r from-blue-600 to-blue-800 text-white py-12">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <!-- Breadcrumb -->
+      <nav class="mb-4">
+        <ol class="flex items-center gap-2 text-blue-200 text-sm">
+          <li>
+            <a [routerLink]="['/home']" class="hover:text-white transition-colors">Inicio</a>
+          </li>
+          <li>
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24"
+              stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+            </svg>
+          </li>
+          <li class="text-white font-medium">Mis Reservas</li>
+        </ol>
+      </nav>
+
+      <h1 class="text-3xl md:text-4xl font-bold mb-2">
+        Mis Reservas
+      </h1>
+      <p class="text-blue-100">
+        Consulta el estado de tus reservas con tu número de DNI
+      </p>
+    </div>
+  </div>
+
+  <!-- Contenido -->
+  <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+
+    <!-- Buscador -->
+    <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 mb-8">
+      <div class="flex flex-col sm:flex-row gap-4">
+        <div class="flex-1">
+          <label class="block text-sm font-medium text-gray-700 mb-2">
+            Número de DNI
+          </label>
+          <div class="relative">
+            <input type="text" [value]="dni()" (input)="onDniInput($event)" (keyup.enter)="buscarReservas()"
+              maxlength="8" placeholder="Ingrese su DNI (8 dígitos)"
+              class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition text-lg">
+            @if (dni()) {
+            <button type="button" (click)="limpiarBusqueda()"
+              class="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+                stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+            }
+          </div>
+        </div>
+        <div class="flex items-end">
+          <button type="button" (click)="buscarReservas()" [disabled]="loading()"
+            class="w-full sm:w-auto px-8 py-3 bg-blue-600 text-white font-semibold rounded-xl hover:bg-blue-700 transition disabled:opacity-50 disabled:cursor-not-allowed">
+            @if (loading()) {
+            <span class="flex items-center justify-center gap-2">
+              <svg class="animate-spin h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                <path class="opacity-75" fill="currentColor"
+                  d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
+                </path>
+              </svg>
+              Buscando...
+            </span>
+            } @else {
+            Buscar
+            }
+          </button>
+        </div>
+      </div>
+
+      <!-- Error -->
+      @if (error()) {
+      <div class="mt-4 bg-red-50 border border-red-200 rounded-xl p-3 flex items-center gap-2">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-red-500 flex-shrink-0" fill="none"
+          viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+        <p class="text-red-700 text-sm">{{ error() }}</p>
+      </div>
+      }
+    </div>
+
+    <!-- Resultados -->
+    @if (buscado()) {
+    @if (reservas().length > 0) {
+    <!-- Header de resultados -->
+    <div class="flex justify-between items-center mb-4">
+      <p class="text-gray-600">
+        Se encontraron <span class="font-semibold text-gray-800">{{ reservas().length }}</span>
+        reserva(s) para el DNI: <span class="font-semibold">{{ dni() }}</span>
+      </p>
+    </div>
+
+    <!-- Lista de reservas -->
+    <div class="space-y-4">
+      @for (reserva of reservas(); track reserva.id) {
+      <div
+        class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-md transition-shadow">
+        <!-- Header de la reserva -->
+        <div class="p-4 sm:p-6 border-b border-gray-100">
+          <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+            <div class="flex items-center gap-3">
+              <div class="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center flex-shrink-0">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-blue-600" fill="none" viewBox="0 0 24 24"
+                  stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                </svg>
+              </div>
+              <div>
+                <p class="text-sm text-gray-500">Reserva</p>
+                <p class="text-xl font-bold text-gray-800">#{{ reserva.id }}</p>
+              </div>
+            </div>
+            <span class="px-4 py-1.5 text-sm font-medium rounded-full self-start sm:self-center"
+              [ngClass]="getEstadoClass(reserva.estado)">
+              {{ reserva.estado }}
+            </span>
+          </div>
+        </div>
+
+        <!-- Contenido de la reserva -->
+        <div class="p-4 sm:p-6">
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            <!-- Hotel -->
+            <div>
+              <p class="text-sm text-gray-500 mb-1">Hotel</p>
+              <p class="font-medium text-gray-800">{{ reserva.hotel.nombre }}</p>
+            </div>
+
+            <!-- Fechas -->
+            <div>
+              <p class="text-sm text-gray-500 mb-1">Check-in / Check-out</p>
+              <p class="font-medium text-gray-800">
+                {{ formatDate(reserva.fechaInicio) }} - {{ formatDate(reserva.fechaFin) }}
+              </p>
+              <p class="text-xs text-gray-500">
+                {{ calcularNoches(reserva.fechaInicio, reserva.fechaFin) }} noche(s)
+              </p>
+            </div>
+
+            <!-- Habitaciones -->
+            <div>
+              <p class="text-sm text-gray-500 mb-1">Habitaciones</p>
+              <p class="font-medium text-gray-800">{{ reserva.detalles.length }}</p>
+            </div>
+
+            <!-- Total -->
+            <div>
+              <p class="text-sm text-gray-500 mb-1">Total</p>
+              <p class="text-xl font-bold text-green-600">{{ formatCurrency(reserva.total) }}</p>
+            </div>
+          </div>
+
+          <!-- Fecha de reserva -->
+          <div
+            class="mt-4 pt-4 border-t border-gray-100 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+            <p class="text-sm text-gray-500">
+              Reservado el {{ formatDateLong(reserva.fechaReserva) }}
+            </p>
+            <a [routerLink]="['/home/reserva', reserva.id, 'confirmacion']" class="inline-flex items-center gap-2 text-blue-600 hover:text-blue-800 font-medium text-sm
+            transition-colors">
+              Ver detalles
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24"
+                stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+              </svg>
+            </a>
+          </div>
+        </div>
+      </div>
+      }
+    </div>
+    } @else {
+    <!-- Sin reservas -->
+    <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-12 text-center">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 mx-auto text-gray-300 mb-4" fill="none"
+        viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+          d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+      </svg>
+      <h3 class="text-xl font-semibold text-gray-700 mb-2">
+        No se encontraron reservas
+      </h3>
+      <p class="text-gray-500 mb-6">
+        @if (mensaje()) {
+        {{ mensaje() }}
+        } @else {
+        No hay reservas registradas para el DNI: <span class="font-medium">{{ dni() }}</span>
+        }
+      </p>
+      <a [routerLink]="['/home/departamentos']"
+        class="inline-flex items-center gap-2 px-6 py-3 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+        </svg>
+        Hacer una reserva
+      </a>
+    </div>
+    }
+    } @else {
+    <!-- Estado inicial -->
+    <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-12 text-center">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 mx-auto text-blue-200 mb-4" fill="none"
+        viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+          d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+      </svg>
+      <h3 class="text-xl font-semibold text-gray-700 mb-2">
+        Busca tus reservas
+      </h3>
+      <p class="text-gray-500">
+        Ingresa tu número de DNI para ver el estado de tus reservas
+      </p>
+    </div>
+    }
+
+  </div>
+
+  <!-- Navegación -->
+  <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pb-12">
+    <a [routerLink]="['/home']"
+      class="inline-flex items-center gap-2 text-blue-600 hover:text-blue-800 font-medium transition-colors">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+      </svg>
+      Volver al inicio
+    </a>
+  </div>
+</div>

@@ -1,0 +1,7 @@
+
+
+export interface DepartamentoResponse {
+  id:      number;
+  nombre:  string;
+  detalle: string;
+}
