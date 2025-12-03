@@ -34,7 +34,7 @@
         Reservar
       </a>
 
-      <a href="#contacto"
+      <a routerLink="/home/contacto" routerLinkActive="bg-slate-800"
         class="flex items-center gap-2 px-4 py-2 text-gray-300 rounded-lg hover:bg-slate-800 hover:text-white transition-colors">
         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -68,9 +68,8 @@
     <!-- Right side buttons -->
     <div class="flex items-center gap-3">
       @if (isAuthenticated()) {
-      <!-- User info + Logout -->
+      <!-- Logout button -->
       <div class="hidden md:flex items-center gap-3">
-        <span class="text-gray-400 text-sm">{{ usuario()?.username }}</span>
         <button (click)="logout()"
           class="flex items-center gap-2 px-4 py-2 bg-rose-600 text-white rounded-lg hover:bg-rose-700 transition-colors">
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -122,7 +121,7 @@
         </svg>
         Reservar
       </a>
-      <a href="#contacto"
+      <a routerLink="/home/contacto" (click)="toggleMobileMenu()"
         class="flex items-center gap-3 px-4 py-3 text-gray-300 rounded-lg hover:bg-slate-700 hover:text-white">
         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"

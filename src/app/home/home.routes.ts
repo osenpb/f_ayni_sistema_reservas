@@ -6,6 +6,7 @@ import { ReservaPageComponent } from './pages/reserva-page/reserva-page.componen
 import { PagoPageComponent } from './pages/pago-page/pago-page.component';
 import { ConfirmacionPageComponent } from './pages/confirmacion-page/confirmacion-page.component';
 import { MisReservasPageComponent } from './pages/mis-reservas-page/mis-reservas-page.component';
+import { ContactoPageComponent } from './pages/contacto-page/contacto-page.component';
 import { ClienteLayoutComponent } from './layout/cliente-layout/cliente-layout.component';
 
 export const homeRoutes: Routes = [
@@ -45,8 +46,12 @@ export const homeRoutes: Routes = [
         path: 'mis-reservas',
         component: MisReservasPageComponent,
       },
-    ]
-  }
+      {
+        path: 'contacto',
+        component: ContactoPageComponent,
+      },
+    ],
+  },
 ];
 
 export default homeRoutes;

@@ -1,4 +1,11 @@
-import { ChangeDetectionStrategy, Component, inject, OnInit, signal, computed } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  inject,
+  OnInit,
+  signal,
+  computed,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, ReactiveFormsModule, Validators, FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
@@ -36,9 +43,7 @@ export class ReservaPageComponent implements OnInit {
   errorMessage = signal<string | null>(null);
 
   // Lista de habitaciones seleccionadas (dinámicas)
-  habitacionesSeleccionadas = signal<HabitacionSeleccionada[]>([
-    { index: 1, habitacionId: null }
-  ]);
+  habitacionesSeleccionadas = signal<HabitacionSeleccionada[]>([{ index: 1, habitacionId: null }]);
 
   private nextIndex = 2;
 
@@ -59,15 +64,44 @@ export class ReservaPageComponent implements OnInit {
   // Fecha mínima (hoy)
   minDate = new Date().toISOString().split('T')[0];
 
-  // Computed para calcular el total
+  // Computed para calcular las noches
+  noches = computed(() => {
+    const fechas = this.fechasForm.getRawValue();
+    if (!fechas.fechaInicio || !fechas.fechaFin) return 0;
+
+    const inicio = new Date(fechas.fechaInicio);
+    const fin = new Date(fechas.fechaFin);
+    const diff = fin.getTime() - inicio.getTime();
+    return Math.max(0, Math.ceil(diff / (1000 * 60 * 60 * 24)));
+  });
+
+  // Computed para calcular el total (precio por noche * noches)
   total = computed(() => {
     const habitaciones = this.habitacionesDisponibles();
     const seleccionadas = this.habitacionesSeleccionadas();
-    
+    const numNoches = this.noches();
+
+    let sumaPorNoche = 0;
+    for (const sel of seleccionadas) {
+      if (sel.habitacionId) {
+        const hab = habitaciones.find((h) => h.id === sel.habitacionId);
+        if (hab) {
+          sumaPorNoche += hab.precio;
+        }
+      }
+    }
+    return sumaPorNoche * (numNoches > 0 ? numNoches : 1);
+  });
+
+  // Computed para el subtotal (precio por noche sin multiplicar)
+  subtotalPorNoche = computed(() => {
+    const habitaciones = this.habitacionesDisponibles();
+    const seleccionadas = this.habitacionesSeleccionadas();
+
     let suma = 0;
     for (const sel of seleccionadas) {
       if (sel.habitacionId) {
-        const hab = habitaciones.find(h => h.id === sel.habitacionId);
+        const hab = habitaciones.find((h) => h.id === sel.habitacionId);
         if (hab) {
           suma += hab.precio;
         }
@@ -81,10 +115,10 @@ export class ReservaPageComponent implements OnInit {
     const habitaciones = this.habitacionesDisponibles();
     const seleccionadas = this.habitacionesSeleccionadas();
     const seleccionadasIds = seleccionadas
-      .filter(s => s.index !== currentIndex && s.habitacionId !== null)
-      .map(s => s.habitacionId);
-    
-    return habitaciones.filter(h => !seleccionadasIds.includes(h.id));
+      .filter((s) => s.index !== currentIndex && s.habitacionId !== null)
+      .map((s) => s.habitacionId);
+
+    return habitaciones.filter((h) => !seleccionadasIds.includes(h.id));
   }
 
   ngOnInit(): void {
@@ -133,13 +167,13 @@ export class ReservaPageComponent implements OnInit {
     const hoy = new Date();
     const manana = new Date(hoy);
     manana.setDate(manana.getDate() + 1);
-    
+
     const fechaInicio = hoy.toISOString().split('T')[0];
     const fechaFin = manana.toISOString().split('T')[0];
 
     this.fechasForm.patchValue({
       fechaInicio: fechaInicio,
-      fechaFin: fechaFin
+      fechaFin: fechaFin,
     });
 
     this.buscarHabitaciones();
@@ -194,18 +228,18 @@ export class ReservaPageComponent implements OnInit {
   agregarHabitacion(): void {
     const seleccionadas = this.habitacionesSeleccionadas();
     const disponibles = this.habitacionesDisponibles();
-    
+
     // Verificar si hay más habitaciones disponibles
     const idsSeleccionados = seleccionadas
-      .filter(s => s.habitacionId !== null)
-      .map(s => s.habitacionId);
-    
-    const habsRestantes = disponibles.filter(h => !idsSeleccionados.includes(h.id));
-    
+      .filter((s) => s.habitacionId !== null)
+      .map((s) => s.habitacionId);
+
+    const habsRestantes = disponibles.filter((h) => !idsSeleccionados.includes(h.id));
+
     if (habsRestantes.length > 0) {
       this.habitacionesSeleccionadas.set([
         ...seleccionadas,
-        { index: this.nextIndex++, habitacionId: null }
+        { index: this.nextIndex++, habitacionId: null },
       ]);
     }
   }
@@ -213,26 +247,22 @@ export class ReservaPageComponent implements OnInit {
   quitarHabitacion(index: number): void {
     const seleccionadas = this.habitacionesSeleccionadas();
     if (seleccionadas.length > 1) {
-      this.habitacionesSeleccionadas.set(
-        seleccionadas.filter(s => s.index !== index)
-      );
+      this.habitacionesSeleccionadas.set(seleccionadas.filter((s) => s.index !== index));
     }
   }
 
   onHabitacionChange(index: number, event: Event): void {
     const select = event.target as HTMLSelectElement;
     const habitacionId = select.value ? Number(select.value) : null;
-    
+
     const seleccionadas = this.habitacionesSeleccionadas();
     this.habitacionesSeleccionadas.set(
-      seleccionadas.map(s => 
-        s.index === index ? { ...s, habitacionId } : s
-      )
+      seleccionadas.map((s) => (s.index === index ? { ...s, habitacionId } : s))
     );
   }
 
   getHabitacionInfo(habitacionId: number): HabitacionPublic | undefined {
-    return this.habitacionesDisponibles().find(h => h.id === habitacionId);
+    return this.habitacionesDisponibles().find((h) => h.id === habitacionId);
   }
 
   onSubmit(): void {
@@ -251,8 +281,8 @@ export class ReservaPageComponent implements OnInit {
 
     // Obtener IDs de habitaciones seleccionadas
     const habitacionesIds = this.habitacionesSeleccionadas()
-      .filter(s => s.habitacionId !== null)
-      .map(s => s.habitacionId as number);
+      .filter((s) => s.habitacionId !== null)
+      .map((s) => s.habitacionId as number);
 
     if (habitacionesIds.length === 0) {
       this.errorMessage.set('Seleccione al menos una habitación');
