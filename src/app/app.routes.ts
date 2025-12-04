@@ -4,23 +4,19 @@ export const routes: Routes = [
   {
     path: '',
     redirectTo: 'auth/login',
-    pathMatch: 'full'
+    pathMatch: 'full',
   },
 
   {
     path: 'auth',
-    loadChildren: () => import('./auth/auth.routes')
+    loadChildren: () => import('./auth/auth.routes'),
   },
   {
     path: 'home',
-    loadChildren: () => import('./home/home.routes')
+    loadChildren: () => import('./home/home.routes'),
   },
   {
     path: 'admin',
-    loadChildren: () => import('./admin/admin.routes')
-  }
-
-
-
-
+    loadChildren: () => import('./admin/admin.routes'),
+  },
 ];

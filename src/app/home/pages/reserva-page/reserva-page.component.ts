@@ -5,6 +5,7 @@ import {
   OnInit,
   signal,
   computed,
+  effect,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, ReactiveFormsModule, Validators, FormsModule } from '@angular/forms';
@@ -42,6 +43,10 @@ export class ReservaPageComponent implements OnInit {
   submitting = signal<boolean>(false);
   errorMessage = signal<string | null>(null);
 
+  // Signals para las fechas (para que computed funcione correctamente)
+  fechaInicioSignal = signal<string>('');
+  fechaFinSignal = signal<string>('');
+
   // Lista de habitaciones seleccionadas (dinámicas)
   habitacionesSeleccionadas = signal<HabitacionSeleccionada[]>([{ index: 1, habitacionId: null }]);
 
@@ -64,13 +69,15 @@ export class ReservaPageComponent implements OnInit {
   // Fecha mínima (hoy)
   minDate = new Date().toISOString().split('T')[0];
 
-  // Computed para calcular las noches
+  // Computed para calcular las noches (ahora usa signals)
   noches = computed(() => {
-    const fechas = this.fechasForm.getRawValue();
-    if (!fechas.fechaInicio || !fechas.fechaFin) return 0;
+    const fechaInicio = this.fechaInicioSignal();
+    const fechaFin = this.fechaFinSignal();
 
-    const inicio = new Date(fechas.fechaInicio);
-    const fin = new Date(fechas.fechaFin);
+    if (!fechaInicio || !fechaFin) return 0;
+
+    const inicio = new Date(fechaInicio);
+    const fin = new Date(fechaFin);
     const diff = fin.getTime() - inicio.getTime();
     return Math.max(0, Math.ceil(diff / (1000 * 60 * 60 * 24)));
   });
@@ -176,6 +183,10 @@ export class ReservaPageComponent implements OnInit {
       fechaFin: fechaFin,
     });
 
+    // Actualizar signals de fechas
+    this.fechaInicioSignal.set(fechaInicio);
+    this.fechaFinSignal.set(fechaFin);
+
     this.buscarHabitaciones();
   }
 
@@ -220,6 +231,11 @@ export class ReservaPageComponent implements OnInit {
 
   onFechaChange(): void {
     const fechas = this.fechasForm.getRawValue();
+
+    // Actualizar signals de fechas para que computed se recalcule
+    this.fechaInicioSignal.set(fechas.fechaInicio || '');
+    this.fechaFinSignal.set(fechas.fechaFin || '');
+
     if (fechas.fechaInicio && fechas.fechaFin) {
       this.buscarHabitaciones();
     }
