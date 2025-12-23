@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, input } from '@angular/core';
-import { HotelResponse } from '../../../interfaces/hotel/hotel-response.interface';
+import { HotelResponse } from '../../../interfaces';
 
 @Component({
   selector: 'app-card-hotel.component',

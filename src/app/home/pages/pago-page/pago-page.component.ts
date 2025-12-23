@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { ReservaPublicService } from '../../services/reserva-public.service';
-import { ReservaDetalleResponse } from '../../interfaces/reserva-public.interface';
+import { ReservaResponse } from '../../../interfaces';
 
 @Component({
   standalone: true,
@@ -18,7 +18,7 @@ export class PagoPageComponent implements OnInit {
   private reservaService = inject(ReservaPublicService);
 
   reservaId = signal<number | null>(null);
-  reserva = signal<ReservaDetalleResponse | null>(null);
+  reserva = signal<ReservaResponse | null>(null);
   loading = signal<boolean>(true);
   procesando = signal<boolean>(false);
   errorMessage = signal<string | null>(null);
@@ -36,7 +36,7 @@ export class PagoPageComponent implements OnInit {
   total = computed(() => {
     const res = this.reserva();
     if (!res) return 0;
-    return res.total || res.montoTotal || 0;
+    return res.total;
   });
 
   ngOnInit(): void {
@@ -93,11 +93,25 @@ export class PagoPageComponent implements OnInit {
     this.procesando.set(true);
     this.errorMessage.set(null);
 
-    // Simular procesamiento de pago (2 segundos)
-    setTimeout(() => {
-      // Pago exitoso - redirigir a confirmación
-      this.router.navigate(['/home/reserva', this.reservaId(), 'confirmacion']);
-    }, 2000);
+    const reservaId = this.reservaId();
+    if (!reservaId) {
+      this.errorMessage.set('ID de reserva no válido');
+      this.procesando.set(false);
+      return;
+    }
+
+    // Confirmar el pago en el backend
+    this.reservaService.confirmarPago(reservaId).subscribe({
+      next: () => {
+        // Pago exitoso - redirigir a confirmación
+        this.router.navigate(['/home/reserva', reservaId, 'confirmacion']);
+      },
+      error: (err) => {
+        console.error('Error al confirmar pago:', err);
+        this.procesando.set(false);
+        this.errorMessage.set(err.error?.message || 'Error al procesar el pago. Intente nuevamente.');
+      }
+    });
   }
 
   formatCurrency(amount: number): string {

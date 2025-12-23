@@ -40,7 +40,7 @@ export class DashboardPageComponent implements OnInit, AfterViewInit, OnDestroy 
   private reservasChart: Chart | null = null;
   private ingresosChart: Chart | null = null;
   private estadoChart: Chart | null = null;
-  private hotelesDepChart: Chart | null = null;
+  private hotelesDepChart: any = null;
 
   // Intervalo para actualización automática
   private refreshInterval: any;
@@ -228,7 +228,7 @@ export class DashboardPageComponent implements OnInit, AfterViewInit, OnDestroy 
         // Mostrar TODOS los departamentos ordenados por cantidad (mayor a menor)
         // Incluye departamentos con 0 hoteles
         const sortedEntries = Object.entries(data.hotelesPorDepartamento).sort(
-          (a, b) => b[1] - a[1]
+          (a: [string, number], b: [string, number]) => b[1] - a[1]
         );
 
         this.hotelesDepChart = new Chart(ctx, {

@@ -1,7 +1,6 @@
-import { HttpClient } from "@angular/common/http";
-import { computed, inject, Injectable, signal } from "@angular/core";
+import { HttpClient } from '@angular/common/http';
+import { computed, inject, Injectable, signal } from '@angular/core';
 import { catchError, map, Observable, of, tap, throwError } from 'rxjs';
-import { rxResource } from '@angular/core/rxjs-interop';
 import { LoginRequest, RegisterRequest, AuthResponse } from '../interfaces/auth.interface';
 import { UserResponse } from '../interfaces/userResponse.interface';
 
@@ -11,18 +10,76 @@ const baseUrl = 'http://localhost:8080/api/v1';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
-
   private http = inject(HttpClient);
 
   // Signals privados
   private _authStatus = signal<AuthStatus>('checking');
-  private _user = signal<UserResponse | null>(null);
+  private _user = signal<UserResponse | null>(this.loadUserFromStorage());
   private _token = signal<string | null>(localStorage.getItem('token'));
 
+  // Inicializar el estado de autenticación en el constructor
+  constructor() {
+    this.initializeAuth();
+  }
 
-  checkStatusResource = rxResource({
-    stream: () => this.checkAuthStatus()
-  });
+  /**
+   * Inicializa el estado de autenticación al cargar el servicio
+   */
+  private initializeAuth(): void {
+    const token = localStorage.getItem('token');
+    const user = this.loadUserFromStorage();
+
+    if (token && user) {
+      // Tenemos token y usuario en localStorage, verificar con backend
+      this._token.set(token);
+      this._user.set(user);
+      this._authStatus.set('authenticated');
+
+      // Verificar token en segundo plano
+      this.verifyTokenInBackground();
+    } else if (token) {
+      // Solo tenemos token, necesitamos obtener usuario
+      this._token.set(token);
+      this._authStatus.set('checking');
+    } else {
+      // No hay sesión
+      this._authStatus.set('not-authenticated');
+    }
+  }
+
+  /**
+   * Carga el usuario desde localStorage
+   */
+  private loadUserFromStorage(): UserResponse | null {
+    try {
+      const userStr = localStorage.getItem('user');
+      if (userStr) {
+        return JSON.parse(userStr);
+      }
+    } catch (e) {
+      console.warn('Error parsing user from localStorage:', e);
+      localStorage.removeItem('user');
+    }
+    return null;
+  }
+
+  /**
+   * Verifica el token en segundo plano sin bloquear la UI
+   */
+  private verifyTokenInBackground(): void {
+    this.me().subscribe({
+      next: (user) => {
+        console.log('✅ Token verificado, usuario:', user.username);
+        this._user.set(user);
+        this._authStatus.set('authenticated');
+        localStorage.setItem('user', JSON.stringify(user));
+      },
+      error: () => {
+        console.log('⚠️ Token inválido, cerrando sesión');
+        this.logout();
+      },
+    });
+  }
 
   authStatus = computed(() => {
     if (this._authStatus() === 'checking') return 'checking';
@@ -41,18 +98,20 @@ export class AuthService {
    * Registro de nuevo usuario
    */
   register(registerRequest: RegisterRequest): Observable<boolean> {
-    return this.http.post<AuthResponse>(`${baseUrl}/auth/register`, {
-      username: registerRequest.username,
-      email: registerRequest.email,
-      telefono: registerRequest.telefono,
-      password: registerRequest.password,
-    }).pipe(
-      tap((resp: AuthResponse) => {
-        this.handleLoginSuccess(resp);
-      }),
-      map(() => true),
-      catchError((error: any) => this.handleAuthError(error))
-    );
+    return this.http
+      .post<AuthResponse>(`${baseUrl}/auth/register`, {
+        username: registerRequest.username,
+        email: registerRequest.email,
+        telefono: registerRequest.telefono,
+        password: registerRequest.password,
+      })
+      .pipe(
+        tap((resp: AuthResponse) => {
+          this.handleLoginSuccess(resp);
+        }),
+        map(() => true),
+        catchError((error: any) => this.handleAuthError(error))
+      );
   }
 
   /**
@@ -60,11 +119,11 @@ export class AuthService {
    */
   login(loginRequest: LoginRequest): Observable<AuthResponse> {
     return this.http.post<AuthResponse>(`${baseUrl}/auth/login`, loginRequest).pipe(
-      tap(resp => {
+      tap((resp) => {
         console.log('Login exitoso:', resp);
         this.handleLoginSuccess(resp);
       }),
-      catchError(error => this.handleAuthError(error))
+      catchError((error) => this.handleAuthError(error))
     );
   }
 
@@ -80,7 +139,7 @@ export class AuthService {
 
     // Limpiar localStorage
     localStorage.removeItem('token');
-    localStorage.removeItem('user'); // por si guardas el user también
+    localStorage.removeItem('user');
 
     console.log('✅ Sesión cerrada');
   }
@@ -89,33 +148,40 @@ export class AuthService {
    * Verifica el estado de autenticación
    * Ideal para llamar en el AppComponent al iniciar
    */
-  checkAuthStatus(): Observable<boolean> {
+  checkAuthStatus(): Observable<boolean | UserResponse> {
     const token = localStorage.getItem('token');
-
     if (!token) {
-      console.log('❌ No hay token, usuario no autenticado');
+      console.log('No hay token, usuario no autenticado');
       this._authStatus.set('not-authenticated');
+      this._user.set(null);
       return of(false);
     }
 
-    console.log('🔍 Token encontrado, verificando...');
+    // Si ya tenemos usuario cargado, no necesitamos llamar al backend
+    const currentUser = this._user();
+    if (currentUser) {
+      console.log('Usuario ya cargado:', currentUser.username);
+      this._authStatus.set('authenticated');
+      return of(currentUser);
+    }
+
+    console.log('Token encontrado, verificando con backend...');
     this._token.set(token);
 
-    // OPCIÓN 1: Solo confiar en el token (actual)
-    // this._authStatus.set('authenticated');
-    // return of(true);
-
-    // OPCIÓN 2: Validar token con el backend (RECOMENDADO)
-    return this.http.get<UserResponse>(`${baseUrl}/auth/me`).pipe(
-      tap(user => {
-        console.log('✅ Usuario verificado:', user);
-        this._user.set(user);
+    // refresca el estado e info del usuario
+    return this.me().pipe(
+      tap((user) => {
         this._authStatus.set('authenticated');
+        this._user.set(user);
+        localStorage.setItem('user', JSON.stringify(user));
+        console.log('Usuario autenticado correctamente');
       }),
-      map(() => true),
-      catchError(error => {
-        console.error('❌ Token inválido o expirado:', error);
-        this.logout();
+      catchError(() => {
+        console.log('Error al verificar token, cerrando sesión');
+        this._authStatus.set('not-authenticated');
+        this._user.set(null);
+        localStorage.removeItem('token');
+        localStorage.removeItem('user');
         return of(false);
       })
     );
@@ -157,18 +223,16 @@ export class AuthService {
     console.log('💾 Guardando datos de autenticación...');
 
     this._authStatus.set('authenticated');
-    this._user.set(resp.userResponseDTO);
+    this._user.set(resp.user);
     this._token.set(resp.token);
 
     // Guardar en localStorage
     localStorage.setItem('token', resp.token);
-
-    // Opcional: guardar también el usuario
-    localStorage.setItem('user', JSON.stringify(resp.userResponseDTO));
+    localStorage.setItem('user', JSON.stringify(resp.user));
 
     console.log('Datos guardados:', {
-      user: resp.userResponseDTO,
-      token: resp.token.substring(0, 20) + '...'
+      user: resp.user,
+      token: resp.token.substring(0, 20) + '...',
     });
   }
 
@@ -177,6 +241,14 @@ export class AuthService {
    */
   private handleAuthError(error: any) {
     console.error('❌ Error de autenticación:', error);
+
+    // No cerrar sesión automáticamente en errores de conexión
+    if (error.status === 0) {
+      return throwError(() => ({
+        ...error,
+        userMessage: 'No se puede conectar con el servidor',
+      }));
+    }
 
     this.logout();
 
@@ -191,26 +263,31 @@ export class AuthService {
       errorMessage = 'Credenciales inválidas';
     } else if (error.status === 403) {
       errorMessage = 'No tienes permisos';
-    } else if (error.status === 0) {
-      errorMessage = 'No se puede conectar con el servidor';
     }
 
     return throwError(() => ({
       ...error,
-      userMessage: errorMessage
+      userMessage: errorMessage,
     }));
   }
 
-  /**
-   * Refresca los datos del usuario desde el backend
-   */
+  me() {
+    return this.http.get<UserResponse>(`${baseUrl}/auth/me`).pipe(
+      tap((user: UserResponse) => {
+        console.log('Usuario obtenido de /me:', user);
+        this._user.set(user);
+      })
+    );
+  }
+
   refreshUser(): Observable<UserResponse> {
     return this.http.get<UserResponse>(`${baseUrl}/auth/me`).pipe(
-      tap(user => {
+      tap((user) => {
         console.log('🔄 Usuario actualizado:', user);
         this._user.set(user);
+        localStorage.setItem('user', JSON.stringify(user));
       }),
-      catchError(error => {
+      catchError((error) => {
         console.error('❌ Error al refrescar usuario:', error);
         return throwError(() => error);
       })

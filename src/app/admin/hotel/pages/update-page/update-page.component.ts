@@ -4,7 +4,7 @@ import { CommonModule } from '@angular/common';
 import { RouterModule, ActivatedRoute, Router } from '@angular/router';
 
 import { forkJoin } from 'rxjs';
-import { TipoHabitacionResponse } from '../../../../interfaces/tipo-habitacion/tipo-habitacion-response.interface';
+import { TipoHabitacionResponse } from '../../../../interfaces';
 import { HotelService } from '../../../../services/hotel.service';
 import { TipoHabitacionService } from '../../../../services/tipo-habitacion.service';
 import { DepartamentoService } from '../../../../services/departamento.service';
@@ -162,12 +162,12 @@ export class UpdateHotelFormComponent implements OnInit {
     console.log('Payload a enviar:', payload);
 
     this.hotelService.updateHotel(this.hotelId, payload).subscribe({
-      next: (response) => {
+      next: (response: any) => {
         console.log('Respuesta del servidor:', response);
         alert('Hotel actualizado correctamente');
         this.router.navigate(['/admin/hotel/list']);
       },
-      error: (err) => {
+      error: (err: any) => {
         console.error('Error al guardar:', err);
 
         let errorMsg = 'Error desconocido';

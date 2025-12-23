@@ -4,8 +4,8 @@ import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { HotelService } from '../../../../services/hotel.service';
 import { DepartamentoService } from '../../../../services/departamento.service';
-import { HotelResponse } from '../../../../interfaces/hotel/hotel-response.interface';
-import { DepartamentoResponse } from '../../../../interfaces/departamento/departamento-response.interface';
+import { HotelResponse } from '../../../../interfaces';
+import { DepartamentoResponse } from '../../../../interfaces';
 
 @Component({
   standalone: true,

@@ -3,10 +3,10 @@ import { CommonModule } from '@angular/common';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 
-import { HotelResponse } from '../../../interfaces/hotel/hotel-response.interface';
+import { HotelResponse } from '../../../interfaces';
 import { HotelService } from '../../../services/hotel.service';
 import { DepartamentoService } from '../../../services/departamento.service';
-import { DepartamentoResponse } from '../../../interfaces/departamento/departamento-response.interface';
+import { DepartamentoResponse } from '../../../interfaces';
 
 @Component({
   standalone: true,

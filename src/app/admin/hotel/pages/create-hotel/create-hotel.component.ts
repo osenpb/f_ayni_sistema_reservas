@@ -1,7 +1,7 @@
-import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { DepartamentoResponse } from '../../../../interfaces/departamento/departamento-response.interface';
+import { DepartamentoResponse } from '../../../../interfaces';
 
 import { CommonModule } from '@angular/common';
 import { HotelService } from '../../../../services/hotel.service';
@@ -9,7 +9,7 @@ import { DepartamentoService } from '../../../../services/departamento.service';
 
 @Component({
   selector: 'app-create-hotel.component',
-  imports: [ReactiveFormsModule, CommonModule, RouterLink],
+  imports: [ReactiveFormsModule, CommonModule],
   templateUrl: './create-hotel.component.html',
 })
 export class CreateHotelPageComponent implements OnInit {
@@ -76,7 +76,7 @@ export class CreateHotelPageComponent implements OnInit {
           this.router.navigate(['/admin/hotel/list']);
         }
       },
-      error: (err) => {
+      error: (err: any) => {
         console.error('Error creando hotel:', err);
         alert('Error al crear el hotel');
         this.saving.set(false);

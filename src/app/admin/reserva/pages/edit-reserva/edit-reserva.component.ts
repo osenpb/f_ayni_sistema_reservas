@@ -7,10 +7,7 @@ import { ReservaService } from '../../../../services/reserva.service';
 import { HotelService } from '../../../../services/hotel.service';
 import { DepartamentoService } from '../../../../services/departamento.service';
 
-import { HotelResponse } from '../../../../interfaces/hotel/hotel-response.interface';
-import { HabitacionResponse } from '../../../../interfaces/habitacion/habitacion-response.interface';
-import { Reserva, ReservaAdminUpdateDTO } from '../../../../interfaces/reserva/reserva.interface';
-import { DepartamentoResponse } from '../../../../interfaces/departamento/departamento-response.interface';
+import { HotelResponse, HabitacionResponse, Reserva, ReservaAdminUpdateDTO, DepartamentoResponse } from '../../../../interfaces';
 
 interface HabitacionSeleccionada {
   index: number;
@@ -59,6 +56,7 @@ export class EditReservaComponent implements OnInit {
   });
 
   estados = [
+    { value: 'PENDIENTE', label: 'Pendiente' },
     { value: 'CONFIRMADA', label: 'Confirmada' },
     { value: 'CANCELADA', label: 'Cancelada' },
   ];

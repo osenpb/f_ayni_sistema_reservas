@@ -47,7 +47,7 @@ export class LoginPageComponent {
         console.log('AuthResponse:', authResp);
         this.isPosting.set(false);
 
-        const user = authResp.userResponseDTO;
+        const user = authResp.user;
 
         if (!user) {
           console.error('User está undefined');

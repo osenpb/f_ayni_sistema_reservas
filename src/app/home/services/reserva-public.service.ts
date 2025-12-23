@@ -1,15 +1,17 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
-import { catchError, map, Observable, throwError } from 'rxjs';
-import { DepartamentoPublic } from '../interfaces/departamento-public.interface';
-import { HotelesResponse, HotelDetailResponse } from '../interfaces/hotel-public.interface';
-import { HabitacionesDisponiblesResponse } from '../interfaces/habitacion-public.interface';
+import { catchError, Observable, throwError } from 'rxjs';
 import {
+  DepartamentoResponse,
+  HotelesConDepartamentoResponse,
+  HotelDetalleResponse,
+  HabitacionesDisponiblesResponse,
   ReservaRequest,
+  ReservaCreatedResponse,
   ReservaResponse,
-  ReservaDetalleResponse,
+  ReservaListResponse,
   MisReservasResponse,
-} from '../interfaces/reserva-public.interface';
+} from '../../interfaces';
 
 const baseUrl = 'http://localhost:8080/api/public';
 
@@ -19,13 +21,14 @@ const baseUrl = 'http://localhost:8080/api/public';
 export class ReservaPublicService {
   private http = inject(HttpClient);
 
-  // Departamentos
-  getDepartamentos(nombre?: string): Observable<DepartamentoPublic[]> {
+  // ==================== DEPARTAMENTOS ====================
+
+  getDepartamentos(nombre?: string): Observable<DepartamentoResponse[]> {
     const url = nombre
       ? `${baseUrl}/reserva/departamentos?nombre=${encodeURIComponent(nombre)}`
       : `${baseUrl}/reserva/departamentos`;
 
-    return this.http.get<DepartamentoPublic[]>(url).pipe(
+    return this.http.get<DepartamentoResponse[]>(url).pipe(
       catchError((error: any) => {
         console.error('Error al obtener departamentos:', error);
         return throwError(() => error);
@@ -33,19 +36,21 @@ export class ReservaPublicService {
     );
   }
 
-  // Hoteles por departamento
-  getHotelesPorDepartamento(depId: number): Observable<HotelesResponse> {
-    return this.http.get<HotelesResponse>(`${baseUrl}/reserva/hoteles?depId=${depId}`).pipe(
-      catchError((error: any) => {
-        console.error('Error al obtener hoteles:', error);
-        return throwError(() => error);
-      })
-    );
+  // ==================== HOTELES ====================
+
+  getHotelesPorDepartamento(depId: number): Observable<HotelesConDepartamentoResponse> {
+    return this.http
+      .get<HotelesConDepartamentoResponse>(`${baseUrl}/reserva/hoteles?depId=${depId}`)
+      .pipe(
+        catchError((error: any) => {
+          console.error('Error al obtener hoteles:', error);
+          return throwError(() => error);
+        })
+      );
   }
 
-  // Detalle de hotel
-  getHotelDetalle(hotelId: number): Observable<HotelDetailResponse> {
-    return this.http.get<HotelDetailResponse>(`${baseUrl}/reserva/hoteles/${hotelId}`).pipe(
+  getHotelDetalle(hotelId: number): Observable<HotelDetalleResponse> {
+    return this.http.get<HotelDetalleResponse>(`${baseUrl}/reserva/hoteles/${hotelId}`).pipe(
       catchError((error: any) => {
         console.error('Error al obtener detalle del hotel:', error);
         return throwError(() => error);
@@ -53,7 +58,8 @@ export class ReservaPublicService {
     );
   }
 
-  // Habitaciones disponibles por fechas
+  // ==================== HABITACIONES ====================
+
   getHabitacionesDisponibles(
     hotelId: number,
     fechaInicio: string,
@@ -71,10 +77,11 @@ export class ReservaPublicService {
       );
   }
 
-  // Crear reserva
-  crearReserva(hotelId: number, reserva: ReservaRequest): Observable<ReservaResponse> {
+  // ==================== RESERVAS ====================
+
+  crearReserva(hotelId: number, reserva: ReservaRequest): Observable<ReservaCreatedResponse> {
     return this.http
-      .post<ReservaResponse>(`${baseUrl}/reserva/hoteles/${hotelId}/reservar`, reserva)
+      .post<ReservaCreatedResponse>(`${baseUrl}/reserva/hoteles/${hotelId}/reservar`, reserva)
       .pipe(
         catchError((error: any) => {
           console.error('Error al crear reserva:', error);
@@ -83,31 +90,8 @@ export class ReservaPublicService {
       );
   }
 
-  // Obtener detalle de reserva
-  getReservaDetalle(reservaId: number): Observable<ReservaDetalleResponse> {
-    return this.http.get<any>(`${baseUrl}/reserva/reserva/${reservaId}`).pipe(
-      map((data: any) => {
-        // Transformar datos para aplanar la estructura
-        return {
-          ...data,
-          hotelNombre: data.hotel?.nombre || '',
-          hotelDireccion: data.hotel?.direccion || '',
-          clienteNombre: `${data.cliente?.nombre || ''} ${data.cliente?.apellido || ''}`.trim(),
-          clienteDni: data.cliente?.documento || '',
-          clienteEmail: data.cliente?.email || '',
-          montoTotal: data.total,
-          habitaciones: data.detalles?.map((d: any) => {
-            // Buscar habitación en el hotel
-            const hab = data.hotel?.habitaciones?.find((h: any) => h.id === d.habitacionId);
-            return {
-              id: d.habitacionId,
-              numero: hab?.numero || d.habitacionId.toString(),
-              tipo: hab?.tipoHabitacion?.nombre || 'Standard',
-              precio: d.precioNoche || 0
-            };
-          }) || []
-        };
-      }),
+  getReservaDetalle(reservaId: number): Observable<ReservaResponse> {
+    return this.http.get<ReservaResponse>(`${baseUrl}/reserva/reserva/${reservaId}`).pipe(
       catchError((error: any) => {
         console.error('Error al obtener detalle de reserva:', error);
         return throwError(() => error);
@@ -115,11 +99,33 @@ export class ReservaPublicService {
     );
   }
 
-  // Buscar mis reservas por DNI
-  getMisReservas(dni: string): Observable<MisReservasResponse> {
-    return this.http.get<MisReservasResponse>(`${baseUrl}/reserva/mis-reservas?dni=${dni}`).pipe(
+  getMisReservas(fechaInicio?: string, fechaFin?: string): Observable<MisReservasResponse> {
+    let url = `${baseUrl}/reserva/mis-reservas`;
+    const params: string[] = [];
+    
+    if (fechaInicio) {
+      params.push(`fechaInicio=${fechaInicio}`);
+    }
+    if (fechaFin) {
+      params.push(`fechaFin=${fechaFin}`);
+    }
+    
+    if (params.length > 0) {
+      url += '?' + params.join('&');
+    }
+    
+    return this.http.get<MisReservasResponse>(url).pipe(
       catchError((error: any) => {
         console.error('Error al buscar reservas:', error);
+        return throwError(() => error);
+      })
+    );
+  }
+
+  confirmarPago(reservaId: number): Observable<any> {
+    return this.http.post(`${baseUrl}/reserva/${reservaId}/confirmar-pago`, {}).pipe(
+      catchError((error: any) => {
+        console.error('Error al confirmar pago:', error);
         return throwError(() => error);
       })
     );

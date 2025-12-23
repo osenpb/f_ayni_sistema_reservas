@@ -11,9 +11,7 @@ import { CommonModule } from '@angular/common';
 import { FormBuilder, ReactiveFormsModule, Validators, FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { ReservaPublicService } from '../../services/reserva-public.service';
-import { HotelDetailResponse } from '../../interfaces/hotel-public.interface';
-import { HabitacionPublic } from '../../interfaces/habitacion-public.interface';
-import { ReservaRequest } from '../../interfaces/reserva-public.interface';
+import { HotelDetalleResponse, HabitacionResponse, ReservaRequest } from '../../../interfaces';
 import { AuthService } from '../../../auth/services/auth.service';
 
 interface HabitacionSeleccionada {
@@ -36,8 +34,8 @@ export class ReservaPageComponent implements OnInit {
   private authService = inject(AuthService);
 
   hotelId = signal<number | null>(null);
-  hotelData = signal<HotelDetailResponse | null>(null);
-  habitacionesDisponibles = signal<HabitacionPublic[]>([]);
+  hotelData = signal<HotelDetalleResponse | null>(null);
+  habitacionesDisponibles = signal<HabitacionResponse[]>([]);
   loading = signal<boolean>(true);
   loadingHabitaciones = signal<boolean>(false);
   submitting = signal<boolean>(false);
@@ -66,8 +64,12 @@ export class ReservaPageComponent implements OnInit {
     fechaFin: ['', Validators.required],
   });
 
-  // Fecha mínima (hoy)
-  minDate = new Date().toISOString().split('T')[0];
+  // Fecha mínima (mañana - 24 horas de anticipación)
+  minDate = (() => {
+    const tomorrow = new Date();
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    return tomorrow.toISOString().split('T')[0];
+  })();
 
   // Computed para calcular las noches (ahora usa signals)
   noches = computed(() => {
@@ -277,7 +279,7 @@ export class ReservaPageComponent implements OnInit {
     );
   }
 
-  getHabitacionInfo(habitacionId: number): HabitacionPublic | undefined {
+  getHabitacionInfo(habitacionId: number): HabitacionResponse | undefined {
     return this.habitacionesDisponibles().find((h) => h.id === habitacionId);
   }
 

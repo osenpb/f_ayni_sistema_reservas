@@ -1,4 +1,4 @@
-<div class="min-h-screen bg-gray-50 py-8">
+<div class="min-h-screen bg-gray-100 py-8">
   <div class="max-w-3xl mx-auto px-4">
 
     <!-- Loading -->
@@ -9,7 +9,7 @@
             <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
             <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
           </svg>
-          <span class="text-xl">Cargando confirmación...</span>
+          <span class="text-xl">Cargando...</span>
         </div>
       </div>
     }
@@ -31,8 +31,10 @@
     }
 
     @if (!loading() && !error() && reserva()) {
-      <!-- Icono de éxito -->
+      <!-- Icono según estado -->
       <div class="text-center mb-8">
+        <!-- CONFIRMADA -->
+        @if (reserva()?.estado === 'CONFIRMADA') {
         <div class="inline-flex items-center justify-center w-20 h-20 bg-green-100 rounded-full mb-4">
           <svg class="w-10 h-10 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
@@ -40,13 +42,72 @@
         </div>
         <h1 class="text-3xl font-serif text-slate-800 mb-2">¡Reserva Confirmada!</h1>
         <p class="text-gray-500">Tu pago ha sido procesado exitosamente</p>
+        }
+
+        <!-- PENDIENTE -->
+        @if (reserva()?.estado === 'PENDIENTE') {
+        <div class="inline-flex items-center justify-center w-20 h-20 bg-yellow-100 rounded-full mb-4">
+          <svg class="w-10 h-10 text-yellow-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+          </svg>
+        </div>
+        <h1 class="text-3xl font-serif text-slate-800 mb-2">Reserva Pendiente de Pago</h1>
+        <p class="text-gray-500">Completa el pago para confirmar tu reserva</p>
+        }
+
+        <!-- CANCELADA -->
+        @if (reserva()?.estado === 'CANCELADA') {
+        <div class="inline-flex items-center justify-center w-20 h-20 bg-red-100 rounded-full mb-4">
+          <svg class="w-10 h-10 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+          </svg>
+        </div>
+        <h1 class="text-3xl font-serif text-slate-800 mb-2">Reserva Cancelada</h1>
+        <p class="text-gray-500">Esta reserva ha sido cancelada</p>
+        }
       </div>
 
       <!-- Número de reserva -->
-      <div class="bg-indigo-50 border border-indigo-200 rounded-lg p-4 mb-6 text-center">
-        <p class="text-sm text-indigo-600 mb-1">Número de Reserva</p>
-        <p class="text-2xl font-bold text-indigo-700">{{ reserva()?.id?.toString()?.padStart(6, '0') }}</p>
+      <div class="rounded-lg p-4 mb-6 text-center" [ngClass]="{
+        'bg-green-50 border border-green-200': reserva()?.estado === 'CONFIRMADA',
+        'bg-yellow-50 border border-yellow-200': reserva()?.estado === 'PENDIENTE',
+        'bg-red-50 border border-red-200': reserva()?.estado === 'CANCELADA'
+      }">
+        <p class="text-sm mb-1" [ngClass]="{
+          'text-green-600': reserva()?.estado === 'CONFIRMADA',
+          'text-yellow-600': reserva()?.estado === 'PENDIENTE',
+          'text-red-600': reserva()?.estado === 'CANCELADA'
+        }">Número de Reserva</p>
+        <p class="text-2xl font-bold" [ngClass]="{
+          'text-green-700': reserva()?.estado === 'CONFIRMADA',
+          'text-yellow-700': reserva()?.estado === 'PENDIENTE',
+          'text-red-700': reserva()?.estado === 'CANCELADA'
+        }">{{ reserva()?.id?.toString()?.padStart(6, '0') }}</p>
       </div>
+
+      <!-- Alerta de pago pendiente -->
+      @if (reserva()?.estado === 'PENDIENTE') {
+      <div class="bg-yellow-50 border border-yellow-300 rounded-lg p-4 mb-6">
+        <div class="flex items-center gap-3">
+          <svg class="w-6 h-6 text-yellow-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+          </svg>
+          <div>
+            <p class="font-medium text-yellow-800">Pago pendiente</p>
+            <p class="text-sm text-yellow-700">Tu reserva no está confirmada hasta que completes el pago.</p>
+          </div>
+        </div>
+        <div class="mt-4">
+          <a [routerLink]="['/home/reserva', reserva()?.id, 'pago']"
+            class="inline-flex items-center gap-2 px-6 py-3 bg-yellow-500 text-white font-semibold rounded-lg hover:bg-yellow-600 transition">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/>
+            </svg>
+            Completar Pago
+          </a>
+        </div>
+      </div>
+      }
 
       <!-- Detalles de la reserva -->
       <div class="bg-white border border-gray-200 rounded-lg mb-6" id="comprobante">
@@ -67,8 +128,8 @@
             </div>
             <div>
               <p class="text-sm text-gray-500">Hotel</p>
-              <p class="text-lg font-semibold text-gray-800">{{ reserva()?.hotelNombre }}</p>
-              <p class="text-sm text-gray-500">{{ reserva()?.hotelDireccion }}</p>
+              <p class="text-lg font-semibold text-gray-800">{{ hotelNombre }}</p>
+              <p class="text-sm text-gray-500">{{ hotelDireccion }}</p>
             </div>
           </div>
 
@@ -113,9 +174,9 @@
             </div>
             <div>
               <p class="text-sm text-gray-500">Huésped Principal</p>
-              <p class="text-lg font-semibold text-gray-800">{{ reserva()?.clienteNombre }}</p>
-              <p class="text-sm text-gray-500">DNI: {{ reserva()?.clienteDni }}</p>
-              <p class="text-sm text-gray-500">{{ reserva()?.clienteEmail }}</p>
+              <p class="text-lg font-semibold text-gray-800">{{ clienteNombreCompleto }}</p>
+              <p class="text-sm text-gray-500">DNI: {{ clienteDni }}</p>
+              <p class="text-sm text-gray-500">{{ clienteEmail }}</p>
             </div>
           </div>
 
@@ -125,18 +186,19 @@
           <div>
             <p class="text-sm text-gray-500 mb-3">Habitaciones Reservadas ({{ calcularNoches() }} noches)</p>
             <div class="space-y-2">
-              @for (hab of reserva()?.habitaciones; track hab.id) {
+              @for (detalle of reserva()?.detalles; track detalle.id) {
+                @let habInfo = getHabitacionInfo(detalle.habitacionId);
                 <div class="flex justify-between items-center bg-gray-50 rounded-lg px-4 py-3">
                   <div class="flex items-center gap-3">
                     <div class="w-8 h-8 bg-indigo-100 rounded flex items-center justify-center">
-                      <span class="text-sm font-medium text-indigo-600">{{ hab.numero }}</span>
+                      <span class="text-sm font-medium text-indigo-600">{{ habInfo.numero }}</span>
                     </div>
                     <div>
-                      <p class="font-medium text-gray-800">Habitación {{ hab.numero }}</p>
-                      <p class="text-sm text-gray-500">{{ hab.tipo }}</p>
+                      <p class="font-medium text-gray-800">Habitación {{ habInfo.numero }}</p>
+                      <p class="text-sm text-gray-500">{{ habInfo.tipo }}</p>
                     </div>
                   </div>
-                  <p class="font-semibold text-gray-800">{{ formatCurrency(hab.precio) }}</p>
+                  <p class="font-semibold text-gray-800">{{ formatCurrency(detalle.precioNoche) }}/noche</p>
                 </div>
               }
             </div>
@@ -145,30 +207,57 @@
           <hr class="border-gray-200">
 
           <!-- Total -->
-          <div class="bg-gradient-to-r from-indigo-600 to-indigo-700 rounded-lg p-4 text-white">
+          <div class="rounded-lg p-4 text-white" [ngClass]="{
+            'bg-gradient-to-r from-green-600 to-green-700': reserva()?.estado === 'CONFIRMADA',
+            'bg-gradient-to-r from-yellow-500 to-yellow-600': reserva()?.estado === 'PENDIENTE',
+            'bg-gradient-to-r from-gray-500 to-gray-600': reserva()?.estado === 'CANCELADA'
+          }">
             <div class="flex justify-between items-center">
               <div>
-                <p class="text-indigo-200 text-sm">Total Pagado</p>
-                <p class="text-xs text-indigo-200">Incluye todos los impuestos</p>
+                <p class="text-sm opacity-80">
+                  @if (reserva()?.estado === 'CONFIRMADA') { Total Pagado }
+                  @else if (reserva()?.estado === 'PENDIENTE') { Total a Pagar }
+                  @else { Total }
+                </p>
+                <p class="text-xs opacity-80">Incluye todos los impuestos</p>
               </div>
-              <p class="text-3xl font-bold">{{ formatCurrency(reserva()?.total || reserva()?.montoTotal || 0) }}</p>
+              <p class="text-3xl font-bold">{{ formatCurrency(reserva()?.total || 0) }}</p>
             </div>
           </div>
 
-          <!-- Estado -->
+          <!-- Estado badge -->
           <div class="flex items-center justify-center gap-2">
-            <span class="inline-flex items-center gap-1 px-3 py-1 bg-green-100 text-green-700 text-sm font-medium rounded-full">
+            <span class="inline-flex items-center gap-1 px-3 py-1 text-sm font-medium rounded-full" [ngClass]="{
+              'bg-green-100 text-green-700': reserva()?.estado === 'CONFIRMADA',
+              'bg-yellow-100 text-yellow-700': reserva()?.estado === 'PENDIENTE',
+              'bg-red-100 text-red-700': reserva()?.estado === 'CANCELADA'
+            }">
+              @if (reserva()?.estado === 'CONFIRMADA') {
               <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
               </svg>
               Pago Confirmado
+              }
+              @if (reserva()?.estado === 'PENDIENTE') {
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+              </svg>
+              Pendiente de Pago
+              }
+              @if (reserva()?.estado === 'CANCELADA') {
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+              </svg>
+              Reserva Cancelada
+              }
             </span>
           </div>
 
         </div>
       </div>
 
-      <!-- Botones de acción -->
+      <!-- Botones de acción (solo si está CONFIRMADA) -->
+      @if (reserva()?.estado === 'CONFIRMADA') {
       <div class="flex flex-col sm:flex-row gap-4 mb-8">
         <button 
           (click)="descargarPDF()"
@@ -189,8 +278,10 @@
           Imprimir
         </button>
       </div>
+      }
 
-      <!-- Información adicional -->
+      <!-- Información adicional (solo si no está cancelada) -->
+      @if (reserva()?.estado !== 'CANCELADA') {
       <div class="bg-amber-50 border border-amber-200 rounded-lg p-4 mb-6">
         <div class="flex gap-3">
           <svg class="w-6 h-6 text-amber-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -207,6 +298,7 @@
           </div>
         </div>
       </div>
+      }
 
       <!-- Links -->
       <div class="flex flex-col sm:flex-row gap-4 justify-center">

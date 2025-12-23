@@ -32,9 +32,9 @@
         <div class="flex gap-2">
           <input type="text" [value]="dniBusqueda()" (input)="onDniInput($event)" (keyup.enter)="buscarPorDni()"
             placeholder="Ingrese DNI (8 dígitos)" maxlength="8"
-            class="flex-1 px-4 py-2 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition">
+            class="flex-1 px-4 py-2 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition">
           <button type="button" (click)="buscarPorDni()"
-            class="px-6 py-2 bg-blue-600 text-white font-medium rounded-xl hover:bg-blue-700 transition-all shadow-sm">
+            class="px-6 py-2 bg-indigo-600 text-white font-medium rounded-xl hover:bg-indigo-700 transition-all shadow-sm">
             Buscar
           </button>
         </div>
@@ -44,7 +44,7 @@
       <div class="flex items-end">
         <button type="button" (click)="mostrarTodas()"
           class="px-6 py-2 bg-gray-100 text-gray-700 font-medium rounded-xl hover:bg-gray-200 transition-all"
-          [class.ring-2]="!modoFiltrado()" [class.ring-blue-500]="!modoFiltrado()">
+          [class.ring-2]="!modoFiltrado()" [class.ring-indigo-500]="!modoFiltrado()">
           Mostrar Todas
         </button>
       </div>
@@ -52,7 +52,7 @@
 
     <!-- Indicador de filtro activo -->
     @if (modoFiltrado()) {
-    <div class="mt-3 flex items-center gap-2 text-sm text-blue-600">
+    <div class="mt-3 flex items-center gap-2 text-sm text-indigo-600">
       <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
           d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
@@ -106,7 +106,7 @@
           <tr>
             <td colspan="9" class="px-6 py-10 text-center text-gray-500">
               <div class="flex justify-center items-center gap-2">
-                <svg class="animate-spin h-5 w-5 text-blue-600" xmlns="http://www.w3.org/2000/svg" fill="none"
+                <svg class="animate-spin h-5 w-5 text-indigo-600" xmlns="http://www.w3.org/2000/svg" fill="none"
                   viewBox="0 0 24 24">
                   <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
                   <path class="opacity-75" fill="currentColor"

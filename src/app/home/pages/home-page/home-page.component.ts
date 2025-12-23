@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, inject, signal, OnInit, OnDestroy }
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { ReservaPublicService } from '../../services/reserva-public.service';
-import { DepartamentoPublic } from '../../interfaces/departamento-public.interface';
+import { DepartamentoResponse } from '../../../interfaces';
 
 @Component({
   standalone: true,
@@ -14,7 +14,7 @@ import { DepartamentoPublic } from '../../interfaces/departamento-public.interfa
 export class HomePageComponent implements OnInit, OnDestroy {
   private reservaService = inject(ReservaPublicService);
 
-  departamentosDestacados = signal<DepartamentoPublic[]>([]);
+  departamentosDestacados = signal<DepartamentoResponse[]>([]);
   loading = signal<boolean>(true);
   
   // Carousel

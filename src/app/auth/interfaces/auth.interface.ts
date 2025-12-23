@@ -15,7 +15,7 @@ export type LoginRequest = {
 
 
 export type AuthResponse = {
-  userResponseDTO: UserResponse,
+  user: UserResponse,
   token: string
 }
 

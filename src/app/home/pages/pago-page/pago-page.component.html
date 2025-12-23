@@ -1,4 +1,4 @@
-<div class="min-h-screen bg-gray-50 py-8">
+<div class="min-h-screen bg-gray-100 py-8">
   <div class="max-w-4xl mx-auto px-4">
 
     <!-- Loading -->
@@ -55,9 +55,9 @@
               
               <!-- Iconos de tarjetas -->
               <div class="flex gap-3 mt-4">
-                <div class="w-12 h-8 bg-blue-600 rounded flex items-center justify-center text-white text-xs font-bold">VISA</div>
+                <div class="w-12 h-8 bg-indigo-600 rounded flex items-center justify-center text-white text-xs font-bold">VISA</div>
                 <div class="w-12 h-8 bg-red-500 rounded flex items-center justify-center text-white text-xs font-bold">MC</div>
-                <div class="w-12 h-8 bg-blue-800 rounded flex items-center justify-center text-white text-xs font-bold">AMEX</div>
+                <div class="w-12 h-8 bg-indigo-800 rounded flex items-center justify-center text-white text-xs font-bold">AMEX</div>
               </div>
             </div>
           </div>
@@ -172,8 +172,8 @@
                   </svg>
                 </div>
                 <div>
-                  <p class="font-medium text-gray-800">{{ reserva()?.hotelNombre }}</p>
-                  <p class="text-sm text-gray-500">{{ reserva()?.hotelDireccion }}</p>
+                  <p class="font-medium text-gray-800">{{ reserva()?.hotel?.nombre }}</p>
+                  <p class="text-sm text-gray-500">{{ reserva()?.hotel?.direccion }}</p>
                 </div>
               </div>
 
@@ -196,8 +196,8 @@
               <!-- Cliente -->
               <div class="text-sm">
                 <p class="text-gray-500">Huésped</p>
-                <p class="font-medium text-gray-800">{{ reserva()?.clienteNombre }}</p>
-                <p class="text-gray-500">DNI: {{ reserva()?.clienteDni }}</p>
+                <p class="font-medium text-gray-800">{{ reserva()?.cliente?.nombre }} {{ reserva()?.cliente?.apellido }}</p>
+                <p class="text-gray-500">DNI: {{ reserva()?.cliente?.documento }}</p>
               </div>
 
               <hr class="border-gray-200">
@@ -205,10 +205,10 @@
               <!-- Habitaciones -->
               <div>
                 <p class="text-sm text-gray-500 mb-2">Habitaciones</p>
-                @for (hab of reserva()?.habitaciones; track hab.id) {
+                @for (detalle of reserva()?.detalles; track detalle.id) {
                   <div class="flex justify-between text-sm py-1">
-                    <span class="text-gray-700">{{ hab.tipo }} - Hab. {{ hab.numero }}</span>
-                    <span class="font-medium">{{ formatCurrency(hab.precio) }}</span>
+                    <span class="text-gray-700">Habitación #{{ detalle.habitacionId }}</span>
+                    <span class="font-medium">{{ formatCurrency(detalle.precioNoche) }}/noche</span>
                   </div>
                 }
               </div>

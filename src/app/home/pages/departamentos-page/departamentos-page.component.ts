@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, inject, signal, computed } from '@a
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
-import { DepartamentoResponse } from '../../../interfaces/departamento/departamento-response.interface';
+import { DepartamentoResponse } from '../../../interfaces';
 import { DepartamentoService } from '../../../services/departamento.service';
 
 @Component({

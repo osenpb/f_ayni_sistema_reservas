@@ -1,8 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { catchError, Observable, throwError } from 'rxjs';
-import { HotelResponse } from '../interfaces/hotel/hotel-response.interface';
-import { HotelRequest } from '../interfaces/hotel/hotel-request.interface';
+import { HotelResponse, HotelRequest } from '../interfaces';
 
 const baseUrl = 'http://localhost:8080/api/admin';
 
@@ -39,8 +38,8 @@ export class HotelService {
     );
   }
 
-  createHotel(hotelRequest: HotelRequest): Observable<HotelRequest> {
-    return this.http.post<HotelRequest>(`${baseUrl}/hoteles`, hotelRequest).pipe(
+  create(hotelRequest: HotelRequest): Observable<HotelResponse> {
+    return this.http.post<HotelResponse>(`${baseUrl}/hoteles`, hotelRequest).pipe(
       catchError((error: any) => {
         console.error('Error al crear hotel:', error);
         return throwError(() => error);
@@ -48,8 +47,8 @@ export class HotelService {
     );
   }
 
-  updateHotel(id: number, hotelRequest: HotelRequest): Observable<HotelRequest> {
-    return this.http.put<HotelRequest>(`${baseUrl}/hoteles/${id}`, hotelRequest).pipe(
+  update(id: number, hotelRequest: HotelRequest): Observable<HotelResponse> {
+    return this.http.put<HotelResponse>(`${baseUrl}/hoteles/${id}`, hotelRequest).pipe(
       catchError((error: any) => {
         console.error('Error al actualizar hotel:', error);
         return throwError(() => error);
@@ -57,7 +56,7 @@ export class HotelService {
     );
   }
 
-  deleteById(idHotel: number): Observable<void> {
+  delete(idHotel: number): Observable<void> {
     return this.http.delete<void>(`${baseUrl}/hoteles/${idHotel}`).pipe(
       catchError((error: any) => {
         console.error('Error al eliminar hotel:', error);
@@ -66,7 +65,12 @@ export class HotelService {
     );
   }
 
-  delete(idHotel: number): Observable<void> {
-    return this.deleteById(idHotel);
+  // Alias para compatibilidad
+  createHotel(hotelRequest: HotelRequest): Observable<HotelResponse> {
+    return this.create(hotelRequest);
+  }
+
+  updateHotel(id: number, hotelRequest: HotelRequest): Observable<HotelResponse> {
+    return this.update(id, hotelRequest);
   }
 }

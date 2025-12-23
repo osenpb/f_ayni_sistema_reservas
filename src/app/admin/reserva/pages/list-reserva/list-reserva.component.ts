@@ -4,7 +4,7 @@ import { RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 
 import { ReservaService } from '../../../../services/reserva.service';
-import { Reserva } from '../../../../interfaces/reserva/reserva.interface';
+import { Reserva } from '../../../../interfaces';
 
 @Component({
   standalone: true,

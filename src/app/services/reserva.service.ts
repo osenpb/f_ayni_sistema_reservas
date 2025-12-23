@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { catchError, Observable, throwError } from 'rxjs';
-import { Reserva, ReservaAdminUpdateDTO } from '../interfaces/reserva/reserva.interface';
+import { ReservaListResponse, ReservaAdminUpdateDTO } from '../interfaces';
 
 const baseUrl = 'http://localhost:8080/api/admin';
 
@@ -9,10 +9,11 @@ const baseUrl = 'http://localhost:8080/api/admin';
   providedIn: 'root',
 })
 export class ReservaService {
+
   private http = inject(HttpClient);
 
-  getAll(): Observable<Reserva[]> {
-    return this.http.get<Reserva[]>(`${baseUrl}/reservas`).pipe(
+  getAll(): Observable<ReservaListResponse[]> {
+    return this.http.get<ReservaListResponse[]>(`${baseUrl}/reservas`).pipe(
       catchError((error: any) => {
         console.error('Error al obtener reservas:', error);
         return throwError(() => error);
@@ -20,8 +21,8 @@ export class ReservaService {
     );
   }
 
-  getById(id: number): Observable<Reserva> {
-    return this.http.get<Reserva>(`${baseUrl}/reservas/${id}`).pipe(
+  getById(id: number): Observable<ReservaListResponse> {
+    return this.http.get<ReservaListResponse>(`${baseUrl}/reservas/${id}`).pipe(
       catchError((error: any) => {
         console.error('Error al obtener reserva:', error);
         return throwError(() => error);
@@ -29,9 +30,9 @@ export class ReservaService {
     );
   }
 
-  buscarPorDni(dni: string): Observable<Reserva[]> {
+  buscarPorDni(dni: string): Observable<ReservaListResponse[]> {
     return this.http
-      .get<Reserva[]>(`${baseUrl}/reservas/buscar`, {
+      .get<ReservaListResponse[]>(`${baseUrl}/reservas/buscar`, {
         params: { dni },
       })
       .pipe(
@@ -42,8 +43,8 @@ export class ReservaService {
       );
   }
 
-  update(id: number, reserva: ReservaAdminUpdateDTO): Observable<Reserva> {
-    return this.http.put<Reserva>(`${baseUrl}/reservas/${id}`, reserva).pipe(
+  update(id: number, reserva: ReservaAdminUpdateDTO): Observable<ReservaListResponse> {
+    return this.http.put<ReservaListResponse>(`${baseUrl}/reservas/${id}`, reserva).pipe(
       catchError((error: any) => {
         console.error('Error al actualizar reserva:', error);
         return throwError(() => error);

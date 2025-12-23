@@ -1,28 +1,10 @@
 import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, catchError, throwError } from 'rxjs';
+import { DashboardStats } from '../interfaces';
 
-export interface DashboardStats {
-  totalDepartamentos: number;
-  totalHoteles: number;
-  totalHabitaciones: number;
-  totalReservas: number;
-  reservasPorEstado: { [key: string]: number };
-  ingresosTotales: number;
-  hotelesPorDepartamento: { [key: string]: number };
-  reservasPorMes: { [key: string]: number };
-  ingresosPorMes: { [key: string]: number };
-  topHoteles: { nombre: string; reservas: number }[];
-  reservasRecientes: {
-    id: number;
-    cliente: string;
-    hotel: string;
-    fechaInicio: string;
-    fechaFin: string;
-    total: number;
-    estado: string;
-  }[];
-}
+// Re-exportar para uso externo
+export type { DashboardStats } from '../interfaces';
 
 const baseUrl = 'http://localhost:8080/api/admin/dashboard';
 

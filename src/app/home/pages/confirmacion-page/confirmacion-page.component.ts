@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, inject, OnInit, signal } from '@ang
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { ReservaPublicService } from '../../services/reserva-public.service';
-import { ReservaDetalleResponse } from '../../interfaces/reserva-public.interface';
+import { ReservaResponse } from '../../../interfaces';
 import jsPDF from 'jspdf';
 
 @Component({
@@ -17,7 +17,7 @@ export class ConfirmacionPageComponent implements OnInit {
   private reservaService = inject(ReservaPublicService);
 
   reservaId = signal<number | null>(null);
-  reserva = signal<ReservaDetalleResponse | null>(null);
+  reserva = signal<ReservaResponse | null>(null);
   loading = signal<boolean>(true);
   error = signal<boolean>(false);
 
@@ -46,6 +46,32 @@ export class ConfirmacionPageComponent implements OnInit {
     });
   }
 
+  // ==================== GETTERS PARA ACCESO A DATOS ====================
+
+  get hotelNombre(): string {
+    return this.reserva()?.hotel?.nombre || 'N/A';
+  }
+
+  get hotelDireccion(): string {
+    return this.reserva()?.hotel?.direccion || 'N/A';
+  }
+
+  get clienteNombreCompleto(): string {
+    const cliente = this.reserva()?.cliente;
+    if (!cliente) return 'N/A';
+    return `${cliente.nombre} ${cliente.apellido}`.trim() || 'N/A';
+  }
+
+  get clienteDni(): string {
+    return this.reserva()?.cliente?.documento || 'N/A';
+  }
+
+  get clienteEmail(): string {
+    return this.reserva()?.cliente?.email || 'N/A';
+  }
+
+  // ==================== UTILIDADES ====================
+
   formatDate(dateString: string): string {
     const date = new Date(dateString);
     return date.toLocaleDateString('es-PE', {
@@ -70,6 +96,39 @@ export class ConfirmacionPageComponent implements OnInit {
 
     return Math.ceil(diff / (1000 * 60 * 60 * 24));
   }
+
+  /**
+   * Obtiene información de habitación desde el hotel
+   */
+  getHabitacionInfo(habitacionId: number): { numero: string; tipo: string; precio: number } {
+    const hotel = this.reserva()?.hotel;
+    if (!hotel?.habitaciones) {
+      return { numero: habitacionId.toString(), tipo: 'Standard', precio: 0 };
+    }
+
+    const habitacion = hotel.habitaciones.find(h => h.id === habitacionId);
+    if (!habitacion) {
+      return { numero: habitacionId.toString(), tipo: 'Standard', precio: 0 };
+    }
+
+    return {
+      numero: habitacion.numero,
+      tipo: habitacion.tipoHabitacion?.nombre || 'Standard',
+      precio: habitacion.precio
+    };
+  }
+
+  /**
+   * Calcula el subtotal por noche (suma de precios de habitaciones)
+   */
+  calcularSubtotalPorNoche(): number {
+    const reserva = this.reserva();
+    if (!reserva?.detalles) return 0;
+
+    return reserva.detalles.reduce((sum, detalle) => sum + detalle.precioNoche, 0);
+  }
+
+  // ==================== GENERAR PDF ====================
 
   descargarPDF(): void {
     const reserva = this.reserva();
@@ -135,9 +194,9 @@ export class ConfirmacionPageComponent implements OnInit {
     doc.setTextColor(...blackColor);
     doc.setFont('helvetica', 'normal');
     doc.setFontSize(11);
-    doc.text(`Hotel: ${reserva.hotelNombre || 'N/A'}`, 20, y);
+    doc.text(`Hotel: ${this.hotelNombre}`, 20, y);
     y += 6;
-    doc.text(`Dirección: ${reserva.hotelDireccion || 'N/A'}`, 20, y);
+    doc.text(`Dirección: ${this.hotelDireccion}`, 20, y);
     y += 15;
 
     // Sección: Datos del Huésped
@@ -150,11 +209,11 @@ export class ConfirmacionPageComponent implements OnInit {
     doc.setTextColor(...blackColor);
     doc.setFont('helvetica', 'normal');
     doc.setFontSize(11);
-    doc.text(`Nombre: ${reserva.clienteNombre || 'N/A'}`, 20, y);
+    doc.text(`Nombre: ${this.clienteNombreCompleto}`, 20, y);
     y += 6;
-    doc.text(`DNI: ${reserva.clienteDni || 'N/A'}`, 20, y);
+    doc.text(`DNI: ${this.clienteDni}`, 20, y);
     y += 6;
-    doc.text(`Email: ${reserva.clienteEmail || 'N/A'}`, 20, y);
+    doc.text(`Email: ${this.clienteEmail}`, 20, y);
     y += 15;
 
     // Sección: Detalles de la Estadía
@@ -189,19 +248,20 @@ export class ConfirmacionPageComponent implements OnInit {
     doc.setFont('helvetica', 'bold');
     doc.text('Habitación', 25, y);
     doc.text('Tipo', 80, y);
-    doc.text('Precio', pageWidth - 45, y);
+    doc.text('Precio/Noche', pageWidth - 45, y);
     y += 10;
 
     doc.setTextColor(...blackColor);
     doc.setFont('helvetica', 'normal');
     
     let subtotal = 0;
-    if (reserva.habitaciones && reserva.habitaciones.length > 0) {
-      for (const hab of reserva.habitaciones) {
-        doc.text(`N° ${hab.numero}`, 25, y);
-        doc.text(hab.tipo || 'Standard', 80, y);
-        doc.text(this.formatCurrency(hab.precio), pageWidth - 45, y);
-        subtotal += hab.precio;
+    if (reserva.detalles && reserva.detalles.length > 0) {
+      for (const detalle of reserva.detalles) {
+        const habInfo = this.getHabitacionInfo(detalle.habitacionId);
+        doc.text(`N° ${habInfo.numero}`, 25, y);
+        doc.text(habInfo.tipo, 80, y);
+        doc.text(this.formatCurrency(detalle.precioNoche), pageWidth - 45, y);
+        subtotal += detalle.precioNoche;
         y += 7;
       }
     }
@@ -215,7 +275,7 @@ export class ConfirmacionPageComponent implements OnInit {
 
     // Totales
     doc.setFontSize(11);
-    doc.text('Subtotal:', pageWidth - 80, y);
+    doc.text('Subtotal/noche:', pageWidth - 80, y);
     doc.text(this.formatCurrency(subtotal), pageWidth - 45, y);
     y += 7;
 
@@ -232,7 +292,7 @@ export class ConfirmacionPageComponent implements OnInit {
     doc.setFontSize(12);
     doc.setFont('helvetica', 'bold');
     doc.text('TOTAL:', pageWidth - 95, y + 3);
-    doc.text(this.formatCurrency(reserva.total || reserva.montoTotal || subtotal * noches), pageWidth - 25, y + 3, { align: 'right' });
+    doc.text(this.formatCurrency(reserva.total), pageWidth - 25, y + 3, { align: 'right' });
 
     y += 25;
 

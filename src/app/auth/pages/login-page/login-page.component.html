@@ -1,110 +1,191 @@
-<main class="min-h-screen bg-gradient-to-br from-indigo-600 via-purple-600 to-indigo-800 flex items-center justify-center p-4">
-  
-  <!-- Login Form Container -->
-  <article class="w-full max-w-md">
-    <div class="bg-white rounded-2xl shadow-2xl p-8">
-      
-      <!-- Header con icono -->
-      <header class="text-center mb-8">
-        <div class="mx-auto w-16 h-16 bg-indigo-100 rounded-full flex items-center justify-center mb-4">
-          <svg class="w-8 h-8 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
-          </svg>
-        </div>
-        <h1 class="text-2xl font-bold text-gray-800">Reservas Hotel</h1>
-        <p class="text-gray-500 text-sm mt-1">Inicia sesión en tu cuenta</p>
-      </header>
+<main class="min-h-screen bg-slate-900 flex">
 
-      <!-- Formulario -->
-      <form [formGroup]="loginForm" class="space-y-5" (ngSubmit)="onSubmit()">
-        
-        <!-- Email Field -->
-        <div class="relative">
-          <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-            <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+  <!-- Panel izquierdo - Imagen/Branding -->
+  <aside class="hidden lg:flex lg:w-1/2 relative overflow-hidden">
+    <!-- Imagen de fondo -->
+    <div class="absolute inset-0">
+      <img src="https://images.unsplash.com/photo-1566073771259-6a8506099945?w=1200" alt="Hotel de lujo"
+        class="w-full h-full object-cover" />
+      <div class="absolute inset-0 bg-gradient-to-r from-slate-900/90 via-slate-900/70 to-transparent"></div>
+    </div>
+
+    <!-- Contenido superpuesto -->
+    <div class="relative z-10 flex flex-col justify-center px-12 py-16">
+      <!-- Logo -->
+      <div class="mb-12">
+        <div class="flex items-center gap-3">
+          <div class="w-12 h-12 border-2 border-amber-400 rounded-lg flex items-center justify-center">
+            <svg class="w-6 h-6 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
             </svg>
           </div>
-          <input
-            id="email"
-            type="email"
-            formControlName="email"
-            placeholder="Correo electrónico"
-            class="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all"
-          />
+          <span class="text-2xl font-serif text-white">
+            Hotel <span class="text-amber-400 italic">LuxeStay</span>
+          </span>
         </div>
+      </div>
 
-        <!-- Password Field -->
-        <div class="relative">
-          <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-            <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
-            </svg>
-          </div>
-          <input
-            id="password"
-            type="password"
-            formControlName="password"
-            placeholder="Contraseña"
-            class="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all"
-          />
-        </div>
-
-        <!-- Error Message -->
-        @if (hasError()) {
-          <div class="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-lg text-sm">
-            Credenciales inválidas. Verifica tu correo y contraseña.
-          </div>
-        }
-
-        <!-- Submit Button -->
-        <button
-          type="submit"
-          [disabled]="isPosting()"
-          class="w-full bg-indigo-600 text-white font-semibold py-3 px-6 rounded-lg hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition-all duration-300 flex items-center justify-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed"
-        >
-          @if (isPosting()) {
-            <svg class="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-              <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-              <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-            </svg>
-            <span>Iniciando sesión...</span>
-          } @else {
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"/>
-            </svg>
-            <span>INICIAR SESIÓN</span>
-          }
-        </button>
-
-      </form>
-
-      <!-- Register Link -->
-      <div class="mt-6 text-center">
-        <p class="text-gray-600">
-          ¿No tienes cuenta? 
-          <a routerLink="/auth/register" class="text-indigo-600 font-medium hover:text-indigo-700 transition-colors">
-            👤 Regístrate aquí
-          </a>
+      <!-- Texto promocional -->
+      <div class="max-w-md">
+        <h2 class="text-4xl font-serif text-white mb-6 leading-tight">
+          Bienvenido a la
+          <span class="text-amber-400">experiencia</span>
+          de hospedaje premium
+        </h2>
+        <p class="text-gray-300 text-lg leading-relaxed">
+          Accede a tu cuenta para gestionar tus reservas, ver ofertas exclusivas y disfrutar de beneficios VIP.
         </p>
       </div>
 
-      <!-- Admin Info Box -->
-      <div class="mt-6 bg-indigo-50 border border-indigo-200 rounded-lg p-4">
+      <!-- Estadísticas -->
+      <div class="mt-12 flex gap-8">
+        <div>
+          <p class="text-3xl font-bold text-amber-400">50+</p>
+          <p class="text-gray-400 text-sm">Hoteles</p>
+        </div>
+        <div>
+          <p class="text-3xl font-bold text-amber-400">10</p>
+          <p class="text-gray-400 text-sm">Departamentos</p>
+        </div>
+        <div>
+          <p class="text-3xl font-bold text-amber-400">5★</p>
+          <p class="text-gray-400 text-sm">Calificación</p>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Panel derecho - Formulario -->
+  <section class="w-full lg:w-1/2 flex items-center justify-center p-6 md:p-12">
+    <article class="w-full max-w-md">
+
+      <!-- Logo móvil -->
+      <div class="lg:hidden flex items-center justify-center gap-3 mb-8">
+        <div class="w-10 h-10 border-2 border-amber-400 rounded-lg flex items-center justify-center">
+          <svg class="w-5 h-5 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+          </svg>
+        </div>
+        <span class="text-xl font-serif text-white">
+          Hotel <span class="text-amber-400 italic">LuxeStay</span>
+        </span>
+      </div>
+
+      <!-- Card del formulario -->
+      <div class="bg-slate-800/50 backdrop-blur-sm border border-slate-700 rounded-2xl p-8">
+
+        <!-- Header -->
+        <header class="text-center mb-8">
+          <h1 class="text-2xl font-serif text-white mb-2">Iniciar Sesión</h1>
+          <p class="text-gray-400 text-sm">Ingresa tus credenciales para continuar</p>
+        </header>
+
+        <!-- Formulario -->
+        <form [formGroup]="loginForm" class="space-y-5" (ngSubmit)="onSubmit()">
+
+          <!-- Email Field -->
+          <div>
+            <label class="block text-sm font-medium text-gray-300 mb-2">Correo electrónico</label>
+            <div class="relative">
+              <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                <svg class="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                </svg>
+              </div>
+              <input id="email" type="email" formControlName="email" placeholder="tu@email.com"
+                class="w-full pl-10 pr-4 py-3 bg-slate-700/50 border border-slate-600 text-white placeholder-gray-500 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-400/50 focus:border-amber-400 transition-all" />
+            </div>
+          </div>
+
+          <!-- Password Field -->
+          <div>
+            <label class="block text-sm font-medium text-gray-300 mb-2">Contraseña</label>
+            <div class="relative">
+              <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                <svg class="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                </svg>
+              </div>
+              <input id="password" type="password" formControlName="password" placeholder="••••••••"
+                class="w-full pl-10 pr-4 py-3 bg-slate-700/50 border border-slate-600 text-white placeholder-gray-500 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-400/50 focus:border-amber-400 transition-all" />
+            </div>
+          </div>
+
+          <!-- Error Message -->
+          @if (hasError()) {
+          <div
+            class="bg-red-500/10 border border-red-500/30 text-red-400 px-4 py-3 rounded-lg text-sm flex items-center gap-2">
+            <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            Credenciales inválidas. Verifica tu correo y contraseña.
+          </div>
+          }
+
+          <!-- Submit Button -->
+          <button type="submit" [disabled]="isPosting()"
+            class="w-full bg-amber-500 text-slate-900 font-semibold py-3 px-6 rounded-lg hover:bg-amber-400 focus:outline-none focus:ring-2 focus:ring-amber-400 focus:ring-offset-2 focus:ring-offset-slate-800 transition-all duration-300 flex items-center justify-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed">
+            @if (isPosting()) {
+            <svg class="animate-spin h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+              <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+              <path class="opacity-75" fill="currentColor"
+                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
+              </path>
+            </svg>
+            <span>Iniciando sesión...</span>
+            } @else {
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1" />
+            </svg>
+            <span>Iniciar Sesión</span>
+            }
+          </button>
+
+        </form>
+
+        <!-- Divider -->
+        <div class="my-6 flex items-center gap-4">
+          <div class="flex-1 h-px bg-slate-600"></div>
+          <span class="text-gray-500 text-sm">o</span>
+          <div class="flex-1 h-px bg-slate-600"></div>
+        </div>
+
+        <!-- Register Link -->
+        <div class="text-center">
+          <p class="text-gray-400">
+            ¿No tienes cuenta?
+            <a routerLink="/auth/register" class="text-amber-400 font-medium hover:text-amber-300 transition-colors">
+              Regístrate aquí
+            </a>
+          </p>
+        </div>
+
+      </div>
+
+      <!-- Admin Info (solo para desarrollo) -->
+      <div class="mt-6 bg-slate-800/30 border border-slate-700 rounded-lg p-4">
         <div class="flex items-start gap-3">
-          <div class="w-8 h-8 bg-indigo-100 rounded-full flex items-center justify-center flex-shrink-0">
-            <svg class="w-4 h-4 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+          <div class="w-8 h-8 bg-indigo-500/20 rounded-full flex items-center justify-center flex-shrink-0">
+            <svg class="w-4 h-4 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
           </div>
           <div>
-            <p class="text-sm font-medium text-indigo-800">Administradores:</p>
-            <p class="text-xs text-indigo-600 mt-1">Utilicen las credenciales proporcionadas por el sistema.</p>
-            <p class="text-xs text-gray-500 mt-1">Email: admin&#64;hotel.com | Password: admin123</p>
+            <p class="text-sm font-medium text-gray-300">Credenciales de prueba:</p>
+            <p class="text-xs text-gray-500 mt-1">admin&#64;hotel.com | admin123</p>
           </div>
         </div>
       </div>
 
-    </div>
-  </article>
+
+    </article>
+  </section>
+
 </main>

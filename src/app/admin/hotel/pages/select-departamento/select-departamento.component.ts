@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, inject, OnInit, signal } from '@ang
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { DepartamentoService } from '../../../../services/departamento.service';
-import { DepartamentoResponse } from '../../../../interfaces/departamento/departamento-response.interface';
+import { DepartamentoResponse } from '../../../../interfaces';
 
 @Component({
   standalone: true,

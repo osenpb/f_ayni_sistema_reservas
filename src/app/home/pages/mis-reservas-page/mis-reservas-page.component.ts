@@ -1,9 +1,9 @@
-import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { RouterLink } from '@angular/router';
+import { RouterLink, Router } from '@angular/router';
 import { ReservaPublicService } from '../../services/reserva-public.service';
-import { ReservaCompleta } from '../../interfaces/reserva-public.interface';
+import { ReservaListResponse } from '../../../interfaces';
 import { HttpClient } from '@angular/common/http';
 
 @Component({
@@ -13,21 +13,25 @@ import { HttpClient } from '@angular/common/http';
   templateUrl: './mis-reservas-page.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class MisReservasPageComponent {
+export class MisReservasPageComponent implements OnInit {
   private reservaService = inject(ReservaPublicService);
   private http = inject(HttpClient);
+  private router = inject(Router);
 
-  dni = signal<string>('');
-  reservas = signal<ReservaCompleta[]>([]);
-  loading = signal<boolean>(false);
-  buscado = signal<boolean>(false);
+  reservas = signal<ReservaListResponse[]>([]);
+  reservasFiltradas = signal<ReservaListResponse[]>([]);
+  loading = signal<boolean>(true);
   error = signal<string | null>(null);
-  mensaje = signal<string | null>(null);
   successMessage = signal<string | null>(null);
+
+  // Filtros por fecha
+  filtroFechaInicio = signal<string>('');
+  filtroFechaFin = signal<string>('');
+  filtroEstado = signal<string>('TODOS');
 
   // Modal eliminar
   showModalEliminar = signal<boolean>(false);
-  reservaSeleccionada = signal<ReservaCompleta | null>(null);
+  reservaSeleccionada = signal<ReservaListResponse | null>(null);
   procesando = signal<boolean>(false);
 
   // Modal editar
@@ -36,65 +40,84 @@ export class MisReservasPageComponent {
   editFechaFin = signal<string>('');
   editError = signal<string | null>(null);
 
-  onDniInput(event: Event): void {
-    const input = event.target as HTMLInputElement;
-    const value = input.value.replace(/\D/g, '');
-    this.dni.set(value);
-    input.value = value;
+  ngOnInit(): void {
+    this.cargarReservas();
   }
 
-  buscarReservas(): void {
-    const dniValue = this.dni().trim();
-
-    if (!dniValue) {
-      this.error.set('Ingrese su número de DNI');
-      return;
-    }
-
-    if (dniValue.length !== 8) {
-      this.error.set('El DNI debe tener 8 dígitos');
-      return;
-    }
-
-    this.error.set(null);
-    this.mensaje.set(null);
-    this.successMessage.set(null);
+  cargarReservas(): void {
     this.loading.set(true);
-    this.buscado.set(false);
+    this.error.set(null);
 
-    this.reservaService.getMisReservas(dniValue).subscribe({
+    const fechaInicio = this.filtroFechaInicio() || undefined;
+    const fechaFin = this.filtroFechaFin() || undefined;
+
+    this.reservaService.getMisReservas(fechaInicio, fechaFin).subscribe({
       next: (data) => {
+        console.log(data);
         if (Array.isArray(data)) {
           this.reservas.set(data);
-          this.mensaje.set(null);
-        } else if ('mensaje' in data) {
+          this.aplicarFiltros();
+        } else {
           this.reservas.set([]);
-          this.mensaje.set(data.mensaje);
+          this.reservasFiltradas.set([]);
         }
-        this.buscado.set(true);
         this.loading.set(false);
       },
-      error: (err) => {
-        console.error('Error buscando reservas:', err);
+      error: (err: any) => {
+        console.error('Error cargando reservas:', err);
+        if (err.status === 401) {
+          this.error.set('Debe iniciar sesión para ver sus reservas');
+        } else {
+          this.error.set('Error al cargar sus reservas. Intente nuevamente.');
+        }
         this.reservas.set([]);
-        this.error.set('Error al buscar reservas. Intente nuevamente.');
-        this.buscado.set(true);
+        this.reservasFiltradas.set([]);
         this.loading.set(false);
       },
     });
   }
 
-  limpiarBusqueda(): void {
-    this.dni.set('');
-    this.reservas.set([]);
-    this.buscado.set(false);
-    this.error.set(null);
-    this.mensaje.set(null);
-    this.successMessage.set(null);
+  aplicarFiltros(): void {
+    let resultado = this.reservas();
+    
+    // Filtrar por estado
+    const estado = this.filtroEstado();
+    if (estado !== 'TODOS') {
+      resultado = resultado.filter(r => r.estado === estado);
+    }
+    
+    this.reservasFiltradas.set(resultado);
+  }
+
+  onFiltroFechaInicioChange(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    this.filtroFechaInicio.set(input.value);
+  }
+
+  onFiltroFechaFinChange(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    this.filtroFechaFin.set(input.value);
+  }
+
+  onFiltroEstadoChange(event: Event): void {
+    const select = event.target as HTMLSelectElement;
+    this.filtroEstado.set(select.value);
+    this.aplicarFiltros();
+  }
+
+  buscarConFiltros(): void {
+    this.cargarReservas();
+  }
+
+  limpiarFiltros(): void {
+    this.filtroFechaInicio.set('');
+    this.filtroFechaFin.set('');
+    this.filtroEstado.set('TODOS');
+    this.cargarReservas();
   }
 
   // === MODAL ELIMINAR ===
-  abrirModalEliminar(reserva: ReservaCompleta): void {
+  abrirModalEliminar(reserva: ReservaListResponse): void {
     this.reservaSeleccionada.set(reserva);
     this.showModalEliminar.set(true);
   }
@@ -115,19 +138,26 @@ export class MisReservasPageComponent {
         this.procesando.set(false);
         this.cerrarModalEliminar();
         this.successMessage.set(`Reserva #${reserva.id} cancelada exitosamente`);
-        this.buscarReservas();
+        // Recargar lista
+        this.cargarReservas();
+        // Limpiar mensaje después de 3 segundos
+        setTimeout(() => this.successMessage.set(null), 3000);
       },
-      error: (err) => {
+      error: (err: any) => {
         console.error('Error cancelando reserva:', err);
         this.procesando.set(false);
         this.cerrarModalEliminar();
-        this.error.set('Error al cancelar la reserva. Intente nuevamente.');
+        if (err.status === 403) {
+          this.error.set('No tiene permiso para cancelar esta reserva');
+        } else {
+          this.error.set('Error al cancelar la reserva. Intente nuevamente.');
+        }
       },
     });
   }
 
   // === MODAL EDITAR ===
-  abrirModalEditar(reserva: ReservaCompleta): void {
+  abrirModalEditar(reserva: ReservaListResponse): void {
     this.reservaSeleccionada.set(reserva);
     this.editFechaInicio.set(reserva.fechaInicio);
     this.editFechaFin.set(reserva.fechaFin);
@@ -159,6 +189,13 @@ export class MisReservasPageComponent {
     return Math.max(0, Math.ceil(diff / (1000 * 60 * 60 * 24)));
   }
 
+  // Obtener fecha mínima (mañana - 24 horas de anticipación)
+  getMinDate(): string {
+    const tomorrow = new Date();
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    return tomorrow.toISOString().split('T')[0];
+  }
+
   confirmarEditar(): void {
     const reserva = this.reservaSeleccionada();
     if (!reserva) return;
@@ -173,11 +210,12 @@ export class MisReservasPageComponent {
 
     const inicio = new Date(fechaInicio);
     const fin = new Date(fechaFin);
-    const hoy = new Date();
-    hoy.setHours(0, 0, 0, 0);
+    const manana = new Date();
+    manana.setDate(manana.getDate() + 1);
+    manana.setHours(0, 0, 0, 0);
 
-    if (inicio < hoy) {
-      this.editError.set('La fecha de entrada no puede ser anterior a hoy');
+    if (inicio < manana) {
+      this.editError.set('Las reservas deben realizarse con al menos 24 horas de anticipación');
       return;
     }
 
@@ -199,19 +237,24 @@ export class MisReservasPageComponent {
           this.procesando.set(false);
           this.cerrarModalEditar();
           this.successMessage.set(`Reserva #${reserva.id} actualizada exitosamente`);
-          this.buscarReservas();
+          this.cargarReservas();
+          setTimeout(() => this.successMessage.set(null), 3000);
         },
-        error: (err) => {
+        error: (err: any) => {
           console.error('Error actualizando reserva:', err);
           this.procesando.set(false);
-          this.editError.set(err.error?.message || 'Error al actualizar la reserva');
+          if (err.status === 403) {
+            this.editError.set('No tiene permiso para actualizar esta reserva');
+          } else {
+            this.editError.set(err.error?.message || 'Error al actualizar la reserva');
+          }
         },
       });
   }
 
   // === UTILIDADES ===
   formatDate(dateString: string): string {
-    const date = new Date(dateString);
+    const date = new Date(dateString + 'T00:00:00');
     return date.toLocaleDateString('es-PE', {
       day: '2-digit',
       month: '2-digit',
@@ -220,7 +263,7 @@ export class MisReservasPageComponent {
   }
 
   formatDateLong(dateString: string): string {
-    const date = new Date(dateString);
+    const date = new Date(dateString + 'T00:00:00');
     return date.toLocaleDateString('es-PE', {
       weekday: 'short',
       day: '2-digit',
@@ -237,6 +280,8 @@ export class MisReservasPageComponent {
     switch (estado) {
       case 'CONFIRMADA':
         return 'bg-green-100 text-green-800';
+      case 'PENDIENTE':
+        return 'bg-yellow-100 text-yellow-800';
       case 'CANCELADA':
         return 'bg-red-100 text-red-800';
       default:

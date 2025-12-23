@@ -5,7 +5,7 @@
     <div class="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
 
       <!-- Cabecera azul -->
-      <div class="bg-blue-600 px-6 py-4">
+      <div class="bg-indigo-600 px-6 py-4">
         <h1 class="text-xl font-bold text-white">Nuevo Departamento</h1>
       </div>
 
@@ -18,7 +18,7 @@
             Nombre del Departamento
           </label>
           <input type="text" formControlName="nombre" placeholder="Ej: Lima"
-            class="w-full px-4 py-2.5 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition"
+            class="w-full px-4 py-2.5 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition"
             [class.border-red-500]="nombreInvalid" [class.border-gray-300]="!nombreInvalid">
           @if (nombreInvalid) {
           <p class="mt-1 text-sm text-red-500">
@@ -33,7 +33,7 @@
             Detalle del Departamento
           </label>
           <input type="text" formControlName="detalle" placeholder="Ej: La capital del Perú"
-            class="w-full px-4 py-2.5 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition"
+            class="w-full px-4 py-2.5 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition"
             [class.border-red-500]="detalleInvalid" [class.border-gray-300]="!detalleInvalid">
           @if (detalleInvalid) {
           <p class="mt-1 text-sm text-red-500">

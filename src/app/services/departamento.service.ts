@@ -1,8 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
-
 import { catchError, Observable, throwError } from 'rxjs';
-import { DepartamentoResponse } from '../interfaces/departamento/departamento-response.interface';
+import { DepartamentoResponse, DepartamentoRequest } from '../interfaces';
 
 const baseUrl = 'http://localhost:8080/api/admin';
 
@@ -30,7 +29,7 @@ export class DepartamentoService {
     );
   }
 
-  create(departamento: Omit<DepartamentoResponse, 'id'>): Observable<DepartamentoResponse> {
+  create(departamento: DepartamentoRequest): Observable<DepartamentoResponse> {
     return this.http.post<DepartamentoResponse>(`${baseUrl}/departamentos`, departamento).pipe(
       catchError((error: any) => {
         console.error('Error al crear departamento:', error);
@@ -39,10 +38,7 @@ export class DepartamentoService {
     );
   }
 
-  update(
-    id: number,
-    departamento: Omit<DepartamentoResponse, 'id'>
-  ): Observable<DepartamentoResponse> {
+  update(id: number, departamento: DepartamentoRequest): Observable<DepartamentoResponse> {
     return this.http.put<DepartamentoResponse>(`${baseUrl}/departamentos/${id}`, departamento).pipe(
       catchError((error: any) => {
         console.error('Error al actualizar departamento:', error);
