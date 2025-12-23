@@ -79,13 +79,13 @@ export class MisReservasPageComponent implements OnInit {
 
   aplicarFiltros(): void {
     let resultado = this.reservas();
-    
+
     // Filtrar por estado
     const estado = this.filtroEstado();
     if (estado !== 'TODOS') {
-      resultado = resultado.filter(r => r.estado === estado);
+      resultado = resultado.filter((r) => r.estado === estado);
     }
-    
+
     this.reservasFiltradas.set(resultado);
   }
 
@@ -182,11 +182,15 @@ export class MisReservasPageComponent implements OnInit {
   }
 
   calcularNochesEdit(): number {
-    const inicio = new Date(this.editFechaInicio());
-    const fin = new Date(this.editFechaFin());
-    if (isNaN(inicio.getTime()) || isNaN(fin.getTime())) return 0;
-    const diff = fin.getTime() - inicio.getTime();
-    return Math.max(0, Math.ceil(diff / (1000 * 60 * 60 * 24)));
+    if (!this.editFechaInicio() || !this.editFechaFin()) return 0;
+
+    const [y1, m1, d1] = this.editFechaInicio().split('-').map(Number);
+    const [y2, m2, d2] = this.editFechaFin().split('-').map(Number);
+
+    const inicio = new Date(y1, m1 - 1, d1);
+    const fin = new Date(y2, m2 - 1, d2);
+
+    return Math.max(0, Math.round((fin.getTime() - inicio.getTime()) / 86400000));
   }
 
   // Obtener fecha mínima (mañana - 24 horas de anticipación)
@@ -208,18 +212,20 @@ export class MisReservasPageComponent implements OnInit {
       return;
     }
 
-    const inicio = new Date(fechaInicio);
-    const fin = new Date(fechaFin);
-    const manana = new Date();
-    manana.setDate(manana.getDate() + 1);
-    manana.setHours(0, 0, 0, 0);
+    const hoy = new Date();
+    const hoyISO = hoy.toISOString().split('T')[0];
 
-    if (inicio < manana) {
+    // mañana en formato yyyy-MM-dd
+    const mananaISO = new Date(hoy.getFullYear(), hoy.getMonth(), hoy.getDate() + 1)
+      .toISOString()
+      .split('T')[0];
+
+    if (fechaInicio < mananaISO) {
       this.editError.set('Las reservas deben realizarse con al menos 24 horas de anticipación');
       return;
     }
 
-    if (fin <= inicio) {
+    if (fechaFin <= fechaInicio) {
       this.editError.set('La fecha de salida debe ser posterior a la de entrada');
       return;
     }

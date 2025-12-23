@@ -1,18 +1,17 @@
 import { HttpHandlerFn, HttpRequest, HttpErrorResponse } from '@angular/common/http';
 import { inject } from '@angular/core';
-import { AuthService } from '../services/auth.service';
 import { catchError, throwError } from 'rxjs';
-import { Router } from '@angular/router';
 
 export function authInterceptor(req: HttpRequest<unknown>, next: HttpHandlerFn) {
-  const authService = inject(AuthService);
-  const router = inject(Router);
-  
-  // Obtener token del localStorage directamente para evitar problemas de timing
-  const token = localStorage.getItem('token') || authService.token();
+  // Obtener token del localStorage directamente
+  const token = localStorage.getItem('token');
 
-  // Solo evitar rutas de login/registro
-  if (token && !req.url.includes('/api/v1/auth/login') && !req.url.includes('/api/v1/auth/register')) {
+  // Solo agregar token si existe y no es ruta de auth
+  if (
+    token &&
+    !req.url.includes('/api/v1/auth/login') &&
+    !req.url.includes('/api/v1/auth/register')
+  ) {
     req = req.clone({
       headers: req.headers.set('Authorization', `Bearer ${token}`),
     });
@@ -20,11 +19,16 @@ export function authInterceptor(req: HttpRequest<unknown>, next: HttpHandlerFn) 
 
   return next(req).pipe(
     catchError((error: HttpErrorResponse) => {
-      // Solo cerrar sesión si es un 401 en una ruta que no sea de auth
+      // Solo limpiar localStorage si es 401 y NO es una petición a /me
+      // Esto evita que se pierda la sesión durante la verificación inicial
       if (error.status === 401 && !req.url.includes('/api/v1/auth/')) {
-        console.warn('Token expirado o inválido, redirigiendo a login...');
-        authService.logout();
-        router.navigate(['/auth/login']);
+        console.warn('⚠️ Error 401 detectado en:', req.url);
+        // No redirigir automáticamente, dejar que el componente maneje el error
+        // Solo limpiar el storage si el token es inválido
+        if (!req.url.includes('/me')) {
+          localStorage.removeItem('token');
+          localStorage.removeItem('user');
+        }
       }
       return throwError(() => error);
     })

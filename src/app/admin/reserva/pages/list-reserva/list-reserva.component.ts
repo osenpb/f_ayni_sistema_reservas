@@ -17,10 +17,14 @@ export class ListReservaComponent {
   private reservaService = inject(ReservaService);
 
   reservas = signal<Reserva[]>([]);
+  reservasFiltradas = signal<Reserva[]>([]);
   loading = signal<boolean>(true);
-  dniBusqueda = signal<string>('');
-  modoFiltrado = signal<boolean>(false);
   successMessage = signal<string | null>(null);
+
+  // Filtros
+  filtroFechaDesde = signal<string>('');
+  filtroFechaHasta = signal<string>('');
+  filtroEstado = signal<string>('TODOS');
 
   // Modal eliminar
   showModalEliminar = signal<boolean>(false);
@@ -33,12 +37,11 @@ export class ListReservaComponent {
 
   loadReservas(): void {
     this.loading.set(true);
-    this.modoFiltrado.set(false);
-    this.dniBusqueda.set('');
 
     this.reservaService.getAll().subscribe({
       next: (data) => {
         this.reservas.set(data);
+        this.aplicarFiltros();
         this.loading.set(false);
       },
       error: (err) => {
@@ -48,37 +51,61 @@ export class ListReservaComponent {
     });
   }
 
-  buscarPorDni(): void {
-    const dni = this.dniBusqueda().trim();
+  aplicarFiltros(): void {
+    let resultado = this.reservas();
 
-    if (!dni) {
-      this.loadReservas();
-      return;
+    // Filtrar por fecha de reserva DESDE (fechaReserva >= filtroFechaDesde)
+    const fechaDesde = this.filtroFechaDesde();
+    if (fechaDesde) {
+      resultado = resultado.filter((r) => r.fechaReserva >= fechaDesde);
     }
 
-    if (dni.length !== 8) {
-      alert('El DNI debe tener 8 dígitos');
-      return;
+    // Filtrar por fecha de reserva HASTA (fechaReserva <= filtroFechaHasta)
+    const fechaHasta = this.filtroFechaHasta();
+    if (fechaHasta) {
+      resultado = resultado.filter((r) => r.fechaReserva <= fechaHasta);
     }
 
-    this.loading.set(true);
-    this.modoFiltrado.set(true);
+    // Filtrar por estado
+    const estado = this.filtroEstado();
+    if (estado !== 'TODOS') {
+      resultado = resultado.filter((r) => r.estado === estado);
+    }
 
-    this.reservaService.buscarPorDni(dni).subscribe({
-      next: (data) => {
-        this.reservas.set(data);
-        this.loading.set(false);
-      },
-      error: (err) => {
-        console.error('Error buscando por DNI', err);
-        this.reservas.set([]);
-        this.loading.set(false);
-      },
-    });
+    this.reservasFiltradas.set(resultado);
   }
 
-  mostrarTodas(): void {
-    this.loadReservas();
+  onFiltroFechaDesdeChange(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    this.filtroFechaDesde.set(input.value);
+    this.aplicarFiltros();
+  }
+
+  onFiltroFechaHastaChange(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    this.filtroFechaHasta.set(input.value);
+    this.aplicarFiltros();
+  }
+
+  onFiltroEstadoChange(event: Event): void {
+    const select = event.target as HTMLSelectElement;
+    this.filtroEstado.set(select.value);
+    this.aplicarFiltros();
+  }
+
+  limpiarFiltros(): void {
+    this.filtroFechaDesde.set('');
+    this.filtroFechaHasta.set('');
+    this.filtroEstado.set('TODOS');
+    this.aplicarFiltros();
+  }
+
+  hayFiltrosActivos(): boolean {
+    return (
+      this.filtroFechaDesde() !== '' ||
+      this.filtroFechaHasta() !== '' ||
+      this.filtroEstado() !== 'TODOS'
+    );
   }
 
   // === MODAL ELIMINAR ===
@@ -105,11 +132,7 @@ export class ListReservaComponent {
         this.successMessage.set(`Reserva #${reserva.id} eliminada exitosamente`);
 
         // Recargar lista
-        if (this.modoFiltrado()) {
-          this.buscarPorDni();
-        } else {
-          this.loadReservas();
-        }
+        this.loadReservas();
 
         // Ocultar mensaje después de 5 segundos
         setTimeout(() => this.successMessage.set(null), 5000);
@@ -123,15 +146,12 @@ export class ListReservaComponent {
     });
   }
 
-  onDniInput(event: Event): void {
-    const input = event.target as HTMLInputElement;
-    this.dniBusqueda.set(input.value);
-  }
-
   getEstadoClass(estado: string): string {
     switch (estado) {
       case 'CONFIRMADA':
         return 'bg-green-100 text-green-800';
+      case 'PENDIENTE':
+        return 'bg-yellow-100 text-yellow-800';
       case 'CANCELADA':
         return 'bg-red-100 text-red-800';
       default:
@@ -140,12 +160,12 @@ export class ListReservaComponent {
   }
 
   formatDate(dateString: string): string {
-    const date = new Date(dateString);
-    return date.toLocaleDateString('es-PE', {
-      day: '2-digit',
-      month: '2-digit',
-      year: 'numeric',
-    });
+    if (!dateString) return '';
+
+    // Si viene como yyyy-MM-dd o yyyy-MM-ddTHH:mm:ss
+    const [year, month, day] = dateString.split('T')[0].split('-');
+
+    return `${day}/${month}/${year}`;
   }
 
   formatCurrency(amount: number): string {

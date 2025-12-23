@@ -1,23 +1,11 @@
 <div class="p-8">
   <div class="max-w-6xl mx-auto">
 
-    <!-- Header con filtros -->
+    <!-- Header -->
     <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
       <h1 class="text-3xl font-bold text-gray-800">
         Hoteles en {{ departamento()?.nombre || 'Cargando...' }}
       </h1>
-
-      <!-- Filtros de fecha -->
-      <div class="flex items-center gap-2">
-        <input type="date" [value]="fechaInicio()" (input)="fechaInicio.set($any($event.target).value)"
-          class="px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm">
-        <input type="date" [value]="fechaFin()" (input)="fechaFin.set($any($event.target).value)"
-          class="px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm">
-        <button (click)="buscarHabitacionesDisponibles()"
-          class="px-4 py-2 bg-indigo-600 text-white font-medium rounded-lg hover:bg-indigo-700 transition text-sm">
-          Habitaciones disponibles
-        </button>
-      </div>
     </div>
 
     <!-- Mensaje de éxito -->

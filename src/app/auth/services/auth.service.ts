@@ -12,39 +12,22 @@ const baseUrl = 'http://localhost:8080/api/v1';
 export class AuthService {
   private http = inject(HttpClient);
 
-  // Signals privados
-  private _authStatus = signal<AuthStatus>('checking');
+  // Signals privados - inicializar desde localStorage
+  private _authStatus = signal<AuthStatus>(this.getInitialAuthStatus());
   private _user = signal<UserResponse | null>(this.loadUserFromStorage());
   private _token = signal<string | null>(localStorage.getItem('token'));
 
-  // Inicializar el estado de autenticación en el constructor
-  constructor() {
-    this.initializeAuth();
-  }
-
   /**
-   * Inicializa el estado de autenticación al cargar el servicio
+   * Determina el estado inicial de autenticación basado en localStorage
    */
-  private initializeAuth(): void {
+  private getInitialAuthStatus(): AuthStatus {
     const token = localStorage.getItem('token');
-    const user = this.loadUserFromStorage();
+    const user = localStorage.getItem('user');
 
     if (token && user) {
-      // Tenemos token y usuario en localStorage, verificar con backend
-      this._token.set(token);
-      this._user.set(user);
-      this._authStatus.set('authenticated');
-
-      // Verificar token en segundo plano
-      this.verifyTokenInBackground();
-    } else if (token) {
-      // Solo tenemos token, necesitamos obtener usuario
-      this._token.set(token);
-      this._authStatus.set('checking');
-    } else {
-      // No hay sesión
-      this._authStatus.set('not-authenticated');
+      return 'authenticated';
     }
+    return 'not-authenticated';
   }
 
   /**
@@ -54,7 +37,9 @@ export class AuthService {
     try {
       const userStr = localStorage.getItem('user');
       if (userStr) {
-        return JSON.parse(userStr);
+        const user = JSON.parse(userStr);
+        console.log('👤 Usuario cargado desde localStorage:', user.username);
+        return user;
       }
     } catch (e) {
       console.warn('Error parsing user from localStorage:', e);
@@ -63,36 +48,14 @@ export class AuthService {
     return null;
   }
 
-  /**
-   * Verifica el token en segundo plano sin bloquear la UI
-   */
-  private verifyTokenInBackground(): void {
-    this.me().subscribe({
-      next: (user) => {
-        console.log('✅ Token verificado, usuario:', user.username);
-        this._user.set(user);
-        this._authStatus.set('authenticated');
-        localStorage.setItem('user', JSON.stringify(user));
-      },
-      error: () => {
-        console.log('⚠️ Token inválido, cerrando sesión');
-        this.logout();
-      },
-    });
-  }
-
-  authStatus = computed(() => {
-    if (this._authStatus() === 'checking') return 'checking';
-    if (this._user()) return 'authenticated';
-    return 'not-authenticated';
-  });
-
+  // Computed values
+  authStatus = computed(() => this._authStatus());
   user = computed<UserResponse | null>(() => this._user());
   token = computed(() => this._token());
 
-  //helpers
-  isAuthenticated = computed(() => this.authStatus() === 'authenticated');
-  isChecking = computed(() => this.authStatus() === 'checking');
+  // Helpers
+  isAuthenticated = computed(() => this._authStatus() === 'authenticated' && this._user() !== null);
+  isChecking = computed(() => this._authStatus() === 'checking');
 
   /**
    * Registro de nuevo usuario
@@ -120,7 +83,7 @@ export class AuthService {
   login(loginRequest: LoginRequest): Observable<AuthResponse> {
     return this.http.post<AuthResponse>(`${baseUrl}/auth/login`, loginRequest).pipe(
       tap((resp) => {
-        console.log('Login exitoso:', resp);
+        console.log('✅ Login exitoso:', resp.user.username);
         this.handleLoginSuccess(resp);
       }),
       catchError((error) => this.handleAuthError(error))
@@ -131,7 +94,7 @@ export class AuthService {
    * Logout del usuario
    */
   logout() {
-    console.log('Cerrando sesión...');
+    console.log('🚪 Cerrando sesión...');
 
     this._user.set(null);
     this._token.set(null);
@@ -145,43 +108,42 @@ export class AuthService {
   }
 
   /**
-   * Verifica el estado de autenticación
-   * Ideal para llamar en el AppComponent al iniciar
+   * Verifica el estado de autenticación con el backend
+   * Usar solo cuando sea necesario verificar que el token sigue válido
    */
   checkAuthStatus(): Observable<boolean | UserResponse> {
     const token = localStorage.getItem('token');
+    const storedUser = this.loadUserFromStorage();
+
     if (!token) {
-      console.log('No hay token, usuario no autenticado');
+      console.log('❌ No hay token');
       this._authStatus.set('not-authenticated');
       this._user.set(null);
       return of(false);
     }
 
-    // Si ya tenemos usuario cargado, no necesitamos llamar al backend
-    const currentUser = this._user();
-    if (currentUser) {
-      console.log('Usuario ya cargado:', currentUser.username);
+    // Si ya tenemos usuario en localStorage, usarlo sin llamar al backend
+    if (storedUser) {
+      console.log('✅ Usuario ya disponible:', storedUser.username);
+      this._user.set(storedUser);
+      this._token.set(token);
       this._authStatus.set('authenticated');
-      return of(currentUser);
+      return of(storedUser);
     }
 
-    console.log('Token encontrado, verificando con backend...');
-    this._token.set(token);
+    // Solo llamar al backend si no tenemos usuario
+    console.log('🔄 Verificando token con backend...');
+    this._authStatus.set('checking');
 
-    // refresca el estado e info del usuario
     return this.me().pipe(
       tap((user) => {
+        console.log('✅ Token válido, usuario:', user.username);
         this._authStatus.set('authenticated');
-        this._user.set(user);
         localStorage.setItem('user', JSON.stringify(user));
-        console.log('Usuario autenticado correctamente');
       }),
-      catchError(() => {
-        console.log('Error al verificar token, cerrando sesión');
-        this._authStatus.set('not-authenticated');
-        this._user.set(null);
-        localStorage.removeItem('token');
-        localStorage.removeItem('user');
+      catchError((error) => {
+        console.log('❌ Token inválido:', error.status);
+        this.logout();
         return of(false);
       })
     );
@@ -222,18 +184,16 @@ export class AuthService {
   private handleLoginSuccess(resp: AuthResponse) {
     console.log('💾 Guardando datos de autenticación...');
 
-    this._authStatus.set('authenticated');
-    this._user.set(resp.user);
-    this._token.set(resp.token);
-
-    // Guardar en localStorage
+    // Guardar en localStorage PRIMERO
     localStorage.setItem('token', resp.token);
     localStorage.setItem('user', JSON.stringify(resp.user));
 
-    console.log('Datos guardados:', {
-      user: resp.user,
-      token: resp.token.substring(0, 20) + '...',
-    });
+    // Luego actualizar signals
+    this._token.set(resp.token);
+    this._user.set(resp.user);
+    this._authStatus.set('authenticated');
+
+    console.log('✅ Datos guardados para:', resp.user.username);
   }
 
   /**
@@ -242,15 +202,13 @@ export class AuthService {
   private handleAuthError(error: any) {
     console.error('❌ Error de autenticación:', error);
 
-    // No cerrar sesión automáticamente en errores de conexión
+    // No cerrar sesión en errores de conexión
     if (error.status === 0) {
       return throwError(() => ({
         ...error,
         userMessage: 'No se puede conectar con el servidor',
       }));
     }
-
-    this.logout();
 
     // Extraer mensaje de error
     let errorMessage = 'Error desconocido';
@@ -271,22 +229,24 @@ export class AuthService {
     }));
   }
 
-  me() {
+  /**
+   * Obtiene información del usuario actual desde el backend
+   */
+  me(): Observable<UserResponse> {
     return this.http.get<UserResponse>(`${baseUrl}/auth/me`).pipe(
       tap((user: UserResponse) => {
-        console.log('Usuario obtenido de /me:', user);
+        console.log('📡 Usuario obtenido de /me:', user.username);
         this._user.set(user);
+        localStorage.setItem('user', JSON.stringify(user));
       })
     );
   }
 
+  /**
+   * Refresca la información del usuario
+   */
   refreshUser(): Observable<UserResponse> {
-    return this.http.get<UserResponse>(`${baseUrl}/auth/me`).pipe(
-      tap((user) => {
-        console.log('🔄 Usuario actualizado:', user);
-        this._user.set(user);
-        localStorage.setItem('user', JSON.stringify(user));
-      }),
+    return this.me().pipe(
       catchError((error) => {
         console.error('❌ Error al refrescar usuario:', error);
         return throwError(() => error);
