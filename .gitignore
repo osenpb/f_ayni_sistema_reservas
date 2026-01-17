@@ -1,0 +1,42 @@
+node_modules
+# ##########################
+# Angular - Osenshop Stándard
+# ##########################
+
+# Dependencias (Nunca subir node_modules)
+node_modules/
+
+# Salidas de compilación
+/dist/
+/.angular/
+
+# Logs de error
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Caché de IDEs y Editores
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Archivos de Sistema
+.DS_Store
+Thumbs.db
+
+# Cobertura de pruebas (Karma/Jasmine)
+/coverage/
+
+# Entornos (Variables sensibles)
+# Descomenta la siguiente línea si quieres que tus llaves API locales no se suban
+# src/environments/environment.development.ts
+
+# Varios
+.env
+.bak

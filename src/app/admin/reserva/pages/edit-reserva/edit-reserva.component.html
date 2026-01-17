@@ -153,7 +153,7 @@
               <option value="">-- Seleccionar --</option>
               @for (hab of getHabitacionesParaSelect(sel.index); track hab.id) {
               <option [value]="hab.id" [selected]="hab.id === sel.habitacionId">
-                {{ hab.tipoHabitacion?.nombre || 'Habitación' }} - S/ {{ hab.precio?.toFixed(2) }}
+                {{ hab.tipoHabitacion.nombre || 'Habitación' }} - S/ {{ hab.precio.toFixed(2) }}
               </option>
               }
             </select>
