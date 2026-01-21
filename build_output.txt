@@ -1,0 +1,1035 @@
+
+> dawi-frontend@0.0.0 build
+> ng build
+
+[baseline-browser-mapping] The data in this module is over two months old.  To ensure accurate Baseline data, please update: `npm i baseline-browser-mapping@latest -D`
+[33m❯[39m Building...
+[32m✔[39m Building...
+Application bundle generation failed. [3.776 seconds] - 2026-01-21T03:56:40.551Z
+
+X [ERROR] TS2307: Cannot find module '../../../services/departamento.service' or its corresponding type declarations. [plugin angular-compiler]
+
+    src/app/features/admin/departamento/pages/create-departamento/create-departamento.component.ts:5:36:
+      5 │ ...epartamentoService } from '../../../services/departamento.service';
+        ╵                              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+X [ERROR] TS2571: Object is of type 'unknown'. [plugin angular-compiler]
+
+    src/app/features/admin/departamento/pages/create-departamento/create-departamento.component.ts:40:4:
+      40 │     this.departamentoService.create(departamentoData).subscribe({
+         ╵     ~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+X [ERROR] TS7006: Parameter 'err' implicitly has an 'any' type. [plugin angular-compiler]
+
+    src/app/features/admin/departamento/pages/create-departamento/create-departamento.component.ts:45:14:
+      45 │       error: (err) => {
+         ╵               ~~~
+
+
+X [ERROR] TS2307: Cannot find module '../../../services/departamento.service' or its corresponding type declarations. [plugin angular-compiler]
+
+    src/app/features/admin/departamento/pages/edit-departamento/edit-departamento.component.ts:5:36:
+      5 │ ...epartamentoService } from '../../../services/departamento.service';
+        ╵                              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+X [ERROR] TS2571: Object is of type 'unknown'. [plugin angular-compiler]
+
+    src/app/features/admin/departamento/pages/edit-departamento/edit-departamento.component.ts:42:4:
+      42 │     this.departamentoService.getById(id).subscribe({
+         ╵     ~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+X [ERROR] TS7006: Parameter 'departamento' implicitly has an 'any' type. [plugin angular-compiler]
+
+    src/app/features/admin/departamento/pages/edit-departamento/edit-departamento.component.ts:43:13:
+      43 │       next: (departamento) => {
+         ╵              ~~~~~~~~~~~~
+
+
+X [ERROR] TS7006: Parameter 'err' implicitly has an 'any' type. [plugin angular-compiler]
+
+    src/app/features/admin/departamento/pages/edit-departamento/edit-departamento.component.ts:50:14:
+      50 │       error: (err) => {
+         ╵               ~~~
+
+
+X [ERROR] TS2571: Object is of type 'unknown'. [plugin angular-compiler]
+
+    src/app/features/admin/departamento/pages/edit-departamento/edit-departamento.component.ts:75:4:
+      75 │     this.departamentoService.update(id, departamentoData).subscribe({
+         ╵     ~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+X [ERROR] TS7006: Parameter 'err' implicitly has an 'any' type. [plugin angular-compiler]
+
+    src/app/features/admin/departamento/pages/edit-departamento/edit-departamento.component.ts:80:14:
+      80 │       error: (err) => {
+         ╵               ~~~
+
+
+X [ERROR] TS2307: Cannot find module '../../../interfaces' or its corresponding type declarations. [plugin angular-compiler]
+
+    src/app/features/admin/departamento/pages/list-departamento/list-departamento.component.ts:4:37:
+      4 │ import { DepartamentoResponse } from '../../../interfaces';
+        ╵                                      ~~~~~~~~~~~~~~~~~~~~~
+
+
+X [ERROR] TS2307: Cannot find module '../../../services/departamento.service' or its corresponding type declarations. [plugin angular-compiler]
+
+    src/app/features/admin/departamento/pages/list-departamento/list-departamento.component.ts:5:36:
+      5 │ ...epartamentoService } from '../../../services/departamento.service';
+        ╵                              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+X [ERROR] TS2571: Object is of type 'unknown'. [plugin angular-compiler]
+
+    src/app/features/admin/departamento/pages/list-departamento/list-departamento.component.ts:32:4:
+      32 │     this.departamentoService.getAll().subscribe({
+         ╵     ~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+X [ERROR] TS7006: Parameter 'data' implicitly has an 'any' type. [plugin angular-compiler]
+
+    src/app/features/admin/departamento/pages/list-departamento/list-departamento.component.ts:33:13:
+      33 │       next: (data) => {
+         ╵              ~~~~
+
+
+X [ERROR] TS7006: Parameter 'err' implicitly has an 'any' type. [plugin angular-compiler]
+
+    src/app/features/admin/departamento/pages/list-departamento/list-departamento.component.ts:37:14:
+      37 │       error: (err) => {
+         ╵               ~~~
+
+
+X [ERROR] TS2571: Object is of type 'unknown'. [plugin angular-compiler]
+
+    src/app/features/admin/departamento/pages/list-departamento/list-departamento.component.ts:60:4:
+      60 │     this.departamentoService.delete(dep.id).subscribe({
+         ╵     ~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+X [ERROR] TS7006: Parameter 'err' implicitly has an 'any' type. [plugin angular-compiler]
+
+    src/app/features/admin/departamento/pages/list-departamento/list-departamento.component.ts:70:14:
+      70 │       error: (err) => {
+         ╵               ~~~
+
+
+X [ERROR] TS2307: Cannot find module '../../../interfaces' or its corresponding type declarations. [plugin angular-compiler]
+
+    src/app/features/admin/hotel/pages/create-hotel/create-hotel.component.ts:4:37:
+      4 │ import { DepartamentoResponse } from '../../../interfaces';
+        ╵                                      ~~~~~~~~~~~~~~~~~~~~~
+
+
+X [ERROR] TS2307: Cannot find module '../../../services/hotel.service' or its corresponding type declarations. [plugin angular-compiler]
+
+    src/app/features/admin/hotel/pages/create-hotel/create-hotel.component.ts:7:29:
+      7 │ import { HotelService } from '../../../services/hotel.service';
+        ╵                              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+X [ERROR] TS2307: Cannot find module '../../../services/departamento.service' or its corresponding type declarations. [plugin angular-compiler]
+
+    src/app/features/admin/hotel/pages/create-hotel/create-hotel.component.ts:8:36:
+      8 │ ...epartamentoService } from '../../../services/departamento.service';
+        ╵                              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+X [ERROR] TS2571: Object is of type 'unknown'. [plugin angular-compiler]
+
+    src/app/features/admin/hotel/pages/create-hotel/create-hotel.component.ts:46:4:
+      46 │     this.departamentoService.getAll().subscribe((data) => {
+         ╵     ~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+X [ERROR] TS7006: Parameter 'data' implicitly has an 'any' type. [plugin angular-compiler]
+
+    src/app/features/admin/hotel/pages/create-hotel/create-hotel.component.ts:46:49:
+      46 │     this.departamentoService.getAll().subscribe((data) => {
+         ╵                                                  ~~~~
+
+
+X [ERROR] TS2571: Object is of type 'unknown'. [plugin angular-compiler]
+
+    src/app/features/admin/hotel/pages/create-hotel/create-hotel.component.ts:66:4:
+      66 │     this.hotelService.createHotel(hotelData).subscribe({
+         ╵     ~~~~~~~~~~~~~~~~~
+
+
+X [ERROR] TS2307: Cannot find module '../../../services/hotel.service' or its corresponding type declarations. [plugin angular-compiler]
+
+    src/app/features/admin/hotel/pages/list-hotel/list-hotel.component.ts:5:29:
+      5 │ import { HotelService } from '../../../services/hotel.service';
+        ╵                              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+X [ERROR] TS2307: Cannot find module '../../../services/departamento.service' or its corresponding type declarations. [plugin angular-compiler]
+
+    src/app/features/admin/hotel/pages/list-hotel/list-hotel.component.ts:6:36:
+      6 │ ...epartamentoService } from '../../../services/departamento.service';
+        ╵                              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+X [ERROR] TS2307: Cannot find module '../../../interfaces' or its corresponding type declarations. [plugin angular-compiler]
+
+    src/app/features/admin/hotel/pages/list-hotel/list-hotel.component.ts:7:30:
+      7 │ import { HotelResponse } from '../../../interfaces';
+        ╵                               ~~~~~~~~~~~~~~~~~~~~~
+
+
+X [ERROR] TS2307: Cannot find module '../../../interfaces' or its corresponding type declarations. [plugin angular-compiler]
+
+    src/app/features/admin/hotel/pages/list-hotel/list-hotel.component.ts:8:37:
+      8 │ import { DepartamentoResponse } from '../../../interfaces';
+        ╵                                      ~~~~~~~~~~~~~~~~~~~~~
+
+
+X [ERROR] TS2571: Object is of type 'unknown'. [plugin angular-compiler]
+
+    src/app/features/admin/hotel/pages/list-hotel/list-hotel.component.ts:51:4:
+      51 │     this.departamentoService.getById(id).subscribe({
+         ╵     ~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+X [ERROR] TS7006: Parameter 'dep' implicitly has an 'any' type. [plugin angular-compiler]
+
+    src/app/features/admin/hotel/pages/list-hotel/list-hotel.component.ts:52:13:
+      52 │       next: (dep) => this.departamento.set(dep),
+         ╵              ~~~
+
+
+X [ERROR] TS7006: Parameter 'err' implicitly has an 'any' type. [plugin angular-compiler]
+
+    src/app/features/admin/hotel/pages/list-hotel/list-hotel.component.ts:53:14:
+      53 │       error: (err) => console.error('Error cargando departamento:'...
+         ╵               ~~~
+
+
+X [ERROR] TS2571: Object is of type 'unknown'. [plugin angular-compiler]
+
+    src/app/features/admin/hotel/pages/list-hotel/list-hotel.component.ts:59:4:
+      59 │     this.hotelService.getByDepartamento(departamentoId).subscribe({
+         ╵     ~~~~~~~~~~~~~~~~~
+
+
+X [ERROR] TS7006: Parameter 'data' implicitly has an 'any' type. [plugin angular-compiler]
+
+    src/app/features/admin/hotel/pages/list-hotel/list-hotel.component.ts:60:13:
+      60 │       next: (data) => {
+         ╵              ~~~~
+
+
+X [ERROR] TS7006: Parameter 'err' implicitly has an 'any' type. [plugin angular-compiler]
+
+    src/app/features/admin/hotel/pages/list-hotel/list-hotel.component.ts:64:14:
+      64 │       error: (err) => {
+         ╵               ~~~
+
+
+X [ERROR] TS2571: Object is of type 'unknown'. [plugin angular-compiler]
+
+    src/app/features/admin/hotel/pages/list-hotel/list-hotel.component.ts:100:4:
+      100 │     this.hotelService.delete(hotel.id).subscribe({
+          ╵     ~~~~~~~~~~~~~~~~~
+
+
+X [ERROR] TS7006: Parameter 'err' implicitly has an 'any' type. [plugin angular-compiler]
+
+    src/app/features/admin/hotel/pages/list-hotel/list-hotel.component.ts:115:14:
+      115 │       error: (err) => {
+          ╵               ~~~
+
+
+X [ERROR] TS2307: Cannot find module '../../../services/departamento.service' or its corresponding type declarations. [plugin angular-compiler]
+
+    src/app/features/admin/hotel/pages/select-departamento/select-departamento.component.ts:4:36:
+      4 │ ...epartamentoService } from '../../../services/departamento.service';
+        ╵                              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+X [ERROR] TS2307: Cannot find module '../../../interfaces' or its corresponding type declarations. [plugin angular-compiler]
+
+    src/app/features/admin/hotel/pages/select-departamento/select-departamento.component.ts:5:37:
+      5 │ import { DepartamentoResponse } from '../../../interfaces';
+        ╵                                      ~~~~~~~~~~~~~~~~~~~~~
+
+
+X [ERROR] TS2571: Object is of type 'unknown'. [plugin angular-compiler]
+
+    src/app/features/admin/hotel/pages/select-departamento/select-departamento.component.ts:26:4:
+      26 │     this.departamentoService.getAll().subscribe({
+         ╵     ~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+X [ERROR] TS7006: Parameter 'data' implicitly has an 'any' type. [plugin angular-compiler]
+
+    src/app/features/admin/hotel/pages/select-departamento/select-departamento.component.ts:27:13:
+      27 │       next: (data) => {
+         ╵              ~~~~
+
+
+X [ERROR] TS7006: Parameter 'err' implicitly has an 'any' type. [plugin angular-compiler]
+
+    src/app/features/admin/hotel/pages/select-departamento/select-departamento.component.ts:31:14:
+      31 │       error: (err) => {
+         ╵               ~~~
+
+
+X [ERROR] TS2307: Cannot find module '../../../interfaces' or its corresponding type declarations. [plugin angular-compiler]
+
+    src/app/features/admin/hotel/pages/update-page/update-page.component.ts:7:39:
+      7 │ import { TipoHabitacionResponse } from '../../../interfaces';
+        ╵                                        ~~~~~~~~~~~~~~~~~~~~~
+
+
+X [ERROR] TS2307: Cannot find module '../../../services/hotel.service' or its corresponding type declarations. [plugin angular-compiler]
+
+    src/app/features/admin/hotel/pages/update-page/update-page.component.ts:8:29:
+      8 │ import { HotelService } from '../../../services/hotel.service';
+        ╵                              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+X [ERROR] TS2307: Cannot find module '../../../services/tipo-habitacion.service' or its corresponding type declarations. [plugin angular-compiler]
+
+    src/app/features/admin/hotel/pages/update-page/update-page.component.ts:9:38:
+      9 │ ...bitacionService } from '../../../services/tipo-habitacion.service';
+        ╵                           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+X [ERROR] TS2307: Cannot find module '../../../services/departamento.service' or its corresponding type declarations. [plugin angular-compiler]
+
+    src/app/features/admin/hotel/pages/update-page/update-page.component.ts:10:36:
+      10 │ ...partamentoService } from '../../../services/departamento.service';
+         ╵                             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+X [ERROR] NG2003: No suitable injection token for parameter 'hotelService' of class 'UpdateHotelFormComponent'.
+  Consider using the @Inject decorator to specify an injection token. [plugin angular-compiler]
+
+    src/app/features/admin/hotel/pages/update-page/update-page.component.ts:31:12:
+      31 │     private hotelService: HotelService,
+         ╵             ~~~~~~~~~~~~
+
+  This type does not have a value, so it cannot be used as injection token.
+
+    src/app/features/admin/hotel/pages/update-page/update-page.component.ts:31:26:
+      31 │     private hotelService: HotelService,
+         ╵                           ~~~~~~~~~~~~
+
+
+X [ERROR] TS2307: Cannot find module '../../auth/services/auth.service' or its corresponding type declarations. [plugin angular-compiler]
+
+    src/app/features/admin/layout/admin-layout/sidebar/sidebar.component.ts:3:28:
+      3 │ import { AuthService } from '../../auth/services/auth.service';
+        ╵                             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+X [ERROR] TS2571: Object is of type 'unknown'. [plugin angular-compiler]
+
+    src/app/features/admin/layout/admin-layout/sidebar/sidebar.component.ts:16:4:
+      16 │     this.authService.logout();
+         ╵     ~~~~~~~~~~~~~~~~
+
+
+X [ERROR] TS2307: Cannot find module '../../../services/dashboard.service' or its corresponding type declarations. [plugin angular-compiler]
+
+    src/app/features/admin/pages/dashboard-page/dashboard-page.component.ts:14:49:
+      14 │ ...vice, DashboardStats } from '../../../services/dashboard.service';
+         ╵                                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+X [ERROR] TS2571: Object is of type 'unknown'. [plugin angular-compiler]
+
+    src/app/features/admin/pages/dashboard-page/dashboard-page.component.ts:66:4:
+      66 │     this.dashboardService.getStats().subscribe({
+         ╵     ~~~~~~~~~~~~~~~~~~~~~
+
+
+X [ERROR] TS7006: Parameter 'data' implicitly has an 'any' type. [plugin angular-compiler]
+
+    src/app/features/admin/pages/dashboard-page/dashboard-page.component.ts:67:13:
+      67 │       next: (data) => {
+         ╵              ~~~~
+
+
+X [ERROR] TS7006: Parameter 'err' implicitly has an 'any' type. [plugin angular-compiler]
+
+    src/app/features/admin/pages/dashboard-page/dashboard-page.component.ts:74:14:
+      74 │       error: (err) => {
+         ╵               ~~~
+
+
+X [ERROR] TS2345: Argument of type '(a: [string, number], b: [string, number]) => number' is not assignable to parameter of type '(a: [string, unknown], b: [string, unknown]) => number'.
+  Types of parameters 'a' and 'a' are incompatible.
+    Type '[string, unknown]' is not assignable to type '[string, number]'.
+      Type at position 1 in source is not compatible with type at position 1 in target.
+        Type 'unknown' is not assignable to type 'number'. [plugin angular-compiler]
+
+    src/app/features/admin/pages/dashboard-page/dashboard-page.component.ts:231:10:
+      231 │           (a: [string, number], b: [string, number]) => b[1] - a[1]
+          ╵           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+X [ERROR] TS2307: Cannot find module '../../../services/reserva.service' or its corresponding type declarations. [plugin angular-compiler]
+
+    src/app/features/admin/reserva/pages/edit-reserva/edit-reserva.component.ts:6:31:
+      6 │ import { ReservaService } from '../../../services/reserva.service';
+        ╵                                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+X [ERROR] TS2307: Cannot find module '../../../services/hotel.service' or its corresponding type declarations. [plugin angular-compiler]
+
+    src/app/features/admin/reserva/pages/edit-reserva/edit-reserva.component.ts:7:29:
+      7 │ import { HotelService } from '../../../services/hotel.service';
+        ╵                              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+X [ERROR] TS2307: Cannot find module '../../../services/departamento.service' or its corresponding type declarations. [plugin angular-compiler]
+
+    src/app/features/admin/reserva/pages/edit-reserva/edit-reserva.component.ts:8:36:
+      8 │ ...epartamentoService } from '../../../services/departamento.service';
+        ╵                              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+X [ERROR] TS2307: Cannot find module '../../../interfaces' or its corresponding type declarations. [plugin angular-compiler]
+
+    src/app/features/admin/reserva/pages/edit-reserva/edit-reserva.component.ts:10:104:
+      10 │ ...AdminUpdateDTO, DepartamentoResponse } from '../../../interfaces';
+         ╵                                                ~~~~~~~~~~~~~~~~~~~~~
+
+
+X [ERROR] TS2571: Object is of type 'unknown'. [plugin angular-compiler]
+
+    src/app/features/admin/reserva/pages/edit-reserva/edit-reserva.component.ts:80:21:
+      80 │       departamentos: this.departamentoService.getAll(),
+         ╵                      ~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+X [ERROR] TS2571: Object is of type 'unknown'. [plugin angular-compiler]
+
+    src/app/features/admin/reserva/pages/edit-reserva/edit-reserva.component.ts:81:15:
+      81 │       hoteles: this.hotelService.getAll(),
+         ╵                ~~~~~~~~~~~~~~~~~
+
+
+X [ERROR] TS2571: Object is of type 'unknown'. [plugin angular-compiler]
+
+    src/app/features/admin/reserva/pages/edit-reserva/edit-reserva.component.ts:82:15:
+      82 │       reserva: this.reservaService.getById(reservaId),
+         ╵                ~~~~~~~~~~~~~~~~~~~
+
+
+X [ERROR] TS2571: Object is of type 'unknown'. [plugin angular-compiler]
+
+    src/app/features/admin/reserva/pages/edit-reserva/edit-reserva.component.ts:129:6:
+      129 │       this.hotelService.getById(reserva.hotel.id).subscribe({
+          ╵       ~~~~~~~~~~~~~~~~~
+
+
+X [ERROR] TS7006: Parameter 'hotelCompleto' implicitly has an 'any' type. [plugin angular-compiler]
+
+    src/app/features/admin/reserva/pages/edit-reserva/edit-reserva.component.ts:130:15:
+      130 │         next: (hotelCompleto) => {
+          ╵                ~~~~~~~~~~~~~
+
+
+X [ERROR] TS7006: Parameter 'det' implicitly has an 'any' type. [plugin angular-compiler]
+
+    src/app/features/admin/reserva/pages/edit-reserva/edit-reserva.component.ts:135:82:
+      135 │ ... HabitacionSeleccionada[] = reserva.detalles.map((det, idx) => ({
+          ╵                                                      ~~~
+
+
+X [ERROR] TS7006: Parameter 'idx' implicitly has an 'any' type. [plugin angular-compiler]
+
+    src/app/features/admin/reserva/pages/edit-reserva/edit-reserva.component.ts:135:87:
+      135 │ ... HabitacionSeleccionada[] = reserva.detalles.map((det, idx) => ({
+          ╵                                                           ~~~
+
+
+X [ERROR] TS7006: Parameter 'err' implicitly has an 'any' type. [plugin angular-compiler]
+
+    src/app/features/admin/reserva/pages/edit-reserva/edit-reserva.component.ts:145:16:
+      145 │         error: (err) => {
+          ╵                 ~~~
+
+
+X [ERROR] TS2571: Object is of type 'unknown'. [plugin angular-compiler]
+
+    src/app/features/admin/reserva/pages/edit-reserva/edit-reserva.component.ts:177:6:
+      177 │       this.hotelService.getById(hotelId).subscribe({
+          ╵       ~~~~~~~~~~~~~~~~~
+
+
+X [ERROR] TS7006: Parameter 'hotel' implicitly has an 'any' type. [plugin angular-compiler]
+
+    src/app/features/admin/reserva/pages/edit-reserva/edit-reserva.component.ts:178:15:
+      178 │         next: (hotel) => {
+          ╵                ~~~~~
+
+
+X [ERROR] TS7006: Parameter 'err' implicitly has an 'any' type. [plugin angular-compiler]
+
+    src/app/features/admin/reserva/pages/edit-reserva/edit-reserva.component.ts:181:16:
+      181 │         error: (err) => {
+          ╵                 ~~~
+
+
+X [ERROR] TS2571: Object is of type 'unknown'. [plugin angular-compiler]
+
+    src/app/features/admin/reserva/pages/edit-reserva/edit-reserva.component.ts:302:4:
+      302 │     this.reservaService.update(id, reservaData).subscribe({
+          ╵     ~~~~~~~~~~~~~~~~~~~
+
+
+X [ERROR] TS7006: Parameter 'response' implicitly has an 'any' type. [plugin angular-compiler]
+
+    src/app/features/admin/reserva/pages/edit-reserva/edit-reserva.component.ts:303:13:
+      303 │       next: (response) => {
+          ╵              ~~~~~~~~
+
+
+X [ERROR] TS7006: Parameter 'err' implicitly has an 'any' type. [plugin angular-compiler]
+
+    src/app/features/admin/reserva/pages/edit-reserva/edit-reserva.component.ts:308:14:
+      308 │       error: (err) => {
+          ╵               ~~~
+
+
+X [ERROR] TS2307: Cannot find module '../../../services/reserva.service' or its corresponding type declarations. [plugin angular-compiler]
+
+    src/app/features/admin/reserva/pages/list-reserva/list-reserva.component.ts:6:31:
+      6 │ import { ReservaService } from '../../../services/reserva.service';
+        ╵                                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+X [ERROR] TS2307: Cannot find module '../../../interfaces' or its corresponding type declarations. [plugin angular-compiler]
+
+    src/app/features/admin/reserva/pages/list-reserva/list-reserva.component.ts:7:24:
+      7 │ import { Reserva } from '../../../interfaces';
+        ╵                         ~~~~~~~~~~~~~~~~~~~~~
+
+
+X [ERROR] TS2571: Object is of type 'unknown'. [plugin angular-compiler]
+
+    src/app/features/admin/reserva/pages/list-reserva/list-reserva.component.ts:41:4:
+      41 │     this.reservaService.getAll().subscribe({
+         ╵     ~~~~~~~~~~~~~~~~~~~
+
+
+X [ERROR] TS7006: Parameter 'data' implicitly has an 'any' type. [plugin angular-compiler]
+
+    src/app/features/admin/reserva/pages/list-reserva/list-reserva.component.ts:42:13:
+      42 │       next: (data) => {
+         ╵              ~~~~
+
+
+X [ERROR] TS7006: Parameter 'err' implicitly has an 'any' type. [plugin angular-compiler]
+
+    src/app/features/admin/reserva/pages/list-reserva/list-reserva.component.ts:47:14:
+      47 │       error: (err) => {
+         ╵               ~~~
+
+
+X [ERROR] TS2571: Object is of type 'unknown'. [plugin angular-compiler]
+
+    src/app/features/admin/reserva/pages/list-reserva/list-reserva.component.ts:128:4:
+      128 │     this.reservaService.delete(reserva.id).subscribe({
+          ╵     ~~~~~~~~~~~~~~~~~~~
+
+
+X [ERROR] TS7006: Parameter 'err' implicitly has an 'any' type. [plugin angular-compiler]
+
+    src/app/features/admin/reserva/pages/list-reserva/list-reserva.component.ts:140:14:
+      140 │       error: (err) => {
+          ╵               ~~~
+
+
+X [ERROR] TS2307: Cannot find module '../../../environments/environments' or its corresponding type declarations. [plugin angular-compiler]
+
+    src/app/features/auth/services/auth.service.ts:6:28:
+      6 │ import { environment } from '../../../environments/environments';
+        ╵                             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+X [ERROR] TS2307: Cannot find module '../../interfaces/reserva/reserva.interface' or its corresponding type declarations. [plugin angular-compiler]
+
+    src/app/features/home/components/reservation-details/reservation-details.component.ts:3:32:
+      3 │ ...eservaResponse } from '../../interfaces/reserva/reserva.interface';
+        ╵                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+X [ERROR] TS2307: Cannot find module '../../interfaces/reserva/reserva.interface' or its corresponding type declarations. [plugin angular-compiler]
+
+    src/app/features/home/components/reservation-header/reservation-header.component.ts:3:32:
+      3 │ ...eservaResponse } from '../../interfaces/reserva/reserva.interface';
+        ╵                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+X [ERROR] TS2307: Cannot find module '../../interfaces' or its corresponding type declarations. [plugin angular-compiler]
+
+    src/app/features/home/interfaces/index.ts:43:7:
+      43 │ } from '../../interfaces';
+         ╵        ~~~~~~~~~~~~~~~~~~
+
+
+X [ERROR] TS2307: Cannot find module '../../interfaces' or its corresponding type declarations. [plugin angular-compiler]
+
+    src/app/features/home/interfaces/index.ts:46:40:
+      46 │ ...artamentoPublic = import('../../interfaces').DepartamentoResponse;
+         ╵                             ~~~~~~~~~~~~~~~~~~
+
+
+X [ERROR] TS2307: Cannot find module '../../interfaces' or its corresponding type declarations. [plugin angular-compiler]
+
+    src/app/features/home/interfaces/index.ts:47:38:
+      47 │ ... HabitacionPublic = import('../../interfaces').HabitacionResponse;
+         ╵                               ~~~~~~~~~~~~~~~~~~
+
+
+X [ERROR] TS2307: Cannot find module '../../interfaces' or its corresponding type declarations. [plugin angular-compiler]
+
+    src/app/features/home/interfaces/index.ts:48:42:
+      48 │ ...itacionPublic = import('../../interfaces').TipoHabitacionResponse;
+         ╵                           ~~~~~~~~~~~~~~~~~~
+
+
+X [ERROR] TS2307: Cannot find module '../../interfaces' or its corresponding type declarations. [plugin angular-compiler]
+
+    src/app/features/home/interfaces/index.ts:49:33:
+      49 │ export type HotelPublic = import('../../interfaces').HotelInfo;
+         ╵                                  ~~~~~~~~~~~~~~~~~~
+
+
+X [ERROR] TS2307: Cannot find module '../../interfaces' or its corresponding type declarations. [plugin angular-compiler]
+
+    src/app/features/home/interfaces/index.ts:50:37:
+      50 │ ... ReservaCompleta = import('../../interfaces').ReservaListResponse;
+         ╵                              ~~~~~~~~~~~~~~~~~~
+
+
+X [ERROR] TS2307: Cannot find module '../../interfaces' or its corresponding type declarations. [plugin angular-compiler]
+
+    src/app/features/home/interfaces/index.ts:51:44:
+      51 │ ...servaDetalleResponse = import('../../interfaces').ReservaResponse;
+         ╵                                  ~~~~~~~~~~~~~~~~~~
+
+
+X [ERROR] TS2307: Cannot find module '../../auth/services/auth.service' or its corresponding type declarations. [plugin angular-compiler]
+
+    src/app/features/home/layout/navbar/navbar.component.ts:4:28:
+      4 │ import { AuthService } from '../../auth/services/auth.service';
+        ╵                             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+X [ERROR] TS2571: Object is of type 'unknown'. [plugin angular-compiler]
+
+    src/app/features/home/layout/navbar/navbar.component.ts:19:12:
+      19 │   usuario = this.authService.user;
+         ╵             ~~~~~~~~~~~~~~~~
+
+
+X [ERROR] TS2571: Object is of type 'unknown'. [plugin angular-compiler]
+
+    src/app/features/home/layout/navbar/navbar.component.ts:20:20:
+      20 │   isAuthenticated = this.authService.isAuthenticated;
+         ╵                     ~~~~~~~~~~~~~~~~
+
+
+X [ERROR] TS2571: Object is of type 'unknown'. [plugin angular-compiler]
+
+    src/app/features/home/layout/navbar/navbar.component.ts:48:6:
+      48 │       this.authService.logout();
+         ╵       ~~~~~~~~~~~~~~~~
+
+
+X [ERROR] TS2307: Cannot find module '../../services/pdf-generator.service' or its corresponding type declarations. [plugin angular-compiler]
+
+    src/app/features/home/pages/confirmacion-page/confirmacion-page.component.ts:6:36:
+      6 │ ... PdfGeneratorService } from '../../services/pdf-generator.service';
+        ╵                                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+X [ERROR] TS2571: Object is of type 'unknown'. [plugin angular-compiler]
+
+    src/app/features/home/pages/confirmacion-page/confirmacion-page.component.ts:120:4:
+      120 │     this.pdfGenerator.descargarPDF(reserva);
+          ╵     ~~~~~~~~~~~~~~~~~
+
+
+X [ERROR] TS2307: Cannot find module '../../services/departamento.service' or its corresponding type declarations. [plugin angular-compiler]
+
+    src/app/features/home/pages/departamentos-page/departamentos-page.component.ts:6:36:
+      6 │ ...{ DepartamentoService } from '../../services/departamento.service';
+        ╵                                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+X [ERROR] TS2571: Object is of type 'unknown'. [plugin angular-compiler]
+
+    src/app/features/home/pages/departamentos-page/departamentos-page.component.ts:74:4:
+      74 │     this.departamentoService.getAll().subscribe({
+         ╵     ~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+X [ERROR] TS7006: Parameter 'data' implicitly has an 'any' type. [plugin angular-compiler]
+
+    src/app/features/home/pages/departamentos-page/departamentos-page.component.ts:75:13:
+      75 │       next: (data) => {
+         ╵              ~~~~
+
+
+X [ERROR] TS7006: Parameter 'err' implicitly has an 'any' type. [plugin angular-compiler]
+
+    src/app/features/home/pages/departamentos-page/departamentos-page.component.ts:79:14:
+      79 │       error: (err) => {
+         ╵               ~~~
+
+
+X [ERROR] TS2307: Cannot find module '../../services/hotel.service' or its corresponding type declarations. [plugin angular-compiler]
+
+    src/app/features/home/pages/hoteles-page/hoteles-page.component.ts:7:29:
+      7 │ import { HotelService } from '../../services/hotel.service';
+        ╵                              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+X [ERROR] TS2307: Cannot find module '../../services/departamento.service' or its corresponding type declarations. [plugin angular-compiler]
+
+    src/app/features/home/pages/hoteles-page/hoteles-page.component.ts:8:36:
+      8 │ ...{ DepartamentoService } from '../../services/departamento.service';
+        ╵                                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+X [ERROR] TS2571: Object is of type 'unknown'. [plugin angular-compiler]
+
+    src/app/features/home/pages/hoteles-page/hoteles-page.component.ts:56:4:
+      56 │     this.departamentoService.getById(id).subscribe({
+         ╵     ~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+X [ERROR] TS7006: Parameter 'data' implicitly has an 'any' type. [plugin angular-compiler]
+
+    src/app/features/home/pages/hoteles-page/hoteles-page.component.ts:57:13:
+      57 │       next: (data) => {
+         ╵              ~~~~
+
+
+X [ERROR] TS7006: Parameter 'error' implicitly has an 'any' type. [plugin angular-compiler]
+
+    src/app/features/home/pages/hoteles-page/hoteles-page.component.ts:60:14:
+      60 │       error: (error) => {
+         ╵               ~~~~~
+
+
+X [ERROR] TS2571: Object is of type 'unknown'. [plugin angular-compiler]
+
+    src/app/features/home/pages/hoteles-page/hoteles-page.component.ts:68:4:
+      68 │     this.hotelService.getByDepartamento(depId).subscribe({
+         ╵     ~~~~~~~~~~~~~~~~~
+
+
+X [ERROR] TS7006: Parameter 'data' implicitly has an 'any' type. [plugin angular-compiler]
+
+    src/app/features/home/pages/hoteles-page/hoteles-page.component.ts:69:13:
+      69 │       next: (data) => {
+         ╵              ~~~~
+
+
+X [ERROR] TS7006: Parameter 'error' implicitly has an 'any' type. [plugin angular-compiler]
+
+    src/app/features/home/pages/hoteles-page/hoteles-page.component.ts:73:14:
+      73 │       error: (error) => {
+         ╵               ~~~~~
+
+
+X [ERROR] TS2571: Object is of type 'unknown'. [plugin angular-compiler]
+
+    src/app/features/home/pages/hoteles-page/hoteles-page.component.ts:82:4:
+      82 │     this.hotelService.getAll().subscribe({
+         ╵     ~~~~~~~~~~~~~~~~~
+
+
+X [ERROR] TS7006: Parameter 'data' implicitly has an 'any' type. [plugin angular-compiler]
+
+    src/app/features/home/pages/hoteles-page/hoteles-page.component.ts:83:13:
+      83 │       next: (data) => {
+         ╵              ~~~~
+
+
+X [ERROR] TS7006: Parameter 'error' implicitly has an 'any' type. [plugin angular-compiler]
+
+    src/app/features/home/pages/hoteles-page/hoteles-page.component.ts:87:14:
+      87 │       error: (error) => {
+         ╵               ~~~~~
+
+
+X [ERROR] TS2307: Cannot find module '../../interfaces' or its corresponding type declarations. [plugin angular-compiler]
+
+    src/app/features/home/services/reserva-public.service.ts:14:7:
+      14 │ } from '../../interfaces';
+         ╵        ~~~~~~~~~~~~~~~~~~
+
+
+X [ERROR] TS2307: Cannot find module '../../../environments/environments' or its corresponding type declarations. [plugin angular-compiler]
+
+    src/app/features/home/services/reserva-public.service.ts:15:28:
+      15 │ import { environment } from '../../../environments/environments';
+         ╵                             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+X [ERROR] TS2307: Cannot find module '../../interfaces' or its corresponding type declarations. [plugin angular-compiler]
+
+    src/app/features/home/utils/confirmation-data-accessors.ts:1:32:
+      1 │ import { ReservaResponse } from '../../interfaces';
+        ╵                                 ~~~~~~~~~~~~~~~~~~
+
+
+X [ERROR] TS2307: Cannot find module '../../interfaces' or its corresponding type declarations. [plugin angular-compiler]
+
+    src/app/features/home/utils/confirmation-utils.ts:1:32:
+      1 │ import { ReservaResponse } from '../../interfaces';
+        ╵                                 ~~~~~~~~~~~~~~~~~~
+
+
+X [ERROR] TS2307: Cannot find module '../../interfaces' or its corresponding type declarations. [plugin angular-compiler]
+
+    src/app/features/reservas/mis-reservas-page/mis-reservas-page.component.ts:8:36:
+      8 │ import { ReservaListResponse } from '../../interfaces';
+        ╵                                     ~~~~~~~~~~~~~~~~~~
+
+
+X [ERROR] TS2307: Cannot find module '../../../home/services/reserva-public.service' or its corresponding type declarations. [plugin angular-compiler]
+
+    src/app/features/reservas/reserva-page/reserva-page.component.ts:13:37:
+      13 │ ...licService } from '../../../home/services/reserva-public.service';
+         ╵                      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+X [ERROR] TS2307: Cannot find module '../../interfaces' or its corresponding type declarations. [plugin angular-compiler]
+
+    src/app/features/reservas/reserva-page/reserva-page.component.ts:14:73:
+      14 │ ...nse, HabitacionResponse, ReservaRequest } from '../../interfaces';
+         ╵                                                   ~~~~~~~~~~~~~~~~~~
+
+
+X [ERROR] TS2571: Object is of type 'unknown'. [plugin angular-compiler]
+
+    src/app/features/reservas/reserva-page/reserva-page.component.ts:159:4:
+      159 │     this.reservaService.getHotelDetalle(hotelId).subscribe({
+          ╵     ~~~~~~~~~~~~~~~~~~~
+
+
+X [ERROR] TS7006: Parameter 'data' implicitly has an 'any' type. [plugin angular-compiler]
+
+    src/app/features/reservas/reserva-page/reserva-page.component.ts:160:13:
+      160 │       next: (data) => {
+          ╵              ~~~~
+
+
+X [ERROR] TS7006: Parameter 'err' implicitly has an 'any' type. [plugin angular-compiler]
+
+    src/app/features/reservas/reserva-page/reserva-page.component.ts:166:14:
+      166 │       error: (err) => {
+          ╵               ~~~
+
+
+X [ERROR] TS2571: Object is of type 'unknown'. [plugin angular-compiler]
+
+    src/app/features/reservas/reserva-page/reserva-page.component.ts:215:4:
+      215 │     this.reservaService
+          ╵     ~~~~~~~~~~~~~~~~~~~
+
+
+X [ERROR] TS7006: Parameter 'response' implicitly has an 'any' type. [plugin angular-compiler]
+
+    src/app/features/reservas/reserva-page/reserva-page.component.ts:218:15:
+      218 │         next: (response) => {
+          ╵                ~~~~~~~~
+
+
+X [ERROR] TS7006: Parameter 'err' implicitly has an 'any' type. [plugin angular-compiler]
+
+    src/app/features/reservas/reserva-page/reserva-page.component.ts:225:16:
+      225 │         error: (err) => {
+          ╵                 ~~~
+
+
+X [ERROR] TS2571: Object is of type 'unknown'. [plugin angular-compiler]
+
+    src/app/features/reservas/reserva-page/reserva-page.component.ts:337:4:
+      337 │     this.reservaService.crearReserva(hotelId, reservaRequest).sub...
+          ╵     ~~~~~~~~~~~~~~~~~~~
+
+
+X [ERROR] TS7006: Parameter 'response' implicitly has an 'any' type. [plugin angular-compiler]
+
+    src/app/features/reservas/reserva-page/reserva-page.component.ts:338:13:
+      338 │       next: (response) => {
+          ╵              ~~~~~~~~
+
+
+X [ERROR] TS7006: Parameter 'err' implicitly has an 'any' type. [plugin angular-compiler]
+
+    src/app/features/reservas/reserva-page/reserva-page.component.ts:342:14:
+      342 │       error: (err) => {
+          ╵               ~~~
+
+
+X [ERROR] Could not resolve "../../../services/departamento.service"
+
+    src/app/features/admin/departamento/pages/create-departamento/create-departamento.component.ts:5:36:
+      5 │ ...epartamentoService } from '../../../services/departamento.service';
+        ╵                              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+X [ERROR] Could not resolve "../../../services/departamento.service"
+
+    src/app/features/admin/departamento/pages/edit-departamento/edit-departamento.component.ts:5:36:
+      5 │ ...epartamentoService } from '../../../services/departamento.service';
+        ╵                              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+X [ERROR] Could not resolve "../../../services/departamento.service"
+
+    src/app/features/admin/departamento/pages/list-departamento/list-departamento.component.ts:5:36:
+      5 │ ...epartamentoService } from '../../../services/departamento.service';
+        ╵                              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+X [ERROR] Could not resolve "../../../services/hotel.service"
+
+    src/app/features/admin/hotel/pages/create-hotel/create-hotel.component.ts:6:29:
+      6 │ import { HotelService } from '../../../services/hotel.service';
+        ╵                              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+X [ERROR] Could not resolve "../../../services/departamento.service"
+
+    src/app/features/admin/hotel/pages/create-hotel/create-hotel.component.ts:7:36:
+      7 │ ...epartamentoService } from '../../../services/departamento.service';
+        ╵                              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+X [ERROR] Could not resolve "../../../services/hotel.service"
+
+    src/app/features/admin/hotel/pages/list-hotel/list-hotel.component.ts:5:29:
+      5 │ import { HotelService } from '../../../services/hotel.service';
+        ╵                              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+X [ERROR] Could not resolve "../../../services/departamento.service"
+
+    src/app/features/admin/hotel/pages/list-hotel/list-hotel.component.ts:6:36:
+      6 │ ...epartamentoService } from '../../../services/departamento.service';
+        ╵                              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+X [ERROR] Could not resolve "../../../services/departamento.service"
+
+    src/app/features/admin/hotel/pages/select-departamento/select-departamento.component.ts:4:36:
+      4 │ ...epartamentoService } from '../../../services/departamento.service';
+        ╵                              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+X [ERROR] Could not resolve "../../auth/services/auth.service"
+
+    src/app/features/admin/layout/admin-layout/sidebar/sidebar.component.ts:3:28:
+      3 │ import { AuthService } from '../../auth/services/auth.service';
+        ╵                             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+X [ERROR] Could not resolve "../../../services/dashboard.service"
+
+    src/app/features/admin/pages/dashboard-page/dashboard-page.component.ts:4:49:
+      4 │ ...rvice, DashboardStats } from '../../../services/dashboard.service';
+        ╵                                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+X [ERROR] Could not resolve "../../../services/reserva.service"
+
+    src/app/features/admin/reserva/pages/edit-reserva/edit-reserva.component.ts:6:31:
+      6 │ import { ReservaService } from '../../../services/reserva.service';
+        ╵                                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+X [ERROR] Could not resolve "../../../services/hotel.service"
+
+    src/app/features/admin/reserva/pages/edit-reserva/edit-reserva.component.ts:7:29:
+      7 │ import { HotelService } from '../../../services/hotel.service';
+        ╵                              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+X [ERROR] Could not resolve "../../../services/departamento.service"
+
+    src/app/features/admin/reserva/pages/edit-reserva/edit-reserva.component.ts:8:36:
+      8 │ ...epartamentoService } from '../../../services/departamento.service';
+        ╵                              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+X [ERROR] Could not resolve "../../../services/reserva.service"
+
+    src/app/features/admin/reserva/pages/list-reserva/list-reserva.component.ts:5:31:
+      5 │ import { ReservaService } from '../../../services/reserva.service';
+        ╵                                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+X [ERROR] Could not resolve "../../../environments/environments"
+
+    src/app/features/auth/services/auth.service.ts:6:28:
+      6 │ import { environment } from '../../../environments/environments';
+        ╵                             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+X [ERROR] Could not resolve "../../auth/services/auth.service"
+
+    src/app/features/home/layout/navbar/navbar.component.ts:4:28:
+      4 │ import { AuthService } from '../../auth/services/auth.service';
+        ╵                             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+X [ERROR] Could not resolve "../../services/pdf-generator.service"
+
+    src/app/features/home/pages/confirmacion-page/confirmacion-page.component.ts:6:36:
+      6 │ ... PdfGeneratorService } from '../../services/pdf-generator.service';
+        ╵                                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+X [ERROR] Could not resolve "../../services/departamento.service"
+
+    src/app/features/home/pages/departamentos-page/departamentos-page.component.ts:6:36:
+      6 │ ...{ DepartamentoService } from '../../services/departamento.service';
+        ╵                                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+X [ERROR] Could not resolve "../../services/hotel.service"
+
+    src/app/features/home/pages/hoteles-page/hoteles-page.component.ts:6:29:
+      6 │ import { HotelService } from '../../services/hotel.service';
+        ╵                              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+X [ERROR] Could not resolve "../../services/departamento.service"
+
+    src/app/features/home/pages/hoteles-page/hoteles-page.component.ts:7:36:
+      7 │ ...{ DepartamentoService } from '../../services/departamento.service';
+        ╵                                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+X [ERROR] Could not resolve "../../../environments/environments"
+
+    src/app/features/home/services/reserva-public.service.ts:5:28:
+      5 │ import { environment } from '../../../environments/environments';
+        ╵                             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+X [ERROR] Could not resolve "../../../home/services/reserva-public.service"
+
+    src/app/features/reservas/reserva-page/reserva-page.component.ts:5:37:
+      5 │ ...blicService } from '../../../home/services/reserva-public.service';
+        ╵                       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+

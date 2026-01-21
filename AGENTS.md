@@ -489,22 +489,39 @@ describe('ComponentNameComponent', () => {
 src/
 ├── app/
 │   ├── core/                    # Core functionality (guards, interceptors)
+│   │   └── interceptors/        # Global HTTP interceptors
 │   ├── shared/                  # Shared components, pipes, directives
-│   ├── features/               # Feature modules
-│   │   ├── auth/               # Authentication feature
-│   │   │   ├── pages/          # Page components
-│   │   │   ├── services/       # Feature-specific services
-│   │   │   └── auth.routes.ts  # Feature routing
-│   │   ├── admin/              # Admin feature
-│   │   └── home/               # Public/home feature
-│   ├── services/               # Application-wide services
-│   ├── interfaces/             # TypeScript interfaces
-│   │   ├── index.ts           # Barrel exports
-│   │   └── feature/           # Feature-specific interfaces
-│   └── app.config.ts          # Application configuration
-├── environments/               # Environment configurations
-├── styles.css                 # Global styles
-└── main.ts                    # Application bootstrap
+│   ├── features/                # Feature modules
+│   │   ├── auth/                # Authentication feature
+│   │   │   ├── pages/           # Page components
+│   │   │   ├── services/        # Feature-specific services
+│   │   │   └── auth.routes.ts   # Feature routing
+│   │   ├── admin/               # Admin feature
+│   │   │   ├── departamento/    # Admin departamentos management
+│   │   │   ├── hotel/           # Admin hotels management
+│   │   │   ├── reserva/         # Admin reservations management
+│   │   │   ├── layout/          # Admin layout components
+│   │   │   ├── pages/           # Admin pages
+│   │   │   └── admin.routes.ts  # Admin routing
+│   │   ├── home/                # Public/home feature
+│   │   │   ├── pages/           # Public pages
+│   │   │   ├── components/      # Reusable home components
+│   │   │   ├── services/        # Public-facing services
+│   │   │   ├── layout/          # Home layout components
+│   │   │   ├── utils/           # Utility functions
+│   │   │   └── home.routes.ts   # Home routing
+│   │   └── reservas/            # Reservations feature
+│   │       ├── reserva-page/    # Reservation page
+│   │       ├── mis-reservas-page/ # My reservations page
+│   │       └── reservas.routes.ts # Reservations routing
+│   ├── services/                # Application-wide services
+│   ├── interfaces/              # TypeScript interfaces
+│   │   ├── index.ts             # Barrel exports
+│   │   └── feature/             # Feature-specific interfaces
+│   └── app.config.ts            # Application configuration
+├── environments/                # Environment configurations
+├── styles.css                   # Global styles
+└── main.ts                      # Application bootstrap
 ```
 
 ### Commit Message Conventions

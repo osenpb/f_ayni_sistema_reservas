@@ -9,14 +9,14 @@ export const routes: Routes = [
 
   {
     path: 'auth',
-    loadChildren: () => import('./auth/auth.routes'),
+    loadChildren: () => import('./features/auth/auth.routes'),
   },
   {
     path: 'home',
-    loadChildren: () => import('./home/home.routes'),
+    loadChildren: () => import('./features/home/home.routes'),
   },
   {
     path: 'admin',
-    loadChildren: () => import('./admin/admin.routes'),
+    loadChildren: () => import('./features/admin/admin.routes'),
   },
 ];

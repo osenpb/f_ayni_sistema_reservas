@@ -10,6 +10,7 @@ const baseUrl = `${environment.apiUrl}/admin`;
   providedIn: 'root',
 })
 export class DepartamentoService {
+  
   private http = inject(HttpClient);
 
   getAll(): Observable<DepartamentoResponse[]> {
