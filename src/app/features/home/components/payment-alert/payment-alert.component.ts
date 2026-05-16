@@ -1,13 +1,14 @@
 import { Component, input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
+import { ReservaResponse } from '../../interfaces';
 
 @Component({
   selector: 'app-payment-alert',
   standalone: true,
   imports: [CommonModule, RouterLink],
   template: `
-    @if (reserva()?.estado === 'PENDIENTE') {
+    @if (reserva().estado === 'PENDIENTE') {
     <div class="bg-yellow-50 border border-yellow-300 rounded-lg p-4 mb-6">
       <div class="flex items-center gap-3">
         <svg class="w-6 h-6 text-yellow-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -19,7 +20,7 @@ import { RouterLink } from '@angular/router';
         </div>
       </div>
       <div class="mt-4">
-        <a [routerLink]="['/home/reserva', reserva()?.id, 'pago']"
+        <a [routerLink]="['/home/reserva', reserva().id, 'pago']"
           class="inline-flex items-center gap-2 px-6 py-3 bg-yellow-500 text-white font-semibold rounded-lg hover:bg-yellow-600 transition">
           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/>
@@ -32,5 +33,5 @@ import { RouterLink } from '@angular/router';
   `,
 })
 export class PaymentAlertComponent {
-  reserva = input.required<any>();
+  reserva = input.required<Pick<ReservaResponse, 'id' | 'estado'>>();
 }

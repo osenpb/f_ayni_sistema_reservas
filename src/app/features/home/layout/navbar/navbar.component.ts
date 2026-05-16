@@ -28,6 +28,7 @@ export class NavbarComponent {
   // Signals locales para UI
   userMenuOpen = signal(false);
   mobileMenuOpen = signal(false);
+  showLogoutModal = signal(false);
 
   constructor() {
     effect(() => {
@@ -41,6 +42,11 @@ export class NavbarComponent {
     });
   }
 
+  openLogoutModal() {
+    this.showLogoutModal.set(true);
+    this.mobileMenuOpen.set(false);
+  }
+
   toggleUserMenu() {
     this.userMenuOpen.update(value => !value);
   }
@@ -49,8 +55,13 @@ export class NavbarComponent {
     this.mobileMenuOpen.update(value => !value);
   }
 
-  logout() {
+  cancelLogout() {
+    this.showLogoutModal.set(false);
+  }
+
+  confirmLogout() {
     this.authService.logout();
+    this.showLogoutModal.set(false);
     this.userMenuOpen.set(false);
     this.router.navigate(['/auth/login']);
   }

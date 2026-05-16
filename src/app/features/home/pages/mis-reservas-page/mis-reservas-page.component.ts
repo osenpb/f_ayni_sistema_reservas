@@ -4,11 +4,12 @@ import { FormsModule } from '@angular/forms';
 import { RouterLink, Router } from '@angular/router';
 
 import { ReservaPublicService } from '../../../../services/reserva-public.service';
-import { ReservaListResponse } from '../../../../interfaces';
+import { ReservaListResponse, ReservaUpdateRequest } from '../../../../interfaces';
 import { LoggerService } from '../../../../core/services/logger.service';
 import { CurrencySolPipe } from '../../../../shared/pipes/currency-sol.pipe';
 import { EstadoBadgePipe } from '../../../../shared/pipes/estado-badge.pipe';
 import { FormatDatePipe } from '../../../../shared/pipes/format-date.pipe';
+import { EditReservaModalComponent } from '../../components/edit-reserva-modal/edit-reserva-modal.component';
 
 @Component({
   standalone: true,
@@ -20,6 +21,7 @@ import { FormatDatePipe } from '../../../../shared/pipes/format-date.pipe';
     CurrencySolPipe,
     EstadoBadgePipe,
     FormatDatePipe,
+    EditReservaModalComponent,
   ],
   templateUrl: './mis-reservas-page.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -35,21 +37,15 @@ export class MisReservasPageComponent implements OnInit {
   error = signal<string | null>(null);
   successMessage = signal<string | null>(null);
 
-  // Filtros por fecha
   filtroFechaInicio = signal<string>('');
   filtroFechaFin = signal<string>('');
   filtroEstado = signal<string>('TODOS');
 
-  // Modal eliminar
   showModalEliminar = signal<boolean>(false);
   reservaSeleccionada = signal<ReservaListResponse | null>(null);
   procesando = signal<boolean>(false);
 
-  // Modal editar
   showModalEditar = signal<boolean>(false);
-  editFechaInicio = signal<string>('');
-  editFechaFin = signal<string>('');
-  editError = signal<string | null>(null);
 
   ngOnInit(): void {
     this.cargarReservas();
@@ -90,13 +86,10 @@ export class MisReservasPageComponent implements OnInit {
 
   aplicarFiltros(): void {
     let resultado = this.reservas();
-
-    // Filtrar por estado
     const estado = this.filtroEstado();
     if (estado !== 'TODOS') {
       resultado = resultado.filter((r) => r.estado === estado);
     }
-
     this.reservasFiltradas.set(resultado);
   }
 
@@ -149,9 +142,7 @@ export class MisReservasPageComponent implements OnInit {
         this.procesando.set(false);
         this.cerrarModalEliminar();
         this.successMessage.set(`Reserva #${reserva.id} cancelada exitosamente`);
-        // Recargar lista
         this.cargarReservas();
-        // Limpiar mensaje después de 3 segundos
         setTimeout(() => this.successMessage.set(null), 3000);
       },
       error: (err: any) => {
@@ -170,109 +161,43 @@ export class MisReservasPageComponent implements OnInit {
   // === MODAL EDITAR ===
   abrirModalEditar(reserva: ReservaListResponse): void {
     this.reservaSeleccionada.set(reserva);
-    this.editFechaInicio.set(reserva.fechaInicio);
-    this.editFechaFin.set(reserva.fechaFin);
-    this.editError.set(null);
     this.showModalEditar.set(true);
   }
 
   cerrarModalEditar(): void {
     this.showModalEditar.set(false);
     this.reservaSeleccionada.set(null);
-    this.editError.set(null);
   }
 
-  onEditFechaInicioChange(event: Event): void {
-    const input = event.target as HTMLInputElement;
-    this.editFechaInicio.set(input.value);
-  }
-
-  onEditFechaFinChange(event: Event): void {
-    const input = event.target as HTMLInputElement;
-    this.editFechaFin.set(input.value);
-  }
-
-  calcularNochesEdit(): number {
-    if (!this.editFechaInicio() || !this.editFechaFin()) return 0;
-
-    const [y1, m1, d1] = this.editFechaInicio().split('-').map(Number);
-    const [y2, m2, d2] = this.editFechaFin().split('-').map(Number);
-
-    const inicio = new Date(y1, m1 - 1, d1);
-    const fin = new Date(y2, m2 - 1, d2);
-
-    return Math.max(0, Math.round((fin.getTime() - inicio.getTime()) / 86400000));
-  }
-
-  // Obtener fecha mínima (mañana - 24 horas de anticipación)
-  getMinDate(): string {
-    const tomorrow = new Date();
-    tomorrow.setDate(tomorrow.getDate() + 1);
-    return tomorrow.toISOString().split('T')[0];
-  }
-
-  confirmarEditar(): void {
+  confirmarEditar(request: ReservaUpdateRequest): void {
     const reserva = this.reservaSeleccionada();
     if (!reserva) return;
 
-    const fechaInicio = this.editFechaInicio();
-    const fechaFin = this.editFechaFin();
-
-    if (!fechaInicio || !fechaFin) {
-      this.editError.set('Las fechas son obligatorias');
-      return;
-    }
-
-    const hoy = new Date();
-    const hoyISO = hoy.toISOString().split('T')[0];
-
-    // mañana en formato yyyy-MM-dd
-    const mananaISO = new Date(hoy.getFullYear(), hoy.getMonth(), hoy.getDate() + 1)
-      .toISOString()
-      .split('T')[0];
-
-    if (fechaInicio < mananaISO) {
-      this.editError.set('Las reservas deben realizarse con al menos 24 horas de anticipación');
-      return;
-    }
-
-    if (fechaFin <= fechaInicio) {
-      this.editError.set('La fecha de salida debe ser posterior a la de entrada');
-      return;
-    }
-
     this.procesando.set(true);
-    this.editError.set(null);
 
-    this.reservaService
-      .actualizarReserva(reserva.id, {
-        fechaInicio: fechaInicio,
-        fechaFin: fechaFin,
-      })
-      .subscribe({
-        next: () => {
-          this.procesando.set(false);
-          this.cerrarModalEditar();
-          this.successMessage.set(`Reserva #${reserva.id} actualizada exitosamente`);
-          this.cargarReservas();
-          setTimeout(() => this.successMessage.set(null), 3000);
-        },
-        error: (err: any) => {
-          this.logger.error('Error actualizando reserva:', err);
-          this.procesando.set(false);
-          if (err.status === 403) {
-            this.editError.set('No tiene permiso para actualizar esta reserva');
-          } else {
-            this.editError.set(err.error?.message || 'Error al actualizar la reserva');
-          }
-        },
-      });
+    this.reservaService.actualizarReserva(reserva.id, request).subscribe({
+      next: () => {
+        this.procesando.set(false);
+        this.cerrarModalEditar();
+        this.successMessage.set(`Reserva #${reserva.id} actualizada exitosamente`);
+        this.cargarReservas();
+        setTimeout(() => this.successMessage.set(null), 3000);
+      },
+      error: (err: any) => {
+        this.logger.error('Error actualizando reserva:', err);
+        this.procesando.set(false);
+        if (err.status === 403) {
+          this.error.set('No tiene permiso para actualizar esta reserva');
+        } else {
+          this.error.set(err.error?.message || 'Error al actualizar la reserva');
+        }
+      },
+    });
   }
 
   calcularNoches(fechaInicio: string, fechaFin: string): number {
     const inicio = new Date(fechaInicio);
     const fin = new Date(fechaFin);
-    const diff = fin.getTime() - inicio.getTime();
-    return Math.ceil(diff / (1000 * 60 * 60 * 24));
+    return Math.ceil((fin.getTime() - inicio.getTime()) / (1000 * 60 * 60 * 24));
   }
 }

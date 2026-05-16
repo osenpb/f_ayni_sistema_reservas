@@ -1,5 +1,6 @@
 import { Component, input } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { EstadoReserva } from '../../interfaces';
 
 @Component({
   selector: 'app-info-alert',
@@ -27,5 +28,5 @@ import { CommonModule } from '@angular/common';
   `,
 })
 export class InfoAlertComponent {
-  readonly estado = input.required<string>();
+  readonly estado = input.required<EstadoReserva>();
 }

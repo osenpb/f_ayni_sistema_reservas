@@ -1,5 +1,6 @@
 import { Component, input, output } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { EstadoReserva } from '../../interfaces';
 
 @Component({
   selector: 'app-action-buttons',
@@ -31,7 +32,7 @@ import { CommonModule } from '@angular/common';
   `,
 })
 export class ActionButtonsComponent {
-  estado = input.required<string>();
+  estado = input.required<EstadoReserva>();
   descargarPDF = output<void>();
   imprimir = output<void>();
 

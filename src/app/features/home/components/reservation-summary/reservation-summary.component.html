@@ -1,0 +1,72 @@
+<div class="bg-white border border-gray-200 rounded-lg sticky top-8">
+  <div class="px-4 py-3 border-b border-gray-200 bg-gray-50 rounded-t-lg">
+    <h2 class="text-lg font-medium text-gray-800">Resumen de la Reserva</h2>
+  </div>
+  <div class="p-4 space-y-4">
+
+    <!-- Hotel -->
+    <div class="flex items-start gap-3">
+      <div class="w-10 h-10 bg-indigo-100 rounded-lg flex items-center justify-center shrink-0">
+        <svg class="w-5 h-5 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
+        </svg>
+      </div>
+      <div>
+        <p class="font-medium text-gray-800">{{ reserva().hotel.nombre }}</p>
+        <p class="text-sm text-gray-500">{{ reserva().hotel.direccion }}</p>
+      </div>
+    </div>
+
+    <hr class="border-gray-200"/>
+
+    <!-- Fechas -->
+    <div class="grid grid-cols-2 gap-4 text-sm">
+      <div>
+        <p class="text-gray-500">Check-in</p>
+        <p class="font-medium text-gray-800">{{ reserva().fechaInicio | formatDate }}</p>
+      </div>
+      <div>
+        <p class="text-gray-500">Check-out</p>
+        <p class="font-medium text-gray-800">{{ reserva().fechaFin | formatDate }}</p>
+      </div>
+    </div>
+
+    <hr class="border-gray-200"/>
+
+    <!-- Cliente -->
+    <div class="text-sm">
+      <p class="text-gray-500">Huésped</p>
+      <p class="font-medium text-gray-800">{{ reserva().usuarioNombre }} {{ reserva().usuarioApellido }}</p>
+      <p class="text-gray-500">DNI: {{ reserva().usuarioDni }}</p>
+    </div>
+
+    <hr class="border-gray-200"/>
+
+    <!-- Habitaciones -->
+    <div>
+      <p class="text-sm text-gray-500 mb-2">Habitaciones</p>
+      @for (detalle of reserva().detalles; track detalle.id) {
+        <div class="flex justify-between text-sm py-1">
+          <span class="text-gray-700">Habitación #{{ detalle.habitacionId }}</span>
+          <span class="font-medium">{{ detalle.precioNoche | currencySol }}/noche</span>
+        </div>
+      }
+    </div>
+
+    <hr class="border-gray-200"/>
+
+    <!-- Total -->
+    <div class="flex justify-between items-center pt-2">
+      <span class="text-lg font-semibold text-gray-800">Total a Pagar</span>
+      <span class="text-2xl font-bold text-indigo-600">{{ reserva().total | currencySol }}</span>
+    </div>
+
+    @if (!puedePagar()) {
+      <p class="text-sm text-emerald-700 bg-emerald-50 border border-emerald-200 rounded-lg p-3">
+        Esta reserva ya no está en estado pendiente. Puedes revisar su estado en la pantalla de confirmación.
+      </p>
+    }
+
+  </div>
+</div>

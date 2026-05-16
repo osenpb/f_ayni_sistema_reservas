@@ -1,2 +1,71 @@
-/* You can add global styles to this file, and also import other style files */
 @import "tailwindcss";
+
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&family=Inter:wght@300;400;500;600;700&display=swap');
+
+@theme {
+  /* Arcilla cálida — acción principal, errores */
+  --color-ayni-950: #2A0E04;
+  --color-ayni-900: #3D1A0E;
+  --color-ayni-800: #6B2D15;
+  --color-ayni-700: #8B3A1A;
+  --color-ayni-600: #A84825;
+  --color-ayni-500: #C45A30;
+  --color-ayni-400: #D4784F;
+  --color-ayni-300: #E4A080;
+  --color-ayni-200: #F0C4A8;
+  --color-ayni-100: #FAE8DC;
+  --color-ayni-50:  #FDF5F0;
+
+  /* Dorado inca — pago, estado pendiente, premium */
+  --color-oro-800: #5C4208;
+  --color-oro-700: #7A5A10;
+  --color-oro-600: #9B7318;
+  --color-oro-500: #BF9020;
+  --color-oro-400: #D4AA45;
+  --color-oro-300: #E8C870;
+  --color-oro-200: #F4DFA0;
+  --color-oro-100: #FAF0D0;
+  --color-oro-50:  #FDFAF0;
+
+  /* Verde selva — confirmado, info, éxito */
+  --color-selva-900: #0A1E1D;
+  --color-selva-800: #0F2E2C;
+  --color-selva-700: #1A4340;
+  --color-selva-600: #235A56;
+  --color-selva-500: #2D716C;
+  --color-selva-400: #3D8E88;
+  --color-selva-300: #6AB0AC;
+  --color-selva-200: #A8D5D2;
+  --color-selva-100: #D0ECEB;
+  --color-selva-50:  #EEF8F7;
+
+  /* Arena cálida — reemplaza todos los gray-* del proyecto */
+  --color-arena-950: #1C1410;
+  --color-arena-900: #2C2018;
+  --color-arena-800: #3E2E24;
+  --color-arena-700: #5C4A3C;
+  --color-arena-600: #7A6458;
+  --color-arena-500: #9A8478;
+  --color-arena-400: #BAA898;
+  --color-arena-300: #D5C8BE;
+  --color-arena-200: #E8DED8;
+  --color-arena-100: #F2EDE8;
+  --color-arena-50:  #FAF7F4;
+
+  /* Verde bosque — acento navbar/CTA alternativo */
+  --color-bosque-900: #2D3A2D;
+  --color-bosque-800: #3A4A3A;
+  --color-bosque-100: #D6DDD6;
+  --color-bosque-50:  #EEF1EE;
+
+  /* Tipografía */
+  /* Terracota peruano — CTA principal del sistema de hotel */
+  --color-terracota-50:  #FDDDD5;
+  --color-terracota-100: #FBB8A4;
+  --color-terracota-500: #D4451A;
+  --color-terracota-600: #B33A15;
+  --color-terracota-900: #7A2210;
+
+  --font-display: 'Cormorant Garamond', Georgia, serif;
+  --font-sans:    'Inter', system-ui, sans-serif;
+}

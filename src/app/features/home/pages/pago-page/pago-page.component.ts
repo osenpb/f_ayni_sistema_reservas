@@ -14,6 +14,8 @@ import { ReservaPublicService } from '../../../../services/reserva-public.servic
 import { CheckoutApiRequest, ReservaResponse } from '../../interfaces';
 import { LoggerService } from '../../../../core/services/logger.service';
 import { CurrencySolPipe } from '../../../../shared/pipes/currency-sol.pipe';
+import { LoadingSpinnerComponent } from '../../components/loading-spinner/loading-spinner.component';
+import { ReservaSummaryComponent } from '../../components/reservation-summary/reservation-summary.component';
 import { environment } from '../../../../../environments/environments';
 
 interface MercadoPagoCardFormData {
@@ -70,7 +72,7 @@ declare global {
 @Component({
   standalone: true,
   selector: 'app-pago-page',
-  imports: [CommonModule, RouterLink, CurrencySolPipe],
+  imports: [CommonModule, RouterLink, CurrencySolPipe, LoadingSpinnerComponent, ReservaSummaryComponent],
   templateUrl: './pago-page.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

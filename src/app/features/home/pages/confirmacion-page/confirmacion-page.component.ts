@@ -1,9 +1,9 @@
-import { ChangeDetectionStrategy, Component, inject, OnDestroy, OnInit, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, DestroyRef, inject, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ActivatedRoute, RouterLink } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { timer, Subscription, switchMap, takeWhile } from 'rxjs';
 
-import { ConfirmationUtils } from '../../utils/confirmation-utils';
-import { ConfirmationDataAccessors } from '../../utils/confirmation-data-accessors';
 import { LoadingSpinnerComponent } from '../../components/loading-spinner/loading-spinner.component';
 import { ErrorDisplayComponent } from '../../components/error-display/error-display.component';
 import { ReservationHeaderComponent } from '../../components/reservation-header/reservation-header.component';
@@ -22,7 +22,6 @@ import { LoggerService } from '../../../../core/services/logger.service';
   selector: 'app-confirmacion-page',
   imports: [
     CommonModule,
-
     LoadingSpinnerComponent,
     ErrorDisplayComponent,
     ReservationHeaderComponent,
@@ -30,16 +29,17 @@ import { LoggerService } from '../../../../core/services/logger.service';
     ReservationDetailsComponent,
     ActionButtonsComponent,
     InfoAlertComponent,
-    NavigationLinksComponent
+    NavigationLinksComponent,
   ],
   templateUrl: './confirmacion-page.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ConfirmacionPageComponent implements OnInit, OnDestroy {
+export class ConfirmacionPageComponent implements OnInit {
   private route = inject(ActivatedRoute);
   private reservaService = inject(ReservaPublicService);
   private pdfGenerator = inject(PdfGeneratorService);
   private logger = inject(LoggerService);
+  private destroyRef = inject(DestroyRef);
 
   reservaId = signal<number | null>(null);
   reserva = signal<ReservaResponse | null>(null);
@@ -48,7 +48,7 @@ export class ConfirmacionPageComponent implements OnInit, OnDestroy {
   pollingActivo = signal<boolean>(false);
   mensajePago = signal<string | null>(null);
 
-  private pollIntervalId: ReturnType<typeof setInterval> | null = null;
+  private pollingRef?: Subscription;
 
   ngOnInit(): void {
     const id = this.route.snapshot.paramMap.get('reservaId');
@@ -88,10 +88,6 @@ export class ConfirmacionPageComponent implements OnInit, OnDestroy {
     });
   }
 
-  ngOnDestroy(): void {
-    this.detenerPolling();
-  }
-
   loadReserva(id: number): void {
     this.loading.set(true);
 
@@ -117,104 +113,40 @@ export class ConfirmacionPageComponent implements OnInit, OnDestroy {
   refrescarEstado(): void {
     const id = this.reservaId();
     if (!id) return;
-
     this.loadReserva(id);
   }
 
   private iniciarPolling(id: number): void {
-    if (this.pollIntervalId) {
-      return;
-    }
+    if (this.pollingRef && !this.pollingRef.closed) return;
 
     this.pollingActivo.set(true);
-    this.pollIntervalId = setInterval(() => {
-      this.reservaService.getReservaDetalle(id).subscribe({
-        next: (data) => {
-          this.reserva.set(data);
-          if (data.estado !== 'PENDIENTE') {
-            this.detenerPolling();
-          }
-        },
-        error: (err) => {
-          this.logger.error('Error consultando estado de pago:', err);
-        },
-      });
-    }, 5000);
+    this.pollingRef = timer(5000, 5000).pipe(
+      switchMap(() => this.reservaService.getReservaDetalle(id)),
+      takeWhile(data => data.estado === 'PENDIENTE', true),
+      takeUntilDestroyed(this.destroyRef),
+    ).subscribe({
+      next: (data) => {
+        this.reserva.set(data);
+        if (data.estado !== 'PENDIENTE') this.pollingActivo.set(false);
+      },
+      error: (err) => {
+        this.logger.error('Error consultando estado de pago:', err);
+      },
+    });
   }
 
   private detenerPolling(): void {
+    this.pollingRef?.unsubscribe();
     this.pollingActivo.set(false);
-    if (!this.pollIntervalId) {
-      return;
-    }
-
-    clearInterval(this.pollIntervalId);
-    this.pollIntervalId = null;
-  }
-
-  // ==================== GETTERS PARA ACCESO A DATOS ====================
-
-  get hotelNombre(): string {
-    return ConfirmationDataAccessors.hotelNombre(this.reserva());
-  }
-
-  get hotelDireccion(): string {
-    return ConfirmationDataAccessors.hotelDireccion(this.reserva());
-  }
-
-  get clienteNombreCompleto(): string {
-    return ConfirmationDataAccessors.clienteNombreCompleto(this.reserva());
-  }
-
-  get clienteDni(): string {
-    return ConfirmationDataAccessors.clienteDni(this.reserva());
-  }
-
-  get clienteEmail(): string {
-    return ConfirmationDataAccessors.clienteEmail(this.reserva());
-  }
-
-  // ==================== UTILIDADES ====================
-
-  formatDate(dateString: string): string {
-    return ConfirmationUtils.formatDate(dateString);
-  }
-
-  formatCurrency(amount: number): string {
-    return ConfirmationUtils.formatCurrency(amount);
-  }
-
-  calcularNoches(): number {
-    return ConfirmationUtils.calcularNoches(this.reserva()!);
-  }
-
-  getHabitacionInfo(habitacionId: number): { numero: string; tipo: string; precio: number } {
-    return ConfirmationUtils.getHabitacionInfo(habitacionId, this.reserva()?.hotel!);
-  }
-
-  calcularSubtotalPorNoche(): number {
-    return ConfirmationUtils.calcularSubtotalPorNoche(this.reserva()!);
-  }
-
-  // ==================== GENERAR PDF ====================
-  descargarPDF(): void {
-    const reserva = this.reserva();
-    if (!reserva) return;
-
-    this.pdfGenerator.descargarPDF(reserva);
-  }
-
-  imprimirComprobante(): void {
-    window.print();
   }
 
   onDescargarPDF(): void {
-    this.descargarPDF();
+    const reserva = this.reserva();
+    if (!reserva) return;
+    this.pdfGenerator.descargarPDF(reserva);
   }
 
   onImprimir(): void {
-    this.imprimirComprobante();
+    window.print();
   }
 }
-
-

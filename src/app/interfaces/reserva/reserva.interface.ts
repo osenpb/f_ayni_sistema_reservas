@@ -69,7 +69,7 @@ export interface ReservaListResponse {
   fechaInicio: string;
   fechaFin: string;
   total: number;
-  estado: string;
+  estado: EstadoReserva;
   hotel: HotelSimple;
   usuario: UsuarioSimple;
   detalles: DetalleSimple[];
@@ -85,7 +85,7 @@ export interface ReservaResponse {
   fechaInicio: string;
   fechaFin: string;
   total: number;
-  estado: string;
+  estado: EstadoReserva;
   hotel: HotelResponse;
   usuarioId: number;
   usuarioNombre: string;

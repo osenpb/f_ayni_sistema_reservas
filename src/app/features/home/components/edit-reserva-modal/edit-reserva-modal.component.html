@@ -1,0 +1,71 @@
+<div class="fixed inset-0 bg-slate-950/40 backdrop-blur-sm flex items-center justify-center z-[100] p-4 animate-in fade-in duration-300">
+  <div class="bg-white rounded-[2.5rem] shadow-2xl max-w-md w-full p-10 overflow-hidden relative">
+
+    <div class="absolute top-0 right-0 p-6">
+      <button (click)="onCerrar()" class="text-slate-300 hover:text-slate-900 transition-colors">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+        </svg>
+      </button>
+    </div>
+
+    <div class="mb-8">
+      <span class="text-[10px] font-black text-amber-500 uppercase tracking-widest">Ajustar Itinerario</span>
+      <h3 class="text-2xl font-bold text-slate-900">Reserva #{{ reserva().id }}</h3>
+    </div>
+
+    <div class="space-y-6">
+      <div class="grid grid-cols-2 gap-4">
+        <div class="space-y-2">
+          <label class="text-[10px] font-bold text-slate-400 uppercase">Nueva Entrada</label>
+          <input
+            type="date"
+            [value]="editFechaInicio()"
+            [min]="getMinDate()"
+            (change)="onFechaInicioChange($event)"
+            class="w-full px-4 py-3 bg-slate-50 border-none rounded-xl text-xs focus:ring-2 focus:ring-amber-500/20 outline-none"
+          />
+        </div>
+        <div class="space-y-2">
+          <label class="text-[10px] font-bold text-slate-400 uppercase">Nueva Salida</label>
+          <input
+            type="date"
+            [value]="editFechaFin()"
+            [min]="getMinDate()"
+            (change)="onFechaFinChange($event)"
+            class="w-full px-4 py-3 bg-slate-50 border-none rounded-xl text-xs focus:ring-2 focus:ring-amber-500/20 outline-none"
+          />
+        </div>
+      </div>
+
+      @if (editError()) {
+        <p class="text-sm text-red-600 bg-red-50 rounded-xl px-4 py-3">{{ editError() }}</p>
+      }
+
+      <div class="p-4 bg-amber-50 rounded-2xl flex items-start gap-3">
+        <div class="mt-1 text-amber-500">
+          <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+            <path
+              fill-rule="evenodd"
+              d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z"
+              clip-rule="evenodd"
+            />
+          </svg>
+        </div>
+        <p class="text-[10px] text-amber-700 leading-tight">
+          Recuerda que los cambios están sujetos a disponibilidad del hotel y pueden aplicar
+          ajustes en la tarifa.
+        </p>
+      </div>
+
+      <button
+        (click)="submit()"
+        [disabled]="procesando()"
+        class="w-full py-4 bg-slate-900 text-white font-bold rounded-2xl hover:bg-slate-800 transition-all disabled:opacity-50"
+      >
+        {{ procesando() ? 'Sincronizando...' : 'Confirmar Cambios' }}
+      </button>
+    </div>
+
+  </div>
+</div>

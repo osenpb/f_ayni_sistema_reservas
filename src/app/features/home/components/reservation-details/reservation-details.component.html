@@ -34,7 +34,7 @@
         </div>
         <div>
           <p class="text-sm text-gray-500">Check-in</p>
-          <p class="font-semibold text-gray-800">{{ reserva().fechaInicio }}</p>
+          <p class="font-semibold text-gray-800">{{ formatDate(reserva().fechaInicio) }}</p>
           <p class="text-xs text-gray-400">Desde las 14:00 hrs</p>
         </div>
       </div>
@@ -46,7 +46,7 @@
         </div>
         <div>
           <p class="text-sm text-gray-500">Check-out</p>
-          <p class="font-semibold text-gray-800">{{ reserva().fechaFin }}</p>
+          <p class="font-semibold text-gray-800">{{ formatDate(reserva().fechaFin) }}</p>
           <p class="text-xs text-gray-400">Hasta las 12:00 hrs</p>
         </div>
       </div>
@@ -96,11 +96,7 @@
     <hr class="border-gray-200">
 
     <!-- Total -->
-    <div class="rounded-lg p-4 text-white" [ngClass]="{
-      'bg-linear-to-r from-green-600 to-green-700': reserva().estado === 'CONFIRMADA',
-      'bg-linear-to-r from-yellow-500 to-yellow-600': reserva().estado === 'PENDIENTE',
-      'bg-linear-to-r from-gray-500 to-gray-600': reserva().estado === 'CANCELADA'
-    }">
+    <div class="rounded-lg p-4 text-white" [ngClass]="estadoGradient()">
       <div class="flex justify-between items-center">
         <div>
           <p class="text-sm opacity-80">
@@ -116,11 +112,7 @@
 
     <!-- Estado badge -->
     <div class="flex items-center justify-center gap-2">
-      <span class="inline-flex items-center gap-1 px-3 py-1 text-sm font-medium rounded-full" [ngClass]="{
-        'bg-green-100 text-green-700': reserva().estado === 'CONFIRMADA',
-        'bg-yellow-100 text-yellow-700': reserva().estado === 'PENDIENTE',
-        'bg-red-100 text-red-700': reserva().estado === 'CANCELADA'
-      }">
+      <span class="inline-flex items-center gap-1 px-3 py-1 text-sm font-medium rounded-full" [ngClass]="estadoBadge()">
         @if (reserva().estado === 'CONFIRMADA') {
         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>

@@ -1,4 +1,4 @@
-import { Component, input } from '@angular/core';
+import { Component, computed, input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReservaResponse } from '../../interfaces';
 
@@ -49,32 +49,13 @@ import { ReservaResponse } from '../../interfaces';
 
     <!-- Número de reserva -->
     <div
-      class="rounded-lg p-4 mb-6 text-center"
-      [ngClass]="{
-        'bg-green-50 border border-green-200': reserva().estado === 'CONFIRMADA',
-        'bg-yellow-50 border border-yellow-200': reserva().estado === 'PENDIENTE',
-        'bg-red-50 border border-red-200': reserva().estado === 'CANCELADA'
-      }"
+      class="rounded-lg p-4 mb-6 text-center border"
+      [ngClass]="[estadoConfig().bg, estadoConfig().border]"
     >
-      <p
-        class="text-sm mb-1"
-        [ngClass]="{
-          'text-green-600': reserva().estado === 'CONFIRMADA',
-          'text-yellow-600': reserva().estado === 'PENDIENTE',
-          'text-red-600': reserva().estado === 'CANCELADA'
-        }"
-      >
+      <p class="text-sm mb-1" [ngClass]="estadoConfig().text">
         Número de Reserva
       </p>
-
-      <p
-        class="text-2xl font-bold"
-        [ngClass]="{
-          'text-green-700': reserva().estado === 'CONFIRMADA',
-          'text-yellow-700': reserva().estado === 'PENDIENTE',
-          'text-red-700': reserva().estado === 'CANCELADA'
-        }"
-      >
+      <p class="text-2xl font-bold" [ngClass]="estadoConfig().textBold">
         {{ reserva().id.toString().padStart(6, '0') }}
       </p>
     </div>
@@ -82,6 +63,15 @@ import { ReservaResponse } from '../../interfaces';
 })
 export class ReservationHeaderComponent {
   readonly reserva = input.required<ReservaResponse>();
+
+  estadoConfig = computed(() => {
+    const configs: Record<string, { bg: string; border: string; text: string; textBold: string }> = {
+      CONFIRMADA: { bg: 'bg-green-50',  border: 'border-green-200',  text: 'text-green-600',  textBold: 'text-green-700' },
+      PENDIENTE:  { bg: 'bg-yellow-50', border: 'border-yellow-200', text: 'text-yellow-600', textBold: 'text-yellow-700' },
+      CANCELADA:  { bg: 'bg-red-50',    border: 'border-red-200',    text: 'text-red-600',    textBold: 'text-red-700' },
+    };
+    return configs[this.reserva().estado] ?? { bg: 'bg-gray-50', border: 'border-gray-200', text: 'text-gray-600', textBold: 'text-gray-700' };
+  });
 }
 
 

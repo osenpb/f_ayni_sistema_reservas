@@ -1,116 +1,160 @@
-<nav class="fixed top-0 z-50 w-full border-b border-white/5 bg-slate-950/80 backdrop-blur-md transition-all duration-300">
+<nav class="fixed top-0 z-50 w-full border-b border-neutral-800 bg-[#121212] transition-all duration-300">
   <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
     <div class="flex h-16 items-center justify-between">
 
-      <a routerLink="/home" class="flex items-center gap-2.5 group">
-        <div class="relative flex h-10 w-10 items-center justify-center overflow-hidden rounded-xl bg-gradient-to-br from-amber-400 to-orange-600 transition-transform group-hover:scale-105">
-          <svg class="h-6 w-6 text-slate-950" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01" />
+      <!-- Logo -->
+      <a routerLink="/home" class="flex items-center gap-2.5">
+        <div class="w-8 h-8 border border-neutral-700 rounded-full flex items-center justify-center">
+          <svg class="w-4 h-4 text-neutral-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+              d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
           </svg>
         </div>
-        <span class="text-xl font-bold tracking-tighter text-white">
-          AYNI<span class="text-amber-500">.</span>
-        </span>
+        <span class=" text-xl text-white tracking-tight font-sans font-bold">Ayni</span>
       </a>
 
-      <div class="hidden md:flex md:items-center md:gap-1">
+      <!-- Links desktop -->
+      <div class="hidden md:flex md:items-center md:gap-0">
         <a routerLink="/home"
-           routerLinkActive="text-amber-500 bg-white/5"
+           routerLinkActive="text-bosque-100"
            [routerLinkActiveOptions]="{exact: true}"
-           class="group flex items-center gap-2 rounded-full px-4 py-2 text-sm font-medium text-slate-300 transition-all hover:bg-white/10 hover:text-white">
+           class="px-4 py-5 text-sm font-medium text-neutral-400 transition-colors hover:text-white">
           Inicio
         </a>
-
         <a routerLink="/home/departamentos"
-           routerLinkActive="text-amber-500 bg-white/5"
-           class="flex items-center gap-2 rounded-full px-4 py-2 text-sm font-medium text-slate-300 transition-all hover:bg-white/10 hover:text-white">
+           routerLinkActive="text-bosque-100"
+           class="px-4 py-5 text-sm font-medium text-neutral-400 transition-colors hover:text-white">
           Explorar Destinos
         </a>
-
         <a routerLink="/home/contacto"
-           routerLinkActive="text-amber-500 bg-white/5"
-           class="flex items-center gap-2 rounded-full px-4 py-2 text-sm font-medium text-slate-300 transition-all hover:bg-white/10 hover:text-white">
+           routerLinkActive="text-bosque-100"
+           class="px-4 py-5 text-sm font-medium text-neutral-400 transition-colors hover:text-white">
           Ayuda
         </a>
 
-        <div class="mx-2 h-4 w-[1px] bg-slate-800"></div>
+        <div class="mx-3 h-4 w-px bg-neutral-700"></div>
 
         @if (isAuthenticated()) {
           <a routerLink="/home/mis-reservas"
-             routerLinkActive="text-amber-500 bg-white/5"
-             class="mr-2 flex items-center gap-2 rounded-full px-4 py-2 text-sm font-medium text-slate-300 transition-all hover:bg-white/10 hover:text-white">
+             routerLinkActive="text-bosque-100"
+             class="mr-2 px-4 py-2 text-sm font-medium text-neutral-400 transition-colors hover:text-white">
             Mis Reservas
           </a>
-
-          <div class="flex items-center gap-3 rounded-full border border-white/10 bg-slate-900/50 pl-1 pr-3 py-1">
-            <div class="flex h-7 w-7 items-center justify-center rounded-full bg-amber-500 text-[10px] font-bold text-slate-950">
-              {{ usuario()?.username?.substring(0,2) | uppercase }}
+          <div class="flex items-center gap-3">
+            <div class="flex items-center gap-2.5">
+              <div class="flex h-8 w-8 items-center justify-center rounded-full bg-bosque-900 text-[11px] font-semibold text-white ring-1 ring-neutral-700">
+                {{ usuario()?.username?.substring(0,2) | uppercase }}
+              </div>
+              <span class="text-sm font-medium text-neutral-300">{{ usuario()?.username }}</span>
             </div>
-            <span class="text-xs font-semibold text-white">{{ usuario()?.username }}</span>
-            <button (click)="logout()" class="ml-1 text-slate-500 hover:text-red-400 transition-colors">
-              <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7" /></svg>
+            <div class="h-4 w-px bg-neutral-700"></div>
+            <button (click)="openLogoutModal()"
+              class="text-neutral-500 hover:text-neutral-200 transition-colors"
+              title="Cerrar sesión">
+              <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                  d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+              </svg>
             </button>
           </div>
         } @else {
           <div class="flex items-center gap-2">
-            <a routerLink="/auth/login" class="px-4 py-2 text-sm font-medium text-slate-300 hover:text-white transition-colors">
+            <a routerLink="/auth/login" class="px-4 py-2 text-sm font-medium text-neutral-400 hover:text-white transition-colors">
               Ingresar
             </a>
-            <a routerLink="/auth/register" class="rounded-full bg-white px-5 py-2 text-sm font-bold text-slate-950 transition-transform hover:bg-amber-400 active:scale-95">
+            <a routerLink="/auth/register" class="rounded-lg bg-bosque-900 px-5 py-2 text-sm font-semibold text-white transition-all hover:bg-bosque-800 active:scale-95">
               Únete a Ayni
             </a>
           </div>
         }
       </div>
 
+      <!-- Hamburger mobile -->
       <div class="flex md:hidden">
-        <button (click)="toggleMobileMenu()" class="inline-flex items-center justify-center rounded-lg p-2 text-slate-400 hover:bg-white/5 hover:text-white">
-          <svg class="h-6 w-6" [class.hidden]="mobileMenuOpen()" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" /></svg>
-          <svg class="h-6 w-6" [class.hidden]="!mobileMenuOpen()" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
+        <button (click)="toggleMobileMenu()" class="inline-flex items-center justify-center rounded-lg p-2 text-neutral-400 hover:bg-neutral-800 transition-colors">
+          <svg class="h-6 w-6" [class.hidden]="mobileMenuOpen()" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+          </svg>
+          <svg class="h-6 w-6" [class.hidden]="!mobileMenuOpen()" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+          </svg>
         </button>
       </div>
     </div>
   </div>
 
+  <!-- Menú móvil -->
   @if (mobileMenuOpen()) {
-    <div class="md:hidden border-t border-white/5 bg-slate-950 px-4 py-6 space-y-4 shadow-2xl animate-in slide-in-from-top duration-300">
-      <div class="grid gap-2">
-        <a routerLink="/home" (click)="toggleMobileMenu()" class="flex items-center gap-4 rounded-xl px-4 py-3 text-base font-medium text-slate-300 hover:bg-white/5 hover:text-white">
-          Inicio
-        </a>
-        <a routerLink="/home/departamentos" (click)="toggleMobileMenu()" class="flex items-center gap-4 rounded-xl px-4 py-3 text-base font-medium text-slate-300 hover:bg-white/5 hover:text-white">
-          Destinos
-        </a>
-        <a routerLink="/home/contacto" (click)="toggleMobileMenu()" class="flex items-center gap-4 rounded-xl px-4 py-3 text-base font-medium text-slate-300 hover:bg-white/5 hover:text-white">
-          Soporte
-        </a>
-      </div>
+    <div class="md:hidden border-t border-neutral-800 bg-neutral-900 px-4 py-4 space-y-1 shadow-lg">
+      <a routerLink="/home" (click)="toggleMobileMenu()" class="block rounded-lg px-4 py-3 text-sm font-medium text-neutral-300 hover:bg-neutral-800 transition-colors">
+        Inicio
+      </a>
+      <a routerLink="/home/departamentos" (click)="toggleMobileMenu()" class="block rounded-lg px-4 py-3 text-sm font-medium text-neutral-300 hover:bg-neutral-800 transition-colors">
+        Explorar Destinos
+      </a>
+      <a routerLink="/home/contacto" (click)="toggleMobileMenu()" class="block rounded-lg px-4 py-3 text-sm font-medium text-neutral-300 hover:bg-neutral-800 transition-colors">
+        Ayuda
+      </a>
 
-      <div class="pt-4 border-t border-white/5">
+      <div class="pt-4 border-t border-neutral-800 mt-2 space-y-2">
         @if (isAuthenticated()) {
-          <div class="mb-4 flex items-center gap-4 px-4">
-             <div class="h-10 w-10 rounded-full bg-amber-500 flex items-center justify-center font-bold text-slate-950">
-               {{ usuario()?.username?.substring(0,1) | uppercase }}
-             </div>
-             <div>
-               <p class="text-sm font-bold text-white">{{ usuario()?.username }}</p>
-               <p class="text-xs text-slate-500">{{ usuario()?.email }}</p>
-             </div>
+          <div class="mb-3 flex items-center gap-3 px-4">
+            <div class="h-9 w-9 rounded-full bg-bosque-900 flex items-center justify-center font-bold text-white text-sm">
+              {{ usuario()?.username?.substring(0,1) | uppercase }}
+            </div>
+            <div>
+              <p class="text-sm font-semibold text-white">{{ usuario()?.username }}</p>
+              <p class="text-xs text-neutral-400">{{ usuario()?.email }}</p>
+            </div>
           </div>
-          <button (click)="logout(); toggleMobileMenu()" class="w-full rounded-xl bg-red-500/10 py-3 text-center text-sm font-bold text-red-500 transition-colors active:bg-red-500 active:text-white">
+          <a routerLink="/home/mis-reservas" (click)="toggleMobileMenu()" class="block rounded-lg px-4 py-3 text-sm font-medium text-neutral-300 hover:bg-neutral-800 transition-colors">
+            Mis Reservas
+          </a>
+          <button (click)="openLogoutModal()" class="w-full rounded-lg border border-neutral-700 py-3 text-center text-sm font-medium text-neutral-300 hover:bg-neutral-800 transition-colors">
             Cerrar Sesión
           </button>
         } @else {
-          <div class="grid gap-3">
-            <a routerLink="/auth/login" (click)="toggleMobileMenu()" class="w-full rounded-xl border border-white/10 py-3 text-center text-sm font-bold text-white">
-              Iniciar Sesión
-            </a>
-            <a routerLink="/auth/register" (click)="toggleMobileMenu()" class="w-full rounded-xl bg-amber-500 py-3 text-center text-sm font-bold text-slate-950">
-              Registrarse
-            </a>
-          </div>
+          <a routerLink="/auth/login" (click)="toggleMobileMenu()" class="block rounded-lg border border-neutral-700 py-3 text-center text-sm font-semibold text-neutral-300 hover:bg-neutral-800 transition-colors">
+            Iniciar Sesión
+          </a>
+          <a routerLink="/auth/register" (click)="toggleMobileMenu()" class="block rounded-lg bg-bosque-900 py-3 text-center text-sm font-semibold text-white hover:bg-bosque-800 transition-colors">
+            Registrarse
+          </a>
         }
       </div>
     </div>
   }
 </nav>
+
+@if (showLogoutModal()) {
+  <div class="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-neutral-950/60 backdrop-blur-sm"
+    (click)="cancelLogout()">
+    <div class="bg-neutral-900 border border-neutral-800 rounded-2xl shadow-2xl w-full max-w-sm p-7"
+      (click)="$event.stopPropagation()">
+
+      <div class="flex h-11 w-11 items-center justify-center rounded-full border border-neutral-700 mb-5">
+        <svg class="h-5 w-5 text-neutral-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+            d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+        </svg>
+      </div>
+
+      <h2 class="text-base font-semibold text-white mb-1 tracking-tight">¿Cerrar sesión?</h2>
+      <p class="text-sm text-neutral-400 mb-7 leading-relaxed">
+        Tu sesión se cerrará y deberás volver a ingresar con tus credenciales.
+      </p>
+
+      <div class="flex gap-3">
+        <button (click)="cancelLogout()"
+          class="flex-1 py-2.5 rounded-xl border border-neutral-700 text-sm font-medium text-neutral-300 hover:bg-neutral-800 transition-colors">
+          Cancelar
+        </button>
+        <button (click)="confirmLogout()"
+          class="flex-1 py-2.5 rounded-xl bg-bosque-900 hover:bg-bosque-800 text-sm font-medium text-white transition-colors">
+          Sí, salir
+        </button>
+      </div>
+
+    </div>
+  </div>
+}
