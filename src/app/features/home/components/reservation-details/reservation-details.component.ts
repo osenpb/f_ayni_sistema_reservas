@@ -16,20 +16,20 @@ export class ReservationDetailsComponent {
 
   estadoGradient = computed(() => {
     const map: Record<string, string> = {
-      CONFIRMADA: 'bg-linear-to-r from-green-600 to-green-700',
-      PENDIENTE:  'bg-linear-to-r from-yellow-500 to-yellow-600',
-      CANCELADA:  'bg-linear-to-r from-gray-500 to-gray-600',
+      CONFIRMADA: 'bg-bosque-900',
+      PENDIENTE:  'bg-neutral-800',
+      CANCELADA:  'bg-neutral-700',
     };
-    return map[this.reserva().estado] ?? 'bg-linear-to-r from-gray-500 to-gray-600';
+    return map[this.reserva().estado] ?? 'bg-neutral-800';
   });
 
   estadoBadge = computed(() => {
     const map: Record<string, string> = {
-      CONFIRMADA: 'bg-green-100 text-green-700',
-      PENDIENTE:  'bg-yellow-100 text-yellow-700',
-      CANCELADA:  'bg-red-100 text-red-700',
+      CONFIRMADA: 'bg-bosque-50 text-bosque-900 border-bosque-100',
+      PENDIENTE:  'bg-amber-50 text-amber-700 border-amber-100',
+      CANCELADA:  'bg-neutral-100 text-neutral-600 border-neutral-200',
     };
-    return map[this.reserva().estado] ?? 'bg-gray-100 text-gray-700';
+    return map[this.reserva().estado] ?? 'bg-neutral-100 text-neutral-600 border-neutral-200';
   });
 
   get hotelNombre(): string {

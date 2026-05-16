@@ -206,8 +206,8 @@ export class PagoPageComponent implements OnInit, OnDestroy {
       return;
     }
 
-    if (!mpPublicKey || mpPublicKey.includes('REEMPLAZAR')) {
-      this.errorMessage.set('La llave publica de Mercado Pago no esta configurada correctamente.');
+    if (!mpPublicKey || mpPublicKey.includes('REEMPLAZAR') || mpPublicKey.includes('TU_PUBLIC_KEY') || mpPublicKey.startsWith('TU_')) {
+      this.errorMessage.set('La llave publica de Mercado Pago no esta configurada. Revisa src/environments/environments.ts.');
       return;
     }
 
